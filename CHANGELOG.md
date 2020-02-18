@@ -11,5 +11,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
  - lti_provider django application
+ - install `django-machina` forum in the `sandbox` project
 
 [unreleased]: https://github.com/openfun/ashley
