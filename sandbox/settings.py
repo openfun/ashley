@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 from configurations import Configuration, values
+from machina import MACHINA_MAIN_STATIC_DIR, MACHINA_MAIN_TEMPLATE_DIR
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -80,6 +81,8 @@ class Base(Configuration):
     # Static files (CSS, JavaScript, Images)
     STATIC_URL = "/static/"
 
+    STATICFILES_DIRS = (MACHINA_MAIN_STATIC_DIR,)
+
     # Internationalization
     TIME_ZONE = "UTC"
     USE_I18N = True
@@ -90,18 +93,22 @@ class Base(Configuration):
     TEMPLATES = [
         {
             "BACKEND": "django.template.backends.django.DjangoTemplates",
-            "DIRS": [],
-            "APP_DIRS": True,
+            "DIRS": [MACHINA_MAIN_TEMPLATE_DIR],
             "OPTIONS": {
                 "context_processors": [
                     "django.contrib.auth.context_processors.auth",
                     "django.contrib.messages.context_processors.messages",
-                    "django.template.context_processors.i18n",
-                    "django.template.context_processors.debug",
-                    "django.template.context_processors.request",
-                    "django.template.context_processors.media",
                     "django.template.context_processors.csrf",
+                    "django.template.context_processors.debug",
+                    "django.template.context_processors.i18n",
+                    "django.template.context_processors.media",
+                    "django.template.context_processors.request",
                     "django.template.context_processors.tz",
+                    "machina.core.context_processors.metadata",
+                ],
+                "loaders": [
+                    "django.template.loaders.filesystem.Loader",
+                    "django.template.loaders.app_directories.Loader",
                 ],
             },
         },
@@ -115,6 +122,7 @@ class Base(Configuration):
         "django.contrib.auth.middleware.AuthenticationMiddleware",
         "django.contrib.messages.middleware.MessageMiddleware",
         "django.middleware.clickjacking.XFrameOptionsMiddleware",
+        "machina.apps.forum_permission.middleware.ForumPermissionMiddleware",
     ]
 
     AUTHENTICATION_BACKENDS = [
@@ -130,12 +138,44 @@ class Base(Configuration):
         "django.contrib.sessions",
         "django.contrib.messages",
         "django.contrib.staticfiles",
+        # Django machina dependencies
+        "mptt",
+        "haystack",
+        "widget_tweaks",
+        # Django machina
+        "machina",
+        "machina.apps.forum",
+        "machina.apps.forum_conversation",
+        "machina.apps.forum_conversation.forum_attachments",
+        "machina.apps.forum_conversation.forum_polls",
+        "machina.apps.forum_feeds",
+        "machina.apps.forum_member",
+        "machina.apps.forum_moderation",
+        "machina.apps.forum_permission",
+        "machina.apps.forum_search",
+        "machina.apps.forum_tracking",
         # Ashley
         "lti_provider",
     ]
 
     # Languages
     LANGUAGE_CODE = "en-us"
+
+    # Cache
+    CACHES = {
+        "default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"},
+        "machina_attachments": {
+            "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+            "LOCATION": values.Value(
+                "/tmp", environ_name="TMP_ATTACHMENT_DIR", environ_prefix=None
+            ),
+        },
+    }
+
+    # Search engine
+    HAYSTACK_CONNECTIONS = {
+        "default": {"ENGINE": "haystack.backends.simple_backend.SimpleEngine"},
+    }
 
 
 class Development(Base):

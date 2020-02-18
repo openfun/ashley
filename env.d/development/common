@@ -6,3 +6,5 @@ DJANGO_SECRET_KEY=ThisIsAnExampleKeyForDevPurposeOnly
 # Python
 PYTHONUNBUFFERED=1
 
+# File cache for Machina attachments
+TMP_ATTACHMENT_DIR=/tmp
