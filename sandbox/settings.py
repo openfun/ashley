@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 from configurations import Configuration, values
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from machina import MACHINA_MAIN_STATIC_DIR, MACHINA_MAIN_TEMPLATE_DIR
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -43,6 +42,17 @@ class Base(Configuration):
     # Security
     ALLOWED_HOSTS = []
     SECRET_KEY = values.Value(None)
+
+    # SECURE_PROXY_SSL_HEADER allows to fix the scheme in Django's HttpRequest
+    # object when you application is behind a reverse proxy.
+    #
+    # Keep this SECURE_PROXY_SSL_HEADER configuration only if :
+    # - your Django app is behind a proxy.
+    # - your proxy strips the X-Forwarded-Proto header from all incoming requests
+    # - Your proxy sets the X-Forwarded-Proto header and sends it to Django
+    #
+    # In other cases, you should comment the following line to avoid security issues.
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
     # Application definition
     ROOT_URLCONF = "urls"
@@ -115,6 +125,11 @@ class Base(Configuration):
         "machina.apps.forum_permission.middleware.ForumPermissionMiddleware",
     ]
 
+    AUTHENTICATION_BACKENDS = [
+        "fun_lti_provider.default.backend.AuthBackend",
+        "django.contrib.auth.backends.ModelBackend",
+    ]
+
     # Django applications from the highest priority to the lowest
     INSTALLED_APPS = [
         "django.contrib.admin",
@@ -139,6 +154,8 @@ class Base(Configuration):
         "machina.apps.forum_tracking",
         "machina.apps.forum_member",
         "machina.apps.forum_permission",
+        # Ashley
+        "fun_lti_provider",
     ]
 
     # Languages
@@ -169,6 +186,34 @@ class Development(Base):
 
     DEBUG = True
     ALLOWED_HOSTS = ["*"]
+
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "verbose": {
+                "format": "[%(levelname)s] [%(asctime)s] [%(module)s] "
+                "%(process)d %(thread)d %(message)s"
+            }
+        },
+        "handlers": {
+            "console": {
+                "level": "DEBUG",
+                "class": "logging.StreamHandler",
+                "formatter": "verbose",
+            }
+        },
+        "loggers": {
+            "oauthlib": {"handlers": ["console"], "level": "DEBUG", "propagate": True},
+            "ashley": {"handlers": ["console"], "level": "DEBUG", "propagate": True},
+            "fun_lti_provider": {
+                "handlers": ["console"],
+                "level": "DEBUG",
+                "propagate": True,
+            },
+            "django": {"handlers": ["console"], "level": "INFO", "propagate": True},
+        },
+    }
 
 
 class Test(Base):

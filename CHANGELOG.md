@@ -8,4 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+ - fun_lti_provider django application
+
 [unreleased]: https://github.com/openfun/ashley
