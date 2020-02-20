@@ -125,10 +125,10 @@ jobs:
           command: ~/.local/bin/isort --recursive --check-only .
       - run:
           name: Lint code with black
-          command: ~/.local/bin/black src/ashley sandbox tests --check
+          command: ~/.local/bin/black src sandbox tests --check
       - run:
           name: Lint code with pylint
-          command: ~/.local/bin/pylint src/ashley sandbox tests
+          command: ~/.local/bin/pylint src sandbox tests
       - run:
           name: Lint code with bandit
           command: ~/.local/bin/bandit -qr src/ashley sandbox
