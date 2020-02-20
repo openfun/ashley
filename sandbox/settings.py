@@ -14,7 +14,6 @@ import os
 
 from configurations import Configuration, values
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Disable pylint error "W0232: Class has no __init__ method", because base Configuration
@@ -42,6 +41,17 @@ class Base(Configuration):
     # Security
     ALLOWED_HOSTS = []
     SECRET_KEY = values.Value(None)
+
+    # SECURE_PROXY_SSL_HEADER allows to fix the scheme in Django's HttpRequest
+    # object when you application is behind a reverse proxy.
+    #
+    # Keep this SECURE_PROXY_SSL_HEADER configuration only if :
+    # - your Django app is behind a proxy.
+    # - your proxy strips the X-Forwarded-Proto header from all incoming requests
+    # - Your proxy sets the X-Forwarded-Proto header and sends it to Django
+    #
+    # In other cases, you should comment the following line to avoid security issues.
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
     # Application definition
     ROOT_URLCONF = "urls"
@@ -107,6 +117,11 @@ class Base(Configuration):
         "django.middleware.clickjacking.XFrameOptionsMiddleware",
     ]
 
+    AUTHENTICATION_BACKENDS = [
+        "lti_provider.default.backend.LTIBackend",
+        "django.contrib.auth.backends.ModelBackend",
+    ]
+
     # Django applications from the highest priority to the lowest
     INSTALLED_APPS = [
         "django.contrib.admin",
@@ -115,6 +130,8 @@ class Base(Configuration):
         "django.contrib.sessions",
         "django.contrib.messages",
         "django.contrib.staticfiles",
+        # Ashley
+        "lti_provider",
     ]
 
     # Languages

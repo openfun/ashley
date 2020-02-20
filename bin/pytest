@@ -3,4 +3,7 @@
 declare DOCKER_USER
 DOCKER_USER="$(id -u):$(id -g)"
 
-DOCKER_USER=${DOCKER_USER} docker-compose run --rm ashley pytest "$@"
+DOCKER_USER=${DOCKER_USER} docker-compose run \
+  -e DJANGO_CONFIGURATION=Test \
+  -e PYTHONPATH=/app/sandbox \
+  --rm ashley pytest "$@"
