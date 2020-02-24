@@ -133,6 +133,56 @@ jobs:
           name: Lint code with bandit
           command: ~/.local/bin/bandit -qr src/ashley sandbox
 
+  test-back:
+    docker:
+      - image: circleci/python:3.8-buster
+        environment:
+          DJANGO_SETTINGS_MODULE: settings
+          DJANGO_CONFIGURATION: Test
+          DJANGO_SECRET_KEY: ThisIsAnExampleKeyForTestPurposeOnly
+          PYTHONPATH: /home/circleci/fun/sandbox
+          DB_HOST: localhost
+          DB_NAME: ashley
+          DB_USER: fun
+          DB_PASSWORD: pass
+          DB_PORT: 5432
+      # services
+      - image: circleci/postgres:12-ram
+        environment:
+          POSTGRES_DB: test_ashley
+          POSTGRES_USER: fun
+          POSTGRES_PASSWORD: pass
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-back-dependencies-{{ .Revision }}
+      # Attach the frontend production build
+      - attach_workspace:
+          at: ~/fun
+      # While running tests, we need to make the /data directory writable for
+      # the circleci user
+      - run:
+          name: Create writable /data
+          command: |
+            sudo mkdir /data && \
+            sudo chown circleci:circleci /data
+      # Run back-end (Django) test suite
+      #
+      # Nota bene: to run the django test suite, we need to ensure that
+      # Postgresql service is up and ready. To achieve this, we wrap the pytest
+      # command execution with dockerize, a tiny tool installed in the CircleCI
+      # image. In our case, dockerize will wait up to one minute that the database
+      # opened its tcp port (5432).
+      - run:
+          name: Run tests
+          command: |
+            dockerize \
+              -wait tcp://localhost:5432 \
+              -timeout 60s \
+                ~/.local/bin/pytest
+
   # ---- Packaging jobs ----
   package-back:
     docker:
@@ -297,11 +347,19 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - test-back:
+          requires:
+            - build-back
+          filters:
+            tags:
+              only: /.*/
 
       # Packaging: python
       #
       # Build the python package
       - package-back:
+          requires:
+            - test-back
           filters:
             tags:
               only: /.*/
@@ -314,6 +372,7 @@ workflows:
       - hub:
           requires:
             - build-docker
+            - test-back
           filters:
             branches:
               only: master

@@ -64,6 +64,11 @@ RUN pip install -e .[dev]
 ARG DOCKER_USER
 USER ${DOCKER_USER}
 
+# Target database host (e.g. database engine following docker-compose services
+# name) & port
+ENV DB_HOST=postgresql \
+    DB_PORT=5432
+
 # Run django development server (wrapped by dockerize to ensure the db is ready
 # to accept connections before running the development server)
 CMD cd sandbox && \
