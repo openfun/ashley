@@ -3,4 +3,6 @@
 declare DOCKER_USER
 DOCKER_USER="$(id -u):$(id -g)"
 
-DOCKER_USER=${DOCKER_USER} docker-compose run --service-ports ashley
+DOCKER_USER=${DOCKER_USER} docker-compose up -d postgresql
+DOCKER_USER=${DOCKER_USER} docker-compose run --rm dockerize dockerize -wait tcp://postgresql:5432 -timeout 60s
+DOCKER_USER=${DOCKER_USER} docker-compose run --rm --service-ports ashley
