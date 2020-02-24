@@ -1,6 +1,13 @@
 version: '3.4'
 
 services:
+  postgresql:
+    image: postgres:9.6
+    env_file:
+      - env.d/development/postgresql
+    ports:
+      - "15432:5432"
+
   ashley:
     build:
       context: .
@@ -13,7 +20,10 @@ services:
       PYLINTHOME: /app/.pylint.d
     env_file:
       - env.d/development/common
+      - env.d/development/postgresql
     ports:
       - "8090:8000"
     volumes:
       - .:/app
+    depends_on:
+      - "${DB_HOST:-postgresql}"
