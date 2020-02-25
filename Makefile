@@ -7,6 +7,7 @@ COMPOSE              = DOCKER_USER=$(DOCKER_USER) docker-compose
 COMPOSE_RUN          = $(COMPOSE) run --rm
 COMPOSE_TEST_RUN     = $(COMPOSE_RUN)
 COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) ashley
+COMPOSE_TEST_RUN_APP_NODEPS = $(COMPOSE_TEST_RUN) --no-deps ashley
 
 # ==============================================================================
 # RULES
@@ -30,27 +31,27 @@ lint: \
 
 lint-black: ## lint back-end python sources with black
 	@echo 'lint:black started…'
-	@$(COMPOSE_TEST_RUN_APP) black src/ashley sandbox tests
+	@$(COMPOSE_TEST_RUN_APP_NODEPS) black src sandbox tests
 .PHONY: lint-black
 
 lint-flake8: ## lint back-end python sources with flake8
 	@echo 'lint:flake8 started…'
-	@$(COMPOSE_TEST_RUN_APP) flake8
+	@$(COMPOSE_TEST_RUN_APP_NODEPS) flake8
 .PHONY: lint-flake8
 
 lint-isort: ## automatically re-arrange python imports in back-end code base
 	@echo 'lint:isort started…'
-	@$(COMPOSE_TEST_RUN_APP) isort --recursive --atomic .
+	@$(COMPOSE_TEST_RUN_APP_NODEPS) isort --recursive  .
 .PHONY: lint-isort
 
 lint-pylint: ## lint back-end python sources with pylint
 	@echo 'lint:pylint started…'
-	@$(COMPOSE_TEST_RUN_APP) pylint src/ashley sandbox tests
+	@$(COMPOSE_TEST_RUN_APP_NODEPS) pylint src sandbox tests
 .PHONY: lint-pylint
 
 lint-bandit: ## lint back-end python sources with bandit
 	@echo 'lint:bandit started…'
-	@$(COMPOSE_TEST_RUN_APP) bandit -qr src/ashley sandbox
+	@$(COMPOSE_TEST_RUN_APP_NODEPS) bandit -qr src sandbox tests
 .PHONY: lint-bandit
 
 logs: ## display app logs (follow mode)
