@@ -132,6 +132,9 @@ jobs:
       - run:
           name: Lint code with bandit
           command: ~/.local/bin/bandit -qr src/ashley sandbox
+      - run:
+          name: Type-check code with mypy
+          command: ~/.local/bin/mypy src
 
   test-back:
     docker:
