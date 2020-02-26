@@ -24,6 +24,7 @@ lint: \
   lint-isort \
   lint-black \
   lint-flake8 \
+  lint-mypy \
   lint-pylint \
   lint-bandit
 .PHONY: lint
@@ -52,6 +53,11 @@ lint-bandit: ## lint back-end python sources with bandit
 	@echo 'lint:bandit started…'
 	@$(COMPOSE_TEST_RUN_APP) bandit -qr src/ashley sandbox
 .PHONY: lint-bandit
+
+lint-mypy: ## type check back-end python sources with mypy
+	@echo 'lint:mypy started…'
+	@$(COMPOSE_TEST_RUN_APP_NODEPS) mypy src
+.PHONY: lint-mypy
 
 logs: ## display app logs (follow mode)
 	@$(COMPOSE) logs -f ashley

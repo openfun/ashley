@@ -25,3 +25,4 @@ docs
 .git
 .vscode
 db.sqlite3
+.mypy_cache
