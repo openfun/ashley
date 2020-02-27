@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+ - custom LTI handlers and authentication backend in `ashley`
  - fun_lti_provider django application
 
 [unreleased]: https://github.com/openfun/ashley
