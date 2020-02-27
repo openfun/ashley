@@ -13,4 +13,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - lti_provider django application
  - install `django-machina` forum in the `sandbox` project
 
+### Changed
+
+ - Update sandbox settings to be able to run Ashley in an `iframe` on multiple
+   external websites
+
 [unreleased]: https://github.com/openfun/ashley
