@@ -54,6 +54,11 @@ class Base(Configuration):
     # In other cases, you should comment the following line to avoid security issues.
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
+    # Disable Samesite flag in session and csrf cookies, because ashley is meant to
+    # run in an iframe on external websites.
+    CSRF_COOKIE_SAMESITE = None
+    SESSION_COOKIE_SAMESITE = None
+
     # Application definition
     ROOT_URLCONF = "urls"
     WSGI_APPLICATION = "wsgi.application"
@@ -121,7 +126,6 @@ class Base(Configuration):
         "django.middleware.csrf.CsrfViewMiddleware",
         "django.contrib.auth.middleware.AuthenticationMiddleware",
         "django.contrib.messages.middleware.MessageMiddleware",
-        "django.middleware.clickjacking.XFrameOptionsMiddleware",
         "machina.apps.forum_permission.middleware.ForumPermissionMiddleware",
     ]
 
@@ -243,19 +247,16 @@ class Production(Base):
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SESSION_COOKIE_SECURE = True
+
     # System check reference:
     # https://docs.djangoproject.com/en/2.2/ref/checks/#security
     SILENCED_SYSTEM_CHECKS = values.ListValue(
         [
-            # Allow the X_FRAME_OPTIONS to be set to "SAMEORIGIN"
-            "security.W019"
+            # Allow to disable django.middleware.clickjacking.XFrameOptionsMiddleware
+            # It is necessary since ashley wil be displayed in an iframe on external LMS sites.
+            "security.W002"
         ]
     )
-    # The X_FRAME_OPTIONS value should be set to "SAMEORIGIN" to display
-    # DjangoCMS frontend admin frames. Dockerflow raises a system check security
-    # warning with this setting, one should add "security.W019" to the
-    # SILENCED_SYSTEM_CHECKS setting (see above).
-    X_FRAME_OPTIONS = "SAMEORIGIN"
 
     # For static files in production, we want to use a backend that includes a hash in
     # the filename, that is calculated from the file content, so that browsers always

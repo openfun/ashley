@@ -13,4 +13,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - custom LTI handlers and authentication backend in `ashley`
  - fun_lti_provider django application
 
+### Changed
+
+ - update sandbox settings to be able to run ashley in an iframe on multiple
+   external websites
+
 [unreleased]: https://github.com/openfun/ashley
