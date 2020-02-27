@@ -1,0 +1,24 @@
+{% extends "machina/board_base.html" %}
+
+{% block header_collapse %}
+  {{ block.super }}
+  <ul class="nav navbar-nav navbar-right">
+    {% if request.user.is_authenticated %}
+    <li class="nav-item dropdown">
+      <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="fas fa-user"></span>
+        <strong>{{ request.user.username }}</strong>
+        <span class="fas fa-chevron-down"></span>
+      </a>
+    </li>
+    {%  else %}
+      <li class="nav-item">
+      <a href="#" class="nav-link disabled">
+        <span class="fas fa-frown"></span>
+        <strong>Not authenticated!</strong>
+      </a>
+
+      </li>
+    {% endif %}
+  </ul>
+{% endblock header_collapse %}
