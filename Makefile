@@ -56,7 +56,7 @@ lint-bandit: ## lint back-end python sources with bandit
 
 lint-mypy: ## type check back-end python sources with mypy
 	@echo 'lint:mypy started…'
-	@$(COMPOSE_TEST_RUN_APP_NODEPS) mypy src
+	@$(COMPOSE_TEST_RUN_APP) mypy src
 .PHONY: lint-mypy
 
 logs: ## display app logs (follow mode)
