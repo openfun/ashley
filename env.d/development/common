@@ -4,7 +4,7 @@ DJANGO_CONFIGURATION=Development
 DJANGO_SECRET_KEY=ThisIsAnExampleKeyForDevPurposeOnly
 
 # Python
-PYTHONUNBUFFERED=1
+PYTHONPATH=/app/sandbox
 
 # File cache for Machina attachments
 TMP_ATTACHMENT_DIR=/tmp

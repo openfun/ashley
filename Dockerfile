@@ -47,6 +47,8 @@ ENTRYPOINT [ "/usr/local/bin/entrypoint" ]
 # ---- Development image ----
 FROM core as development
 
+ENV PYTHONUNBUFFERED=1
+
 # Switch back to the root user to install development dependencies
 USER root:root
 
@@ -76,6 +78,8 @@ CMD cd sandbox && \
 
 # ---- Production image ----
 FROM core as production
+
+ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app/sandbox
 
