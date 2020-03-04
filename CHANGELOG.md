@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
  - lti_provider django application
  - install `django-machina` forum in the `sandbox` project
+ - custom user model, auth backend and LTI handlers in `ashley`
 
 ### Changed
 
