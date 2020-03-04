@@ -43,6 +43,8 @@ class Base(Configuration):
     ALLOWED_HOSTS = []
     SECRET_KEY = values.Value(None)
 
+    AUTH_USER_MODEL = "ashley.User"
+
     # SECURE_PROXY_SSL_HEADER allows to fix the scheme in Django's HttpRequest
     # object when you application is behind a reverse proxy.
     #
@@ -134,9 +136,12 @@ class Base(Configuration):
     ]
 
     AUTHENTICATION_BACKENDS = [
-        "lti_provider.default.backend.LTIBackend",
+        "ashley.auth.backend.LTIBackend",
         "django.contrib.auth.backends.ModelBackend",
     ]
+
+    LTI_LAUNCH_SUCCESS_HANDLER = "ashley.auth.handlers.success"
+    LTI_LAUNCH_FAILURE_HANDLER = "ashley.auth.handlers.failure"
 
     # Django applications from the highest priority to the lowest
     INSTALLED_APPS = [
@@ -163,6 +168,7 @@ class Base(Configuration):
         "machina.apps.forum_search",
         "machina.apps.forum_tracking",
         # Ashley
+        "ashley",
         "lti_provider",
     ]
 
@@ -194,6 +200,34 @@ class Development(Base):
 
     DEBUG = True
     ALLOWED_HOSTS = ["*"]
+
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "verbose": {
+                "format": "[%(levelname)s] [%(asctime)s] [%(module)s] "
+                "%(process)d %(thread)d %(message)s"
+            }
+        },
+        "handlers": {
+            "console": {
+                "level": "DEBUG",
+                "class": "logging.StreamHandler",
+                "formatter": "verbose",
+            }
+        },
+        "loggers": {
+            "oauthlib": {"handlers": ["console"], "level": "DEBUG", "propagate": True},
+            "ashley": {"handlers": ["console"], "level": "DEBUG", "propagate": True},
+            "lti_provider": {
+                "handlers": ["console"],
+                "level": "DEBUG",
+                "propagate": True,
+            },
+            "django": {"handlers": ["console"], "level": "INFO", "propagate": True},
+        },
+    }
 
 
 class Test(Base):
