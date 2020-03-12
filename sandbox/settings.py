@@ -157,7 +157,6 @@ class Base(Configuration):
         "widget_tweaks",
         # Django machina
         "machina",
-        "machina.apps.forum",
         "machina.apps.forum_conversation",
         "machina.apps.forum_conversation.forum_attachments",
         "machina.apps.forum_conversation.forum_polls",
@@ -169,6 +168,7 @@ class Base(Configuration):
         "machina.apps.forum_tracking",
         # Ashley
         "ashley",
+        "ashley.machina_extensions.forum",
         "lti_provider",
     ]
 
