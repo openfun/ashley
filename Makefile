@@ -130,6 +130,7 @@ test: ## run back-end tests
 
 migrate:  ## run django migration for the ashley project.
 	@echo "$(BOLD)Running migrations$(RESET)"
+	@$(COMPOSE) up -d postgresql
 	@$(WAIT_DB)
 	@$(MANAGE) migrate
 .PHONY: migrate
