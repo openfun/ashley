@@ -14,6 +14,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - install `django-machina` forum in the `sandbox` project
  - custom user model, auth backend and LTI handlers in `ashley`
  - standalone LTI consumer to test ashley in development
+ - permission management and group synchronization based on LTI roles
+ - `asley.machina_extensions.forum` application to extend django-machina's
+   forum model.
+ - automatic forum creation based on the context of the LTI launch request
 
 ### Changed
 

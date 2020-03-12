@@ -4,13 +4,23 @@ from django.contrib.auth import authenticate, login
 from django.http import (
     HttpRequest,
     HttpResponse,
+    HttpResponseBadRequest,
     HttpResponseForbidden,
     HttpResponseRedirect,
 )
 from django.urls import reverse
+from machina.core.db.models import get_model
 
 from lti_provider.exceptions import LTIException
 from lti_provider.lti import LTI
+
+from ..permissions.groups import (
+    GroupType,
+    build_forum_group_name,
+    sync_forum_user_groups,
+)
+
+Forum = get_model("forum", "Forum")  # pylint: disable=C0103
 
 
 # pylint: disable=unused-argument
@@ -34,8 +44,34 @@ def success(request: HttpRequest, lti_request: LTI) -> HttpResponse:
 
     user = authenticate(request, lti_request=lti_request)
     if user is not None:
+
+        # Get the context_id (course identifier) of the LTI request
+        lti_context = lti_request.get_param("context_id")
+        if not lti_context:
+            return HttpResponseBadRequest()
+
         login(request, user)
-        return HttpResponseRedirect(reverse("forum:index"))
+
+        # Get the forum related to this context id
+        course_forum, _created = Forum.objects.get_or_create(
+            lti_consumer=lti_request.get_consumer(),
+            lti_context=lti_context,
+            type=Forum.FORUM_POST,
+            defaults={"name": lti_request.context_title, "type": Forum.FORUM_POST},
+        )
+
+        # Synchronize group membership
+        user_groups = map(
+            lambda role: build_forum_group_name(course_forum.id, GroupType.ROLE, role),
+            lti_request.roles,
+        )
+        sync_forum_user_groups(user, course_forum, list(user_groups))
+
+        return HttpResponseRedirect(
+            reverse(
+                "forum:forum", kwargs={"slug": course_forum.slug, "pk": course_forum.id}
+            )
+        )
     return HttpResponseForbidden("Forbidden")
 
 
