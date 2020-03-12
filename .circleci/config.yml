@@ -111,6 +111,8 @@ jobs:
   lint-back:
     docker:
       - image: circleci/python:3.8-buster
+        environment:
+          PYTHONPATH: /home/circleci/fun/sandbox
     working_directory: ~/fun
     steps:
       - checkout

@@ -229,6 +229,8 @@ class Development(Base):
         },
     }
 
+    INSTALLED_APPS = Base.INSTALLED_APPS + ["dev_tools"]
+
 
 class Test(Base):
     """Test environment settings"""

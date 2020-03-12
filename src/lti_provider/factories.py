@@ -1,5 +1,5 @@
 """Factories for the ``lti_provider``."""
-
+import factory
 from factory.django import DjangoModelFactory
 
 from . import models
@@ -12,9 +12,20 @@ class LTIConsumerFactory(DjangoModelFactory):
         model = models.LTIConsumer
         django_get_or_create = ("slug",)
 
+    slug = factory.Sequence(lambda n: f"consumer{n}")
+    title = factory.Sequence(lambda n: f"Consumer {n}")
+
 
 class LTIPassportFactory(DjangoModelFactory):
     """Factory to create LTI passport."""
 
     class Meta:
         model = models.LTIPassport
+        django_get_or_create = (
+            "title",
+            "consumer",
+        )
+
+    title = factory.Sequence(lambda n: f"passport {n}")
+
+    consumer = factory.SubFactory(LTIConsumerFactory)

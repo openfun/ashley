@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Simple LTI Launch Test</title>
+</head>
+
+<body style="margin:0px;padding:0px;overflow:hidden">
+
+<form action="{{ request.build_absolute_uri }}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Display forum">
+</form>
+
+<hr />
+
+{% if lti_params %}
+    {% autoescape off %}
+        <form id="lti_form" action="{{ launch_url }}" method="post" target="lti_iframe">
+            {% for name,value in lti_params.items %}
+                <input type="hidden" name="{{ name }}" value="{{ value }}"/>
+            {% endfor %}
+        </form>
+    {% endautoescape %}
+
+    <iframe
+            class="controlled-iframe"
+            name="lti_iframe"
+            style="overflow:hidden;height:100vh;width:100vw"
+            srcdoc="<body>Loading...</body>"
+            frameborder="0"
+            allowfullscreen
+            allow="fullscreen *"
+            webkitallowfullscreen
+            mozallowfullscreen
+    >
+    </iframe>
+
+    <script>
+    var form = document.querySelector("#lti_form");
+    form.submit();
+    </script>
+{% endif %}
+
+</body>
+
+</html>

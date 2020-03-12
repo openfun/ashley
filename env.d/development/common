@@ -8,3 +8,4 @@ PYTHONPATH=/app/sandbox
 
 # File cache for Machina attachments
 TMP_ATTACHMENT_DIR=/tmp
+PYTHONPATH=/app/sandbox
