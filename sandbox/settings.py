@@ -15,6 +15,8 @@ import os
 from configurations import Configuration, values
 from machina import MACHINA_MAIN_STATIC_DIR, MACHINA_MAIN_TEMPLATE_DIR
 
+from ashley import ASHLEY_MAIN_TEMPLATE_DIR
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Disable pylint error "W0232: Class has no __init__ method", because base Configuration
@@ -104,7 +106,7 @@ class Base(Configuration):
     TEMPLATES = [
         {
             "BACKEND": "django.template.backends.django.DjangoTemplates",
-            "DIRS": [MACHINA_MAIN_TEMPLATE_DIR],
+            "DIRS": [ASHLEY_MAIN_TEMPLATE_DIR, MACHINA_MAIN_TEMPLATE_DIR],
             "OPTIONS": {
                 "context_processors": [
                     "django.contrib.auth.context_processors.auth",
@@ -190,6 +192,10 @@ class Base(Configuration):
     HAYSTACK_CONNECTIONS = {
         "default": {"ENGINE": "haystack.backends.simple_backend.SimpleEngine"},
     }
+
+    # Machina
+    MACHINA_USER_DISPLAY_NAME_METHOD = "get_public_username"
+    MACHINA_PROFILE_AVATARS_ENABLED = False
 
 
 class Development(Base):

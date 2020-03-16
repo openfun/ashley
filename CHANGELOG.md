@@ -20,6 +20,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - automatic forum creation based on the context of the LTI launch request
  - Instructor and Administrator LTI roles have special permissions on their
    forum.
+ - customize django-machina to have a basic set of forum features
 
 ### Changed
 
