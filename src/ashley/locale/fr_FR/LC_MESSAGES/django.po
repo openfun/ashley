@@ -1,0 +1,169 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ashleyforum\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-03-16 23:24+0000\n"
+"PO-Revision-Date: 2020-03-16 22:55\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: French\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Crowdin-Project: ashleyforum\n"
+"X-Crowdin-Language: fr\n"
+"X-Crowdin-File: backend.pot\n"
+
+#: models.py:30
+msgid "LTI remote user identifier"
+msgstr "Identifiant utilisateur LTI distant"
+
+#: models.py:31
+msgid "Unique identifier for the user on the tool consumer"
+msgstr "Identifiant utilisateur unique sur le Consumer"
+
+#: models.py:37
+msgid "Public username"
+msgstr "Nom d'utilisateur public"
+
+#: models.py:38
+msgid "This username will be displayed with the user's posts"
+msgstr "Ce nom d'utilisateur sera associé aux messages de l'utilisateur"
+
+#: templates/forum/forum_detail.html:22
+msgid "Mark subforums read"
+msgstr "Marquer les sous-forums comme lus"
+
+#: templates/forum/forum_detail.html:34 templates/forum/forum_detail.html:59
+msgid "New topic"
+msgstr "Nouvelle discussion"
+
+#: templates/forum/forum_detail.html:40 templates/forum/forum_detail.html:65
+msgid "Mark topics read"
+msgstr "Marquer les discussions comme lues"
+
+#: templates/forum/forum_detail.html:48
+msgid "Announcements"
+msgstr "Annonces"
+
+#: templates/forum/forum_detail.html:52 templates/forum/forum_list.html:20
+#: templates/forum/forum_list.html:38 templates/forum/forum_list.html:206
+msgid "Topics"
+msgstr "Discussions"
+
+#: templates/forum/forum_list.html:21 templates/forum/forum_list.html:39
+#: templates/forum/forum_list.html:207
+msgid "Posts"
+msgstr "Messages"
+
+#: templates/forum/forum_list.html:22 templates/forum/forum_list.html:40
+#: templates/forum/forum_list.html:208
+#: templates/forum_conversation/topic_list.html:15
+msgid "Last post"
+msgstr "Dernier message"
+
+#: templates/forum/forum_list.html:36 templates/forum/forum_list.html:204
+msgid "Forums"
+msgstr "Forums"
+
+#: templates/forum/forum_list.html:77 templates/forum/forum_list.html:150
+#: templates/forum_conversation/topic_list.html:54
+#, python-format
+msgid "By: <a href=\"%(poster_url)s\">%(username)s</a>"
+msgstr "Par : <a href=\"%(poster_url)s\">%(username)s</a>"
+
+#: templates/forum/forum_list.html:81 templates/forum/forum_list.html:154
+#: templates/forum_conversation/topic_list.html:58
+#, python-format
+msgid "By: %(poster_username)s"
+msgstr "Par: %(poster_username)s"
+
+#: templates/forum/forum_list.html:89 templates/forum/forum_list.html:162
+msgid "No posts"
+msgstr "Aucun message"
+
+#: templates/forum/forum_list.html:108 templates/forum/forum_list.html:181
+msgid "Total redirects:"
+msgstr "Nombre total de redirections :"
+
+#: templates/forum/forum_list.html:188 templates/forum/forum_list.html:194
+msgid "Subforums:"
+msgstr "Sous-forums :"
+
+#: templates/forum/forum_list.html:213
+msgid "No forums."
+msgstr "Aucun forum."
+
+#: templates/forum/index.html:6
+msgid "Index"
+msgstr "Index"
+
+#: templates/forum/index.html:13
+msgid "Mark forums read"
+msgstr "Marquer les forums comme lus"
+
+#: templates/forum/index.html:15
+msgid "View unread topics"
+msgstr "Voir les discussions non lues"
+
+#: templates/forum_conversation/partials/topic_detail_actions.html:13
+msgid "Post reply"
+msgstr "Poster une réponse"
+
+#: templates/forum_conversation/partials/topic_detail_actions.html:19
+msgid "Lock topic"
+msgstr "Verrouiller la discussion"
+
+#: templates/forum_conversation/partials/topic_detail_actions.html:20
+msgid "Unlock topic"
+msgstr "Déverrouiller la discussion"
+
+#: templates/forum_conversation/partials/topic_detail_actions.html:21
+msgid "Delete topic"
+msgstr "Supprimer la discussion"
+
+#: templates/forum_conversation/partials/topic_detail_actions.html:22
+msgid "Move topic"
+msgstr "Déplacer la discussion"
+
+#: templates/forum_conversation/partials/topic_detail_actions.html:24
+#: templates/forum_conversation/partials/topic_detail_actions.html:31
+msgid "Change to sticky topic"
+msgstr "Épingler la discussion"
+
+#: templates/forum_conversation/partials/topic_detail_actions.html:25
+#: templates/forum_conversation/partials/topic_detail_actions.html:28
+msgid "Change to announce"
+msgstr "Transformer en annonce"
+
+#: templates/forum_conversation/partials/topic_detail_actions.html:27
+#: templates/forum_conversation/partials/topic_detail_actions.html:30
+msgid "Change to standard topic"
+msgstr "Transformer en discussion standard"
+
+#: templates/forum_conversation/topic_list.html:13
+msgid "Replies"
+msgstr "Réponses"
+
+#: templates/forum_conversation/topic_list.html:14
+msgid "Views"
+msgstr "Vues"
+
+#: templates/forum_conversation/topic_list.html:29
+msgid "This topic is locked"
+msgstr "Cette discussion est verrouillée"
+
+#: templates/forum_conversation/topic_list.html:34
+#, python-format
+msgid "By: <a href=\"%(poster_url)s\">%(username)s</a> on %(creation_date)s"
+msgstr "Par: <a href=\"%(poster_url)s\">%(username)s</a> sur %(creation_date)s"
+
+#: templates/forum_conversation/topic_list.html:38
+#, python-format
+msgid "By: %(poster_username)s on %(creation_date)s"
+msgstr "Par: %(poster_username)s le %(creation_date)s"
+
+#: templates/forum_conversation/topic_list.html:74
+msgid "There are no topics in this forum."
+msgstr "Aucune discussion dans ce forum."

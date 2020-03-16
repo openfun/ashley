@@ -36,6 +36,7 @@ DOCKER_USER          = $(DOCKER_UID):$(DOCKER_GID)
 COMPOSE              = DOCKER_USER=$(DOCKER_USER) docker-compose
 COMPOSE_RUN          = $(COMPOSE) run --rm
 COMPOSE_RUN_APP      = $(COMPOSE_RUN) ashley
+COMPOSE_RUN_CROWDIN  = $(COMPOSE_RUN) crowdin -c crowdin/config.yml
 COMPOSE_TEST_RUN     = $(COMPOSE_RUN)
 COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) ashley
 MANAGE               = $(COMPOSE_RUN_APP) python sandbox/manage.py
@@ -50,6 +51,7 @@ default: help
 
 bootstrap: ## Prepare Docker images for the project
 bootstrap: \
+  env.d/development/crowdin \
 	build \
 	migrate
 .PHONY: bootstrap
@@ -135,6 +137,38 @@ migrate:  ## run django migration for the ashley project.
 	@$(MANAGE) migrate
 .PHONY: migrate
 
+# -- Internationalization
+
+env.d/development/crowdin:
+	cp env.d/development/crowdin.dist env.d/development/crowdin
+
+crowdin-download: ## Download translated message from crowdin
+	@$(COMPOSE_RUN_CROWDIN) download translations
+.PHONY: crowdin-download
+
+crowdin-upload: ## Upload source translations to crowdin
+	@$(COMPOSE_RUN_CROWDIN) upload sources
+.PHONY: crowdin-upload
+
+i18n-compile: ## compile the gettext files
+	@$(COMPOSE_RUN) -w /app/src/ashley ashley python /app/sandbox/manage.py compilemessages
+.PHONY: compilemessages
+
+i18n-download-and-compile: ## download all translated messages and compile them to be used by all applications
+i18n-download-and-compile: \
+  crowdin-download \
+  i18n-compile
+.PHONY: i18n-download-and-compile
+
+i18n-generate: ## create the .po files used for i18n
+	@$(COMPOSE_RUN) -w /app/src/ashley ashley python /app/sandbox/manage.py makemessages --keep-pot
+.PHONY: messages
+
+i18n-generate-and-upload: ## generate source translations for all applications and upload then to crowdin
+i18n-generate-and-upload: \
+  i18n-generate \
+  crowdin-upload
+.PHONY: i18n-generate-and-upload
 
 # -- Misc
 help:

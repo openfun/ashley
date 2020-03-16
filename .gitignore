@@ -27,6 +27,10 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# Translations	# Translations
+*.mo
+*.pot
+
 # Environments
 .env
 .venv
@@ -35,6 +39,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+env.d/development/crowdin
 
 # Logs
 *.log

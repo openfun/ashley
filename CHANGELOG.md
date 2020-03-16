@@ -21,7 +21,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - Instructor and Administrator LTI roles have special permissions on their
    forum.
  - customize django-machina to have a basic set of forum features
-
+ - i18n support and translations with crowdin
+ 
 ### Changed
 
  - Update sandbox settings to be able to run Ashley in an `iframe` on multiple

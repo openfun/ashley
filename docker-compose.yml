@@ -30,3 +30,12 @@ services:
 
   dockerize:
     image: jwilder/dockerize
+
+  crowdin:
+    image: fundocker/crowdin:2.0.31
+    volumes:
+      - ".:/app"
+    env_file:
+      - env.d/development/crowdin
+    user: "${DOCKER_USER:-1000}"
+    working_dir: /app
