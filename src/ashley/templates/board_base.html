@@ -1,0 +1,28 @@
+{% extends "machina/board_base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/theme.css' %}"/>
+{% endblock css %}
+
+{% block body %}
+{% block header %}
+{% endblock header %}
+<div class="my-5 container" id="main_container">
+  <div class="row">
+    <div class="col-12">
+      {% block breadcrumb %}{% include "partials/breadcrumb.html" %}{% endblock breadcrumb %}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <br />
+      {% block messages %}{% include "partials/messages.html" %}{% endblock messages %}
+    </div>
+  </div>
+  {% block content %}
+  {% endblock content %}
+</div>
+{% endblock body %}

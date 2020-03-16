@@ -39,6 +39,10 @@ class AbstractUser(DjangoAbstractUser):
         blank=False,
     )
 
+    def get_public_username(self):
+        """Getter for the public username of the user."""
+        return self.public_username
+
     def save(self, *args, **kwargs):
         if not self.public_username:
             self.public_username = self.username
