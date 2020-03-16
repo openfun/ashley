@@ -1,5 +1,7 @@
 """This module contains default handlers for LTI launch request"""
+import logging
 
+from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.http import (
     HttpRequest,
@@ -9,6 +11,7 @@ from django.http import (
     HttpResponseRedirect,
 )
 from django.urls import reverse
+from django.utils import translation
 from machina.core.db.models import get_model
 
 from lti_provider.exceptions import LTIException
@@ -21,6 +24,8 @@ from ..permissions.groups import (
 )
 
 Forum = get_model("forum", "Forum")  # pylint: disable=C0103
+
+logger = logging.getLogger("ashley")
 
 
 # pylint: disable=unused-argument
@@ -67,11 +72,20 @@ def success(request: HttpRequest, lti_request: LTI) -> HttpResponse:
         )
         sync_forum_user_groups(user, course_forum, list(user_groups))
 
-        return HttpResponseRedirect(
+        response = HttpResponseRedirect(
             reverse(
                 "forum:forum", kwargs={"slug": course_forum.slug, "pk": course_forum.id}
             )
         )
+
+        course_locale = lti_request.get_param("launch_presentation_locale")
+        if course_locale:
+            logger.debug("Course locale detected %s", course_locale)
+            translation.activate(course_locale)
+            response.set_cookie(settings.LANGUAGE_COOKIE_NAME, course_locale)
+
+        return response
+
     return HttpResponseForbidden("Forbidden")
 
 

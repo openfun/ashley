@@ -130,6 +130,7 @@ class Base(Configuration):
     MIDDLEWARE = [
         "django.middleware.security.SecurityMiddleware",
         "django.contrib.sessions.middleware.SessionMiddleware",
+        "django.middleware.locale.LocaleMiddleware",
         "django.middleware.common.CommonMiddleware",
         "django.middleware.csrf.CsrfViewMiddleware",
         "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -157,6 +158,10 @@ class Base(Configuration):
         "mptt",
         "haystack",
         "widget_tweaks",
+        # Ashley
+        "ashley",
+        "ashley.machina_extensions.forum",
+        "lti_provider",
         # Django machina
         "machina",
         "machina.apps.forum_conversation",
@@ -168,10 +173,6 @@ class Base(Configuration):
         "machina.apps.forum_permission",
         "machina.apps.forum_search",
         "machina.apps.forum_tracking",
-        # Ashley
-        "ashley",
-        "ashley.machina_extensions.forum",
-        "lti_provider",
     ]
 
     # Languages
