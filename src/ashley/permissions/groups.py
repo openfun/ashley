@@ -37,7 +37,11 @@ from machina.apps.forum_permission.shortcuts import assign_perm
 
 from ashley.machina_extensions.forum.models import AbstractForum
 from ashley.models import AbstractUser
-from ashley.permissions import DEFAULT_GROUP_FORUM_PERMISSIONS
+from ashley.permissions import (
+    DEFAULT_ADMIN_GROUP_FORUM_PERMISSIONS,
+    DEFAULT_GROUP_FORUM_PERMISSIONS,
+    DEFAULT_INSTRUCTOR_GROUP_FORUM_PERMISSIONS,
+)
 
 logger = logging.getLogger("ashley")
 
@@ -70,9 +74,25 @@ def get_or_create_group_with_default_permissions(
     """
     group, created = Group.objects.get_or_create(name=group_name)
     if created:
-        for perm in DEFAULT_GROUP_FORUM_PERMISSIONS:
+        permissions_to_assign = get_group_default_permissions(group_name, forum)
+        for perm in permissions_to_assign:
             assign_perm(perm, group, forum, True)
     return group
+
+
+def get_group_default_permissions(group_name: str, forum: AbstractForum) -> List[str]:
+    """
+    Get the default permissions for a group.
+    It detects special groups (Administrator and Instructor roles) to grant
+    them additional permissions.
+    """
+    if not group_name.startswith(f"{GROUP_PREFIX}{forum.id}{GROUP_DELIMITER}"):
+        return []
+    if group_name.endswith(f"{GroupType.ROLE.value}{GROUP_DELIMITER}administrator"):
+        return DEFAULT_ADMIN_GROUP_FORUM_PERMISSIONS
+    if group_name.endswith(f"{GroupType.ROLE.value}{GROUP_DELIMITER}instructor"):
+        return DEFAULT_INSTRUCTOR_GROUP_FORUM_PERMISSIONS
+    return DEFAULT_GROUP_FORUM_PERMISSIONS
 
 
 def sync_forum_user_groups(

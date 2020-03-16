@@ -156,13 +156,3 @@ class LTI:
 
         """
         return re.search(r"^course-v[0-9]:.*$", self.get_param("context_id"))
-
-    @property
-    def launch_presentation_locale(self):
-        """LTI launch_presentation_locale.
-
-        Returns:
-            str: the locale present in launch_presentation_locale or fallback to en
-
-        """
-        return self.get_param("launch_presentation_locale", "en")

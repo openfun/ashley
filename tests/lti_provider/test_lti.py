@@ -224,18 +224,3 @@ class LTITestCase(TestCase):
         lti_parameters.update({"context_title": "the context title"})
         lti = self._verified_lti_request(lti_parameters)
         self.assertEqual("the context title", lti.context_title)
-
-    def test_launch_presentation_locale(self):
-        """Test the retrieval of the launch_presentation_locale"""
-        lti_parameters = {
-            "lti_message_type": "basic-lti-launch-request",
-            "lti_version": "LTI-1p0",
-            "resource_link_id": "df7",
-        }
-        lti = self._verified_lti_request(lti_parameters)
-        # If launch_presentation_locale parameter is not defined, it defaults to en
-        self.assertEqual("en", lti.launch_presentation_locale)
-
-        lti_parameters.update({"launch_presentation_locale": "fr"})
-        lti = self._verified_lti_request(lti_parameters)
-        self.assertEqual("fr", lti.launch_presentation_locale)
