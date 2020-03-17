@@ -164,7 +164,7 @@ i18n-generate: ## create the .po files used for i18n
 	@$(COMPOSE_RUN) -w /app/src/ashley ashley python /app/sandbox/manage.py makemessages --keep-pot
 .PHONY: messages
 
-i18n-generate-and-upload: ## generate source translations for all applications and upload then to crowdin
+i18n-generate-and-upload: ## generate source translations for all applications and upload them to crowdin
 i18n-generate-and-upload: \
   i18n-generate \
   crowdin-upload
