@@ -160,8 +160,12 @@ i18n-download-and-compile: \
   i18n-compile
 .PHONY: i18n-download-and-compile
 
-i18n-generate: ## create the .po files used for i18n
+i18n-generate: ## create the .pot files used for i18n
 	@$(COMPOSE_RUN) -w /app/src/ashley ashley python /app/sandbox/manage.py makemessages --keep-pot
+	mv src/ashley/locale/django.pot src/ashley/locale/ashley.pot
+	@$(COMPOSE_RUN) ashley bash -c 'msgfilter -i  $$(pip show -f django-machina 2>/dev/null | grep "Location:" | awk "{print \$$2}")"/machina/locale/en/LC_MESSAGES/django.po" -o /app/src/ashley/locale/machina.pot true'
+	@$(COMPOSE_RUN) ashley msgcat --use-first /app/src/ashley/locale/machina.pot /app/src/ashley/locale/ashley.pot -o /app/src/ashley/locale/django.pot
+
 .PHONY: messages
 
 i18n-generate-and-upload: ## generate source translations for all applications and upload them to crowdin
