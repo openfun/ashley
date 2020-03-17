@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashleyforum\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-16 23:24+0000\n"
-"PO-Revision-Date: 2020-03-16 22:55\n"
+"POT-Creation-Date: 2020-03-17 01:21+0000\n"
+"PO-Revision-Date: 2020-03-17 01:22\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -77,7 +77,7 @@ msgstr "Par : <a href=\"%(poster_url)s\">%(username)s</a>"
 #: templates/forum_conversation/topic_list.html:58
 #, python-format
 msgid "By: %(poster_username)s"
-msgstr "Par: %(poster_username)s"
+msgstr "Par : %(poster_username)s"
 
 #: templates/forum/forum_list.html:89 templates/forum/forum_list.html:162
 msgid "No posts"
@@ -157,13 +157,14 @@ msgstr "Cette discussion est verrouillée"
 #: templates/forum_conversation/topic_list.html:34
 #, python-format
 msgid "By: <a href=\"%(poster_url)s\">%(username)s</a> on %(creation_date)s"
-msgstr "Par: <a href=\"%(poster_url)s\">%(username)s</a> sur %(creation_date)s"
+msgstr "Par : <a href=\"%(poster_url)s\">%(username)s</a> sur %(creation_date)s"
 
 #: templates/forum_conversation/topic_list.html:38
 #, python-format
 msgid "By: %(poster_username)s on %(creation_date)s"
-msgstr "Par: %(poster_username)s le %(creation_date)s"
+msgstr "Par : %(poster_username)s le %(creation_date)s"
 
 #: templates/forum_conversation/topic_list.html:74
 msgid "There are no topics in this forum."
 msgstr "Aucune discussion dans ce forum."
+
