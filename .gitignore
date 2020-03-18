@@ -50,3 +50,6 @@ env.d/development/crowdin
 .pytest_cache
 db.sqlite3
 .mypy_cache
+
+# Site media
+/data/

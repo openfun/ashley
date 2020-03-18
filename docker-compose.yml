@@ -25,6 +25,8 @@ services:
       - "8090:8000"
     volumes:
       - .:/app
+      - ./data/static:/data/static
+      - ./data/media:/data/media
     depends_on:
       - "postgresql"
 
