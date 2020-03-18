@@ -1,0 +1,7 @@
+
+.card.forumlist .card-header .forum-count-col,
+.card.forumlist .card-header .forum-last-post-col,
+.card.topiclist .card-header .topic-count-col,
+.card.topiclist .card-header .topic-last-post-col {
+    font-size: .7rem;
+}
