@@ -135,6 +135,7 @@ class Base(Configuration):
         "django.middleware.csrf.CsrfViewMiddleware",
         "django.contrib.auth.middleware.AuthenticationMiddleware",
         "django.contrib.messages.middleware.MessageMiddleware",
+        "dockerflow.django.middleware.DockerflowMiddleware",
         "machina.apps.forum_permission.middleware.ForumPermissionMiddleware",
     ]
 
@@ -162,6 +163,8 @@ class Base(Configuration):
         "ashley",
         "ashley.machina_extensions.forum",
         "lti_provider",
+        # Third party apps
+        "dockerflow.django",
         # Django machina
         "machina",
         "machina.apps.forum_conversation",
