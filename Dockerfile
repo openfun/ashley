@@ -1,3 +1,19 @@
+# Ashley : A self-hosted alternative discussion forum for OpenEdx
+#
+# Nota bene:
+#
+# this container expects two volumes for statics and media files (that will be
+# served by nginx):
+#
+# * /data/media
+# * /data/static
+#
+# Once mounted, you will need to collect static files via the eponym django
+# admin command:
+#
+#     python sandbox/manage.py collectstatic
+#
+
 # -- Base image --
 FROM python:3.8-slim as base
 

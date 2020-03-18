@@ -18,6 +18,7 @@ from machina import MACHINA_MAIN_STATIC_DIR, MACHINA_MAIN_TEMPLATE_DIR
 from ashley import ASHLEY_MAIN_TEMPLATE_DIR
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR = os.path.join("/", "data")
 
 # Disable pylint error "W0232: Class has no __init__ method", because base Configuration
 # class does not define an __init__ method.
@@ -93,6 +94,9 @@ class Base(Configuration):
 
     # Static files (CSS, JavaScript, Images)
     STATIC_URL = "/static/"
+    STATIC_ROOT = os.path.join(DATA_DIR, "static")
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = os.path.join(DATA_DIR, "media")
 
     STATICFILES_DIRS = (MACHINA_MAIN_STATIC_DIR,)
 
