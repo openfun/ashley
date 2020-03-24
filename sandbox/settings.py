@@ -68,6 +68,9 @@ class Base(Configuration):
     CSRF_COOKIE_SAMESITE = None
     SESSION_COOKIE_SAMESITE = None
 
+    # Privacy
+    SECURE_REFERRER_POLICY = "same-origin"
+
     # Application definition
     ROOT_URLCONF = "urls"
     WSGI_APPLICATION = "wsgi.application"
@@ -276,7 +279,11 @@ class Production(Base):
         [
             # Allow to disable django.middleware.clickjacking.XFrameOptionsMiddleware
             # It is necessary since ashley wil be displayed in an iframe on external LMS sites.
-            "security.W002"
+            "security.W002",
+            # SECURE_SSL_REDIRECT is not defined in the base configuration
+            "security.W008",
+            # No value is defined for SECURE_HSTS_SECONDS
+            "security.W004",
         ]
     )
 
