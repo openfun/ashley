@@ -1,10 +1,11 @@
 """Declare the models related to Ashley ."""
+import uuid
 
 from django.db import models
 from machina.apps.forum.abstract_models import AbstractForum as MachinaAbstractForum
-from machina.core.db.models import model_factory
+from machina.core.db.models import get_model, model_factory
 
-from lti_provider.models import LTIConsumer
+LTIContext = get_model("ashley", "LTIContext")  # pylint: disable=C0103
 
 
 class AbstractForum(MachinaAbstractForum):
@@ -21,11 +22,11 @@ class AbstractForum(MachinaAbstractForum):
     # foreign keys models referenced by their name.
     # (See https://github.com/PyCQA/pylint-django#known-issues )
 
-    lti_consumer = models.ForeignKey(
-        LTIConsumer, on_delete=models.SET_NULL, null=True, db_index=True
+    lti_id = models.UUIDField(
+        null=False, default=uuid.uuid4, editable=False, unique=True
     )
 
-    lti_context = models.CharField(max_length=150, null=True, blank=True, db_index=True)
+    lti_contexts = models.ManyToManyField(LTIContext)
 
     class Meta(MachinaAbstractForum.Meta):
         abstract = True

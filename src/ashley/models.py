@@ -1,11 +1,17 @@
 """Declare the models related to Ashley ."""
+import logging
+from typing import List
 
 from django.contrib.auth.models import AbstractUser as DjangoAbstractUser
+from django.contrib.auth.models import Group
 from django.db import models
+from django.db.models import Model
 from django.utils.translation import gettext_lazy as _
 from machina.core.db.models import model_factory
 
 from lti_provider.models import LTIConsumer
+
+logger = logging.getLogger("ashley")
 
 
 class AbstractUser(DjangoAbstractUser):
@@ -23,7 +29,7 @@ class AbstractUser(DjangoAbstractUser):
     is used for this purpose.
     """
 
-    lti_consumer = models.ForeignKey(LTIConsumer, on_delete=models.CASCADE, null=True)
+    lti_consumer = models.ForeignKey(LTIConsumer, on_delete=models.PROTECT, null=True)
 
     lti_remote_user_id = models.CharField(
         max_length=150,
@@ -64,3 +70,100 @@ class AbstractUser(DjangoAbstractUser):
 
 # Default implementation of the AbstractUser, using django-machina's model factory
 User = model_factory(AbstractUser)
+
+
+class AbstractLTIContext(Model):
+    """Abstract LTI Context model for Ashley."""
+
+    GROUP_PREFIX = "cg"
+    GROUP_DELIMITER = ":"
+
+    lti_id = models.CharField(max_length=150, null=False, blank=False, db_index=True)
+
+    lti_consumer = models.ForeignKey(
+        LTIConsumer, on_delete=models.PROTECT, null=False, db_index=True
+    )
+
+    def get_base_group(self) -> Group:
+        """
+        Get the base (Django) Group for this LTI context.
+
+        All LTI users authenticated within this LTI context should be in this group.
+        """
+        return self._get_or_create_group(self.base_group_name)
+
+    @property
+    def base_group_name(self) -> str:
+        """
+        Get the name of the base group.
+        """
+        return self.GROUP_DELIMITER.join([self.GROUP_PREFIX, str(self.id)])
+
+    def get_role_groups(self, roles: List[str]) -> List[Group]:
+        """
+        Get the Django Groups corresponding to a list of LTI Context Roles
+
+        All LTI users authenticated within this LTI context having these roles
+        should be in these groups.
+        """
+        return list(map(self.get_role_group, roles))
+
+    def get_role_group(self, role: str) -> Group:
+        """
+        Get the Django Group corresponding to a LTI Context Role
+
+        All LTI user authenticated within this LTI context and having this role
+        should be in this group.
+        """
+        group_name = self.GROUP_DELIMITER.join([self.base_group_name, "role", role])
+        return self._get_or_create_group(group_name)
+
+    @staticmethod
+    def _get_or_create_group(group_name: str) -> Group:
+        """
+        Helper to get or create a Django Group by name
+        """
+        group, created = Group.objects.get_or_create(name=group_name)
+        if created:
+            logger.debug("Group %s created", group_name)
+        return group
+
+    def sync_user_groups(self, user, roles: List[str]) -> None:
+        """
+        Synchronize the group membership of a user for this LTI Context
+        """
+
+        current_groups = list(user.groups.filter(name__startswith=self.base_group_name))
+        target_groups = self.get_role_groups(roles) + [self.get_base_group()]
+
+        logger.debug("Current groups : %s", current_groups)
+        logger.debug("Target groups : %s", target_groups)
+
+        # Remove groups if necessary
+        for group in current_groups:
+            if group not in target_groups:
+                logger.debug("Removing user %s from group %s", user, group)
+                user.groups.remove(group)
+
+        # Add group if necessary
+        for group in target_groups:
+            if group not in current_groups:
+                logger.debug("Add user %s to group %s", user, group)
+                user.groups.add(group)
+
+    class Meta:
+        """Options for the ``AbstractLTIContext`` model."""
+
+        abstract = True
+        app_label = "ashley"
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=["lti_consumer", "id"],
+                name="lticontext_unique_consumer_context_id",
+            ),
+        ]
+
+
+# Default implementation of the AbstractLTIContext model
+LTIContext = model_factory(AbstractLTIContext)

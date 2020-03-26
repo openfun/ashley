@@ -148,9 +148,6 @@ class Base(Configuration):
         "django.contrib.auth.backends.ModelBackend",
     ]
 
-    LTI_LAUNCH_SUCCESS_HANDLER = "ashley.auth.handlers.success"
-    LTI_LAUNCH_FAILURE_HANDLER = "ashley.auth.handlers.failure"
-
     # Django applications from the highest priority to the lowest
     INSTALLED_APPS = [
         "django.contrib.admin",

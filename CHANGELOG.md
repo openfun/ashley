@@ -23,6 +23,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - customize django-machina to have a basic set of forum features
  - i18n support and translations with crowdin
  - add basic CSS file in ashley to override machina's stylesheet
+ - each forum has its own unique LTI launch URL
  
 ### Changed
 

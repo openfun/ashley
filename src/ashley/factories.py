@@ -5,6 +5,7 @@ from machina.core.db.models import get_model
 
 from lti_provider.factories import LTIConsumerFactory
 
+LTIContext = get_model("ashley", "LTIContext")  # pylint: disable=C0103
 User = get_model("ashley", "User")  # pylint: disable=C0103
 
 
@@ -22,3 +23,13 @@ class UserFactory(DjangoModelFactory):
     username = factory.LazyAttribute(
         lambda u: f"{u.public_username}@{u.lti_consumer.slug}"
     )
+
+
+class LTIContextFactory(DjangoModelFactory):
+    """Factory to create a LTIContext."""
+
+    class Meta:
+        model = LTIContext
+
+    lti_consumer = factory.SubFactory(LTIConsumerFactory)
+    lti_id = factory.Sequence(lambda n: f"context{n}")
