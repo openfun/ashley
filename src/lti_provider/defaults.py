@@ -15,7 +15,7 @@ from django.conf import settings
 #   "lti_provider.default.backend.AuthBackend"
 #
 
-settings.LTI_LAUNCH_SUCCESS_HANDLER = getattr(
+LTI_LAUNCH_SUCCESS_HANDLER = getattr(
     settings, "LTI_LAUNCH_SUCCESS_HANDLER", "lti_provider.default.handlers.success"
 )
 
@@ -26,6 +26,6 @@ settings.LTI_LAUNCH_SUCCESS_HANDLER = getattr(
 #
 # The handler should return a valid HTTP response (django.http.HttpResponse)
 # A default implementation is given in this application as an example.
-settings.LTI_LAUNCH_FAILURE_HANDLER = getattr(
+LTI_LAUNCH_FAILURE_HANDLER = getattr(
     settings, "LTI_LAUNCH_FAILURE_HANDLER", "lti_provider.default.handlers.failure"
 )

@@ -142,7 +142,7 @@ class LTI:
         """LTI roles of the authenticated user.
 
         Returns:
-            set: normalized LTI roles from the session
+            List[str]: normalized LTI roles from the session
         """
         roles = self.get_param("roles", [])
         return list(map(str.lower, roles))

@@ -27,7 +27,14 @@ def dev_consumer(request: HttpRequest) -> HttpResponse:
         form = LTIConsumerForm(request.POST)
         if form.is_valid():
             launch_url = request.build_absolute_uri(
-                reverse("lti_provider.views.launch")
+                reverse(
+                    "forum.lti.view",
+                    kwargs={
+                        "uuid": uuid.uuid5(
+                            uuid.NAMESPACE_DNS, form.cleaned_data["course_id"]
+                        )
+                    },
+                )
             )
             lti_params = _generate_signed_parameters(form, launch_url, passport)
             return render(
