@@ -28,7 +28,6 @@ share/python-wheels/
 MANIFEST
 
 # Translations	# Translations
-*.mo
 *.pot
 
 # Environments
