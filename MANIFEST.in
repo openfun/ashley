@@ -1,2 +1,4 @@
 include LICENSE
 include README.md
+recursive-include src/ashley *.html *.png *.gif *.js *.css *.jpg *.jpeg *.po *.mo *.eot *.svg *.ttf *.woff *.woff2
+recursive-include src/lti_provider *.html *.png *.gif *.js *.css *.jpg *.jpeg *.po *.mo *.eot *.svg *.ttf *.woff *.woff2
