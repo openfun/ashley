@@ -52,3 +52,11 @@ db.sqlite3
 
 # Site media
 /data/
+src/ashley/static/ashley/
+
+# JS dependencies
+node_modules
+
+# SASS
+.sass-cache
+

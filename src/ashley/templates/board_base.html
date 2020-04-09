@@ -4,7 +4,7 @@
 
 {% block css %}
     {{ block.super }}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/ashley.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'ashley/css/main.css' %}"/>
 {% endblock css %}
 
 {% block body %}
@@ -26,3 +26,8 @@
   {% endblock content %}
 </div>
 {% endblock body %}
+
+{% block js %}
+{{ block.super }}
+<script src="{% static 'ashley/js/ashley.js' %}" type="text/javascript" charset="utf-8"></script>
+{% endblock js %}

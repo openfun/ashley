@@ -41,3 +41,10 @@ services:
       - env.d/development/crowdin
     user: "${DOCKER_USER:-1000}"
     working_dir: /app
+
+  node:
+    image: circleci/node:10
+    working_dir: /app/src/frontend
+    user: "${DOCKER_USER:-1000}"
+    volumes:
+      - .:/app

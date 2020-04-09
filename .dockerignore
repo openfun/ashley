@@ -26,3 +26,6 @@ docs
 .vscode
 db.sqlite3
 .mypy_cache
+
+# Font-end
+**/node_modules

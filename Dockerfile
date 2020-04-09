@@ -20,6 +20,18 @@ FROM python:3.8-slim as base
 # Upgrade pip to its latest release to speed up dependencies installation
 RUN pip install --upgrade pip
 
+# ---- Front-end builder image ----
+FROM node:10 as front-builder
+
+# Copy frontend app sources
+COPY ./src/frontend /builder/src/frontend
+
+WORKDIR /builder/src/frontend
+
+RUN yarn install --frozen-lockfile && \
+    yarn build-production && \
+    yarn sass-production
+
 # ---- Back-end builder image ----
 FROM base as back-builder
 
@@ -29,6 +41,15 @@ WORKDIR /builder
 COPY setup.py setup.cfg MANIFEST.in /builder/
 COPY ./src/ashley /builder/src/ashley/
 COPY ./src/lti_provider /builder/src/lti_provider/
+
+# Copy distributed application's statics
+COPY --from=front-builder \
+    /builder/src/ashley/static/ashley/js/*.js \
+    /builder/src/ashley/static/ashley/js/
+COPY --from=front-builder \
+    /builder/src/ashley/static/ashley/css/main.css \
+    /builder/src/ashley/static/ashley/css/main.css
+
 
 RUN mkdir /install && \
     pip install --prefix=/install .[sandbox]
