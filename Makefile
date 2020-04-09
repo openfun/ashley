@@ -42,6 +42,15 @@ COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) ashley
 MANAGE               = $(COMPOSE_RUN_APP) python sandbox/manage.py
 WAIT_DB              = @$(COMPOSE_RUN) dockerize -wait tcp://$(DB_HOST):$(DB_PORT) -timeout 60s
 
+# -- Node
+# We must run node with a /home because yarn tries to write to ~/.yarnrc. If the
+# ID of our host user (with which we run the container) does not exist in the
+# container (e.g. 1000 exists but 1009 does not exist by default), then yarn
+# will try to write to "/.yarnrc" at the root of the system and will fail with a
+# permission error.
+COMPOSE_RUN_NODE     = $(COMPOSE_RUN) -e HOME="/tmp" node
+YARN                 = $(COMPOSE_RUN_NODE) yarn
+
 # ==============================================================================
 # RULES
 
@@ -98,7 +107,7 @@ lint: \
 
 lint-bandit: ## lint back-end python sources with bandit
 	@echo 'lint:bandit started…'
-	@$(COMPOSE_TEST_RUN_APP) bandit -qr src sandbox
+	@$(COMPOSE_TEST_RUN_APP) bandit -qr -x src/frontend src sandbox
 .PHONY: lint-bandit
 
 lint-black: ## lint back-end python sources with black
@@ -136,6 +145,54 @@ migrate:  ## run django migration for the ashley project.
 	@$(WAIT_DB)
 	@$(MANAGE) migrate
 .PHONY: migrate
+
+# -- Frontend
+
+build-front: ## build front-end application
+build-front: \
+	install-front \
+	build-ts \
+	build-sass
+.PHONY: build-front
+
+build-ts: ## build TypeScript application
+	@$(YARN) build
+.PHONY: build-ts
+
+build-sass: ## build Sass files to CSS
+	@$(YARN) sass
+.PHONY: build-sass
+
+install-front: ## install front-end dependencies
+	@$(YARN) install
+.PHONY: install-front
+
+lint-front: ## run all front-end "linters"
+lint-front: \
+  lint-front-tslint \
+  lint-front-prettier
+.PHONY: lint-front
+
+lint-front-prettier: ## run prettier over js/jsx/json/ts/tsx files -- beware! overwrites files
+	@$(YARN) prettier-write
+.PHONY: lint-front-prettier
+
+lint-front-tslint: ## lint TypeScript sources
+	@$(YARN) lint
+.PHONY: lint-front-tslint
+
+test-front: ## run front-end tests
+	@$(YARN) test --runInBand --passWithNoTests
+.PHONY: test-front
+
+watch-sass: ## watch changes in Sass files
+	@$(YARN) watch-sass
+.PHONY: watch-sass
+
+watch-ts: ## watch changes in TypeScript files
+	@$(YARN) build --watch
+.PHONY: watch-ts
+
 
 # -- Internationalization
 
