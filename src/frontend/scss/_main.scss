@@ -1,6 +1,19 @@
+// Import Draft-js related stylesheet
+@import 'draft-js/dist/Draft';
+@import 'draft-js-emoji-plugin/lib/plugin';
+@import 'draft-js-static-toolbar-plugin/lib/plugin';
+@import 'draft-js-anchor-plugin/lib/plugin';
+
 .card.forumlist .card-header .forum-count-col,
 .card.forumlist .card-header .forum-last-post-col,
 .card.topiclist .card-header .topic-count-col,
 .card.topiclist .card-header .topic-last-post-col {
   font-size: 0.7rem;
+}
+
+.ashley-editor-widget {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  padding: 1em;
+  min-height: 10em;
 }

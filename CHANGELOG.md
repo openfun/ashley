@@ -24,6 +24,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - i18n support and translations with crowdin
  - add basic CSS file in ashley to override machina's stylesheet
  - each forum has its own unique LTI launch URL
+ - wysiwyg editor based on Draft.js
  
 ### Changed
 

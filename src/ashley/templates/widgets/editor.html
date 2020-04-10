@@ -1,0 +1,19 @@
+<div>
+    {% include "django/forms/widgets/hidden.html" %}
+</div>
+<script type="text/javascript">
+    'use strict';
+    (function() {
+        // Replace current script with new empty container for editor.
+        var container = document.createElement('div');
+        container.classList.add("ashley-editor-root");
+        document.currentScript.replaceWith(container);
+
+        // Insert current widget input editor into fully loaded DOM tree.
+        document.addEventListener('DOMContentLoaded', function() {
+            let target = document.getElementById('{{ widget.attrs.id }}');
+            let props = Object.assign({target: target}, {{ widget.props }});
+            Ashley.Editor.init(props, container);
+        });
+    })();
+</script>
