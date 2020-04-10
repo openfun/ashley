@@ -1,6 +1,11 @@
 """This module contains default settings for Ashley application."""
 
 from django.conf import settings
+from draftjs_exporter.defaults import BLOCK_MAP as DEFAULT_BLOCK_MAP
+from draftjs_exporter.defaults import STYLE_MAP as DEFAULT_STYLE_MAP
+from draftjs_exporter.dom import DOM
+
+from ashley.editor.decorators import emoji, link
 
 _FORUM_BASE_PERMISSIONS = [
     "can_see_forum",
@@ -36,3 +41,17 @@ DEFAULT_FORUM_ROLES_PERMISSIONS = getattr(
         "instructor": _FORUM_ADMIN_PERMISSIONS,
     },
 )
+
+
+DEFAULT_DRAFTJS_EXPORTER_CONFIG = {
+    "entity_decorators": {"LINK": link, "emoji": emoji},
+    "composite_decorators": [],
+    "block_map": DEFAULT_BLOCK_MAP,
+    "style_map": DEFAULT_STYLE_MAP,
+    "engine": DOM.STRING,
+}
+
+DRAFTJS_EXPORTER_CONFIG = {
+    **DEFAULT_DRAFTJS_EXPORTER_CONFIG,
+    **getattr(settings, "ASHLEY_DRAFTJS_EXPORTER_CONFIG", {}),
+}

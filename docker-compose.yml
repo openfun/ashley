@@ -43,7 +43,7 @@ services:
     working_dir: /app
 
   node:
-    image: circleci/node:10
+    image: node:lts
     working_dir: /app/src/frontend
     user: "${DOCKER_USER:-1000}"
     volumes:

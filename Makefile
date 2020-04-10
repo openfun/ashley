@@ -178,7 +178,7 @@ lint-front-prettier: ## run prettier over js/jsx/json/ts/tsx files -- beware! ov
 .PHONY: lint-front-prettier
 
 lint-front-tslint: ## lint TypeScript sources
-	@$(YARN) lint
+	@$(YARN) lint-fix
 .PHONY: lint-front-tslint
 
 test-front: ## run front-end tests

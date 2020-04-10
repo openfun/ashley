@@ -391,7 +391,7 @@ jobs:
             - v1-front-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Run tests
-          # Circle CI needs the tests to be ran sequentially, otherwise it hangs. See Jest docs below:
+          # Circle CI needs the tests to be run sequentially, otherwise it hangs. See Jest docs below:
           # (https://jestjs.io/docs/en/troubleshooting#tests-are-extremely-slow-on-docker-and-or-continuous-integration-ci-server)
           command: yarn test --runInBand --passWithNoTests
 
@@ -440,13 +440,13 @@ workflows:
               only: /.*/
       - test-front:
           requires:
-            - lint-front
+            - build-front
           filters:
             tags:
               only: /.*/
       - test-front-package:
           requires:
-            - lint-front
+            - build-front
           filters:
             tags:
               only: /.*/
@@ -507,6 +507,7 @@ workflows:
       # Build the python package
       - package-back:
           requires:
+            - lint-front
             - test-front
             - test-back
             - build-front-production
@@ -521,6 +522,7 @@ workflows:
       # the master branch
       - hub:
           requires:
+            - lint-front
             - test-front
             - build-docker
             - test-back
