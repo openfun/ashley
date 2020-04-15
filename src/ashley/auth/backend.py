@@ -8,7 +8,7 @@ from django.core.exceptions import PermissionDenied
 from lti_provider.default.backend import LTIBackend as BaseLTIBackend
 from lti_provider.lti import LTI
 
-logger = logging.getLogger("ashley")
+logger = logging.getLogger(__name__)
 
 
 class LTIBackend(BaseLTIBackend):

@@ -18,7 +18,7 @@ from .defaults import DEFAULT_FORUM_BASE_PERMISSIONS, DEFAULT_FORUM_ROLES_PERMIS
 Forum = get_model("forum", "Forum")  # pylint: disable=C0103
 LTIContext = get_model("ashley", "LTIContext")  # pylint: disable=C0103
 
-logger = logging.getLogger("ashley")
+logger = logging.getLogger(__name__)
 
 
 class ForumLTIView(BaseLTIView):

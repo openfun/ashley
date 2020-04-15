@@ -39,7 +39,7 @@ from oauthlib.oauth1 import RequestValidator
 
 from .models import LTIPassport
 
-logger = logging.getLogger("lti_provider")
+logger = logging.getLogger(__name__)
 
 
 class LTIRequestValidator(RequestValidator):

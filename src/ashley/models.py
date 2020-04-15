@@ -11,7 +11,7 @@ from machina.core.db.models import model_factory
 
 from lti_provider.models import LTIConsumer
 
-logger = logging.getLogger("ashley")
+logger = logging.getLogger(__name__)
 
 
 class AbstractUser(DjangoAbstractUser):
