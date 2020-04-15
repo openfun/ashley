@@ -9,7 +9,7 @@ from django.core.exceptions import PermissionDenied
 
 from ..lti import LTI
 
-logger = logging.getLogger("lti_provider")
+logger = logging.getLogger(__name__)
 
 USER_MODEL = get_user_model()
 
