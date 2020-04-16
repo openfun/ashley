@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.0-beta.0] - 2020-04-16
+
 ### Added
 
  - lti_provider django application
@@ -31,4 +33,5 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - Update sandbox settings to be able to run Ashley in an `iframe` on multiple
    external websites
 
-[unreleased]: https://github.com/openfun/ashley
+[Unreleased]: https://github.com/openfun/ashley/compare/v1.0.0-beta.0...master
+[1.0.0-beta.0]: https://github.com/openfun/ashley/compare/d767ba96aedcbc7d48fba5fefad2b93b9d623cc8...v1.0.0-beta.0
