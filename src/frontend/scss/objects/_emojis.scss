@@ -1,0 +1,14 @@
+img.emojione {
+  width: 1.5em;
+  height: 1.5em;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  img.emojione {
+    width: 1em;
+    height: 1em;
+  }
+}

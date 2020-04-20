@@ -4,6 +4,8 @@
 @import 'draft-js-static-toolbar-plugin/lib/plugin';
 @import 'draft-js-anchor-plugin/lib/plugin';
 
+@import './objects/_emojis';
+
 .card.forumlist .card-header .forum-count-col,
 .card.forumlist .card-header .forum-last-post-col,
 .card.topiclist .card-header .topic-count-col,

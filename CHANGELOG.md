@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## Added
+
+ - render emoji with emojione on forum posts
+
 ## [1.0.0-beta.0] - 2020-04-16
 
 ### Added
