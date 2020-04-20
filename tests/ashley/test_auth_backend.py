@@ -185,3 +185,58 @@ class LTIBackendTestCase(TestCase):
                 },
                 passport,
             )
+
+    def test_moodle_launch_request(self):
+        """
+        Ensure that a launch request initiated by Moodle is
+        accepted by the authentication backend.
+        """
+
+        consumer = LTIConsumerFactory(slug="consumer")
+        passport = LTIPassportFactory(title="consumer1_passport1", consumer=consumer)
+
+        new_user = self._authenticate(
+            {
+                "user_id": "2",
+                "lis_person_sourcedid": "",
+                "roles": (
+                    "Instructor,urn:lti:sysrole:ims/lis/Administrator,"
+                    + "urn:lti:instrole:ims/lis/Administrator"
+                ),
+                "context_id": "2",
+                "context_label": "moodle101",
+                "context_title": "Moodle 101",
+                "resource_link_title": "Test forum 2",
+                "resource_link_description": "",
+                "resource_link_id": "2",
+                "context_type": "CourseSection",
+                "lis_course_section_sourcedid": "",
+                "lis_result_sourcedid": (
+                    '{"data":{"instanceid":"2","userid":"2","typeid":"1","launchid":1424835319}, '
+                    + '"hash":"2d521baae5180acbc4ea200dfa3f4c75176010b16b0be666cba68a882c7caa82"}'
+                ),
+                "lis_outcome_service_url": "http://moodle-instance.example/mod/lti/service.php",
+                "lis_person_name_given": "Admin",
+                "lis_person_name_family": "User",
+                "lis_person_name_full": "Admin User",
+                "ext_user_username": "moodle-user",
+                "lis_person_contact_email_primary": "user@example.com",
+                "launch_presentation_locale": "en",
+                "ext_lms": "moodle-2",
+                "tool_consumer_info_product_family_code": "moodle",
+                "tool_consumer_info_version": "2019111802",
+                "lti_version": "LTI-1p0",
+                "lti_message_type": "basic-lti-launch-request",
+                "tool_consumer_instance_guid": "mooodle-instance.example",
+                "tool_consumer_instance_name": "Test Site",
+                "tool_consumer_instance_description": "Test Site",
+                "launch_presentation_document_target": "iframe",
+                "launch_presentation_return_url": (
+                    "http://moodle-instance.example/mod/lti/return.php"
+                    + "?course=2&launch_container=3&instanceid=2&sesskey=TEST"
+                ),
+            },
+            passport,
+        )
+
+        self.assertEqual("moodle-user", new_user.public_username)

@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ## Added
 
  - render emoji with emojione on forum posts
+ - add support for Moodle in ashley's LTI authentication backend
 
 ## [1.0.0-beta.0] - 2020-04-16
 

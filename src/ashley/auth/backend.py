@@ -35,9 +35,7 @@ class LTIBackend(BaseLTIBackend):
         email = self._get_mandatory_param(
             lti_request, "lis_person_contact_email_primary"
         )
-        remote_person_sourcedid = self._get_mandatory_param(
-            lti_request, "lis_person_sourcedid"
-        )
+        remote_user_id = self._get_remote_user_id(lti_request)
 
         logger.debug(
             "User %s (consumer = %s) authenticated from LTI request",
@@ -47,17 +45,17 @@ class LTIBackend(BaseLTIBackend):
         user_model = get_user_model()
         try:
             return user_model.objects.get(
-                lti_consumer=lti_consumer, lti_remote_user_id=remote_person_sourcedid
+                lti_consumer=lti_consumer, lti_remote_user_id=remote_user_id
             )
         except user_model.DoesNotExist:
-            username = f"{remote_person_sourcedid}@{lti_consumer.slug:s}"
+            username = f"{remote_user_id}@{lti_consumer.slug:s}"
 
             user = user_model.objects.create_user(
                 username,
                 email=email,
                 lti_consumer=lti_consumer,
-                lti_remote_user_id=remote_person_sourcedid,
-                public_username=remote_person_sourcedid,
+                lti_remote_user_id=remote_user_id,
+                public_username=remote_user_id,
             )
             logger.debug("User %s created in database", username)
 
@@ -65,3 +63,22 @@ class LTIBackend(BaseLTIBackend):
             logger.debug("User %s is not active", user.username)
             raise PermissionDenied()
         return user
+
+    @staticmethod
+    def _get_remote_user_id(lti_request: LTI):
+        """
+        Get the remote user id.
+        It can be in different LTI parameters, depends on the LTI consumer.
+        """
+        parameters_to_test = [
+            # OpenEdx
+            "lis_person_sourcedid",
+            # Moodle
+            "ext_user_username",
+        ]
+        for param in parameters_to_test:
+            user_id = lti_request.get_param(param)
+            if user_id:
+                return user_id
+        logger.debug("Unable to find remote user id in LTI request")
+        raise PermissionDenied()
