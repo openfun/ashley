@@ -4,9 +4,6 @@ module.exports = {
   // webpack config for production.
   mode: 'development',
 
-  // Currently, @babel/preset-env is unaware that using import() with Webpack relies on Promise internally.
-  // Environments which do not have builtin support for Promise, like Internet Explorer, will require both
-  // the promise and iterator polyfills be added manually.
   entry: ['./js/ashley.ts'],
 
   // chunkFilename must have a unique and different name on each build
