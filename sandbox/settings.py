@@ -135,6 +135,7 @@ class Base(Configuration):
     ]
 
     MIDDLEWARE = [
+        "ashley.middleware.SameSiteNoneMiddleware",
         "django.middleware.security.SecurityMiddleware",
         "django.contrib.sessions.middleware.SessionMiddleware",
         "django.middleware.locale.LocaleMiddleware",

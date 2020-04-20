@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
  - render emoji with emojione on forum posts
  - add support for Moodle in ashley's LTI authentication backend
+ - add SameSiteNoneMiddleware to force SameSite=None on CSRF and session cookies
 
 ## [1.0.0-beta.0] - 2020-04-16
 
