@@ -18,6 +18,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
  - update draftjs link decorator to open links in new tab and to add attribute
    `rel="nofollow noopener noreferrer"`
+ - refactor `<AshleyEditor />` in functional component using hooks
 
 ### Fixed
 
