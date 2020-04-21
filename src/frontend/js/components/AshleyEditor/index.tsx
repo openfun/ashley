@@ -10,14 +10,11 @@ import {
   UnderlineButton,
   UnorderedListButton,
 } from 'draft-js-buttons';
-import createEmojiPlugin, {
-  EmojiPlugin,
-  EmojiPluginConfig,
-} from 'draft-js-emoji-plugin';
+import createEmojiPlugin, { EmojiPluginConfig } from 'draft-js-emoji-plugin';
 import Editor from 'draft-js-plugins-editor';
 import PluginEditor from 'draft-js-plugins-editor/lib';
 import createToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
-import React, { ComponentType, Ref } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 interface MyEditorProps {
@@ -27,81 +24,91 @@ interface MyEditorProps {
   emojiConfig?: EmojiPluginConfig;
 }
 
-// Initialize the Toolbar plugin
-const toolbarPlugin = createToolbarPlugin();
-const { Toolbar } = toolbarPlugin;
+const AshleyEditor = (props: MyEditorProps) => {
+  const [editorState, setEditorState] = useState(() => {
+    if (props.target.value) {
+      const jsonContent = JSON.parse(props.target.value);
+      if (jsonContent) {
+        return EditorState.createWithContent(convertFromRaw(jsonContent));
+      }
+    }
+    return EditorState.createEmpty();
+  });
 
-// Initialize the link plugin
-const linkPlugin = createLinkPlugin({
-  linkTarget: '_blank',
-});
-const { LinkButton } = linkPlugin;
+  const toolbarRef = useRef(null as HTMLDivElement | null);
+  const editorContainerRef = useRef(null as HTMLDivElement | null);
+  const editorRef = useRef(null as PluginEditor | null);
 
-export class AshleyEditor extends React.Component<MyEditorProps, any> {
-  private toolbarRef: HTMLDivElement | null;
-  private editorRef: PluginEditor | null;
-
-  private emojiPlugin: EmojiPlugin;
-
-  constructor(props: MyEditorProps) {
-    super(props);
-
-    // Initialize the Emoji plugin
-    this.emojiPlugin = createEmojiPlugin(props.emojiConfig);
-
-    this.toolbarRef = null;
-    this.editorRef = null;
-
-    this.state = {
-      editorState: this.initialEditorState(),
+  // Instantiate plugins in a state to avoid instantiation on every render
+  const [{ emojiPlugin, linkPlugin, toolbarPlugin }] = useState(() => {
+    return {
+      emojiPlugin: createEmojiPlugin(props.emojiConfig),
+      linkPlugin: createLinkPlugin({
+        linkTarget: '_blank',
+      }),
+      toolbarPlugin: createToolbarPlugin(),
     };
-  }
+  });
 
-  onChange(editorState: EditorState) {
-    this.setState({ editorState });
-    const rawContent = convertToRaw(editorState.getCurrentContent());
-    this.props.target.value = JSON.stringify(rawContent);
-  }
+  useEffect(() => {
+    if (props.autofocus && editorRef.current) {
+      editorRef.current.focus();
+    }
+  }, []);
 
-  handleKeyCommand(command: string, editorState: EditorState) {
-    const newState = RichUtils.handleKeyCommand(editorState, command);
+  const editorChange = (stateEditor: EditorState) => {
+    props.target.value = JSON.stringify(
+      convertToRaw(stateEditor.getCurrentContent()),
+    );
+    setEditorState(stateEditor);
+  };
+
+  const keyBinding = (command: string, stateEditor: EditorState) => {
+    const newState = RichUtils.handleKeyCommand(stateEditor, command);
     if (newState) {
-      this.onChange(newState);
+      editorChange(newState);
       return 'handled';
     }
     return 'not-handled';
-  }
+  };
 
-  componentDidMount() {
-    if (this.props.autofocus) {
-      this.editorRef?.focus();
-    }
-
-    // Fix to be able to render the toolbar before the editor
-    // See: https://github.com/draft-js-plugins/draft-js-plugins/issues/1369
-    if (this.toolbarRef) {
-      this.toolbarRef.addEventListener('click', () => {
-        setTimeout(() => {
-          this.setState({
-            editorState: EditorState.forceSelection(
-              this.state.editorState,
-              this.state.editorState.getSelection(),
-            ),
-          });
-        }, 0);
-      });
-    }
-  }
-
-  render() {
-    return (
-      <div>
-        <Toolbar>
+  return (
+    <div>
+      <div
+        className="ashley-editor-widget"
+        ref={editorContainerRef}
+        style={
+          toolbarRef.current
+            ? {
+                top: `${toolbarRef.current.offsetHeight}px`,
+              }
+            : {}
+        }
+      >
+        <Editor
+          ref={editorRef}
+          editorState={editorState}
+          onChange={editorChange}
+          plugins={[toolbarPlugin, emojiPlugin, linkPlugin]}
+          placeholder={props.placeholder}
+          handleKeyCommand={keyBinding}
+        />
+        <emojiPlugin.EmojiSuggestions />
+      </div>
+      <div
+        className="ashley-editor-toolbar"
+        ref={toolbarRef}
+        style={
+          editorContainerRef.current
+            ? {
+                top: `-${editorContainerRef.current.offsetHeight}px`,
+              }
+            : {}
+        }
+      >
+        <toolbarPlugin.Toolbar>
           {(externalProps: any) => (
-            <div
-              ref={toolbar => (this.toolbarRef = toolbar)}
-              className="ashley-editor-buttons"
-            >
+            <div className="ashley-editor-buttons">
               <BoldButton {...externalProps} />
               <ItalicButton {...externalProps} />
               <UnderlineButton {...externalProps} />
@@ -111,37 +118,14 @@ export class AshleyEditor extends React.Component<MyEditorProps, any> {
               <HeadlineThreeButton {...externalProps} />
               <UnorderedListButton {...externalProps} />
               <OrderedListButton {...externalProps} />
-              <this.emojiPlugin.EmojiSelect {...externalProps} />
+              <emojiPlugin.EmojiSelect {...externalProps} />
             </div>
           )}
-        </Toolbar>
-        <div className="ashley-editor-widget">
-          <Editor
-            editorState={this.state.editorState}
-            onChange={e => this.onChange(e)}
-            plugins={[toolbarPlugin, this.emojiPlugin, linkPlugin]}
-            placeholder={this.props.placeholder}
-            handleKeyCommand={this.handleKeyCommand}
-            ref={element => {
-              this.editorRef = element;
-            }}
-          />
-        </div>
-        <this.emojiPlugin.EmojiSuggestions />
+        </toolbarPlugin.Toolbar>
       </div>
-    );
-  }
-
-  private initialEditorState() {
-    if (this.props.target.value) {
-      const jsonContent = JSON.parse(this.props.target.value);
-      if (jsonContent) {
-        return EditorState.createWithContent(convertFromRaw(jsonContent));
-      }
-    }
-    return EditorState.createEmpty();
-  }
-}
+    </div>
+  );
+};
 
 export function init(props: MyEditorProps, container: HTMLElement) {
   ReactDOM.render(<AshleyEditor {...props} />, container);
