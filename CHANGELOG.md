@@ -8,11 +8,16 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## Added
+### Added
 
  - render emoji with emojione on forum posts
  - add support for Moodle in ashley's LTI authentication backend
  - add SameSiteNoneMiddleware to force SameSite=None on CSRF and session cookies
+ 
+### Changed
+
+ - update draftjs link decorator to open links in new tab and to add attribute
+   `rel="nofollow noopener noreferrer"`
 
 ## [1.0.0-beta.0] - 2020-04-16
 
