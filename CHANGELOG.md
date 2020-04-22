@@ -14,6 +14,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - add support for Moodle in ashley's LTI authentication backend
  - add SameSiteNoneMiddleware to force SameSite=None on CSRF and session cookies
 
+### Fixed
+
+  - heading buttons rendering in ashley editor on Firefox
+
 ## [1.0.0-beta.0] - 2020-04-16
 
 ### Added

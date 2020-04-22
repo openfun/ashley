@@ -98,7 +98,10 @@ export class AshleyEditor extends React.Component<MyEditorProps, any> {
       <div>
         <Toolbar>
           {(externalProps: any) => (
-            <div ref={toolbar => (this.toolbarRef = toolbar)}>
+            <div
+              ref={toolbar => (this.toolbarRef = toolbar)}
+              className="ashley-editor-buttons"
+            >
               <BoldButton {...externalProps} />
               <ItalicButton {...externalProps} />
               <UnderlineButton {...externalProps} />
