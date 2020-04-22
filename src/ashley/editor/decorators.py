@@ -15,7 +15,11 @@ def link(props):
     """
     title = props.get("title")
     href = props.get("url", "#")
-    anchor_properties = {"href": href}
+    anchor_properties = {
+        "href": href,
+        "target": "_blank",
+        "rel": "nofollow noopener noreferrer",
+    }
 
     if title is not None:
         anchor_properties["title"] = title
