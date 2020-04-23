@@ -51,8 +51,8 @@ const AshleyEditor = (props: MyEditorProps) => {
   });
 
   useEffect(() => {
-    if (props.autofocus && editorRef.current) {
-      editorRef.current.focus();
+    if (props.autofocus) {
+      focusEditor();
     }
   }, []);
 
@@ -61,6 +61,12 @@ const AshleyEditor = (props: MyEditorProps) => {
       convertToRaw(stateEditor.getCurrentContent()),
     );
     setEditorState(stateEditor);
+  };
+
+  const focusEditor = () => {
+    if (editorRef.current != null) {
+      editorRef.current.focus();
+    }
   };
 
   const keyBinding = (command: string, stateEditor: EditorState) => {
@@ -77,6 +83,7 @@ const AshleyEditor = (props: MyEditorProps) => {
       <div
         className="ashley-editor-widget"
         ref={editorContainerRef}
+        onClick={focusEditor}
         style={
           toolbarRef.current
             ? {
