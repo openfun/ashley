@@ -9,6 +9,6 @@ window.Ashley = {
   },
 };
 
-document.addEventListener('DOMContentLoaded', event => {
+document.addEventListener('DOMContentLoaded', (event) => {
   renderEmojis();
 });
