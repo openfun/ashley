@@ -115,8 +115,7 @@ USER ${DOCKER_USER}
 ENV DB_HOST=postgresql \
     DB_PORT=5432
 
-# Run django development server (wrapped by dockerize to ensure the db is ready
-# to accept connections before running the development server)
+# Run django development server
 CMD cd sandbox && \
     python manage.py runserver 0.0.0.0:8000
 
