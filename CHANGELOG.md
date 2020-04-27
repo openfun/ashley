@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
  - add dependency to bootstrap 4.4.1 and font-awesome 5.13.0
+ - add button to insert a link in AshleyEditor component
 
 ### Changed
 

@@ -14,3 +14,42 @@
 .ashley-editor-buttons button {
   width: 40px;
 }
+
+// DraftJS plugin Anchor style based on the original CSS
+// (https://www.draft-js-plugins.com/plugin/anchor)
+
+.ashley-editor-link-input {
+  height: 34px;
+  width: 100%;
+  padding: 0 12px;
+  font-size: 15px;
+  font-family: inherit;
+  background-color: transparent;
+  border: none;
+  color: $input-color;
+}
+
+.ashley-editor-link-input:focus {
+  outline: none;
+}
+
+.ashley-editor-link-input::-webkit-input-placeholder {
+  color: $input-placeholder-color;
+}
+
+.ashley-editor-link-input:-ms-input-placeholder {
+  color: $input-placeholder-color;
+}
+
+.ashley-editor-link-input::placeholder {
+  color: $input-placeholder-color;
+}
+
+.ashley-editor-link-input-invalid {
+  color: $danger;
+}
+
+.ashley-editor-link {
+  color: $link-color;
+  text-decoration: underline;
+}

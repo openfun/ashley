@@ -22,6 +22,7 @@ interface MyEditorProps {
   placeholder?: string;
   target: HTMLInputElement;
   emojiConfig?: EmojiPluginConfig;
+  linkPlaceholder?: string;
 }
 
 const AshleyEditor = (props: MyEditorProps) => {
@@ -45,6 +46,12 @@ const AshleyEditor = (props: MyEditorProps) => {
       emojiPlugin: createEmojiPlugin(props.emojiConfig),
       linkPlugin: createLinkPlugin({
         linkTarget: '_blank',
+        placeholder: props.linkPlaceholder,
+        theme: {
+          input: 'ashley-editor-link-input',
+          inputInvalid: 'ashley-editor-link-input-invalid',
+          link: 'ashley-editor-link',
+        },
       }),
       toolbarPlugin: createToolbarPlugin(),
     };
@@ -119,6 +126,7 @@ const AshleyEditor = (props: MyEditorProps) => {
               <BoldButton {...externalProps} />
               <ItalicButton {...externalProps} />
               <UnderlineButton {...externalProps} />
+              <linkPlugin.LinkButton {...externalProps} />
               <Separator {...externalProps} />
               <HeadlineOneButton {...externalProps} />
               <HeadlineTwoButton {...externalProps} />
