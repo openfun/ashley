@@ -1,0 +1,50 @@
+//
+// MACHINA BOARD: FORUM PAGES
+// --------------------------------------------------
+
+.card.topiclist {
+  .card-header {
+    .topic-count-col,
+    .topic-last-post-col {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: $gray;
+    }
+  }
+
+  .card-body {
+    .topic-icon {
+      width: 50px;
+      height: 45px;
+      line-height: 49px;
+      text-align: center;
+      color: lighten($blueDark, 10%);
+
+      &.unread {
+        color: lighten($red, 15%);
+      }
+    }
+
+    .topic-name {
+      .topic-created,
+      .topic-inline-pagination {
+        font-size: 0.8rem;
+        color: #666;
+      }
+
+      .topic-inline-pagination {
+        padding-top: 6px;
+      }
+
+      .locked-indicator {
+        color: $red;
+      }
+    }
+
+    .topic-count,
+    .topic-last-post {
+      font-size: 0.9rem;
+      line-height: 1rem;
+    }
+  }
+}

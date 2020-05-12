@@ -152,7 +152,8 @@ build-front: ## build front-end application
 build-front: \
 	install-front \
 	build-ts \
-	build-sass
+	build-sass \
+	copy-webfonts
 .PHONY: build-front
 
 build-ts: ## build TypeScript application
@@ -162,6 +163,9 @@ build-ts: ## build TypeScript application
 build-sass: ## build Sass files to CSS
 	@$(YARN) sass
 .PHONY: build-sass
+
+copy-webfonts: ## Copy fonts to ashley static directory
+	@$(YARN) webfonts
 
 install-front: ## install front-end dependencies
 	@$(YARN) install

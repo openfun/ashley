@@ -30,7 +30,8 @@ WORKDIR /builder/src/frontend
 
 RUN yarn install --frozen-lockfile && \
     yarn build-production && \
-    yarn sass-production
+    yarn sass-production && \
+    yarn webfonts
 
 # ---- Back-end builder image ----
 FROM base as back-builder
@@ -49,7 +50,9 @@ COPY --from=front-builder \
 COPY --from=front-builder \
     /builder/src/ashley/static/ashley/css/main.css \
     /builder/src/ashley/static/ashley/css/main.css
-
+COPY --from=front-builder \
+    /builder/src/ashley/static/ashley/font/* \
+    /builder/src/ashley/static/ashley/font/
 
 RUN mkdir /install && \
     pip install --prefix=/install .[sandbox]

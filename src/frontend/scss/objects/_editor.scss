@@ -1,0 +1,16 @@
+.ashley-editor-widget {
+  border: 1px solid $gray-400;
+  border-radius: 0.25rem;
+  padding: 1em;
+  min-height: 10em;
+  position: relative;
+  cursor: text;
+}
+
+.ashley-editor-toolbar {
+  position: relative;
+}
+
+.ashley-editor-buttons button {
+  width: 40px;
+}

@@ -350,18 +350,23 @@ jobs:
           name: Build application styles in production mode
           command: yarn sass-production
       - run:
+          name: Copy webfonts
+          command: yarn webfonts
+      - run:
           name: List builds
           command: |
             echo "== Javascript =="
             ls ../ashley/static/ashley/js/*.js
             echo "== CSS =="
             ls ../ashley/static/ashley/css/*.css
+            echo "== Webfonts =="
+            ls ../ashley/static/ashley/font/
       - persist_to_workspace:
           root: ~/fun
           paths:
             - src/ashley/static/ashley/js/*.js
             - src/ashley/static/ashley/css/*.css
-
+            - src/ashley/static/ashley/font/*
   lint-front:
     docker:
       - image: circleci/node:10

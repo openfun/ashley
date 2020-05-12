@@ -8,6 +8,15 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+ - add dependency to bootstrap 4.4.1 and font-awesome 5.13.0
+
+### Changed
+
+ - build the forum CSS theme inside ashley instead of using the compiled CSS
+   file distributed with django-machina
+
 ## [1.0.0-beta.1] - 2020-05-04
 
 ### Added
