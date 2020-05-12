@@ -1,31 +1,28 @@
+@charset "UTF-8";
+
+@import './_variables';
+
+@import 'bootstrap/scss/bootstrap';
+
+// Fontawesome
+@import '@fortawesome/fontawesome-free/scss/fontawesome';
+@import '@fortawesome/fontawesome-free/scss/regular';
+@import '@fortawesome/fontawesome-free/scss/brands';
+@import '@fortawesome/fontawesome-free/scss/solid';
+
 // Import Draft-js related stylesheet
 @import 'draft-js/dist/Draft';
 @import 'draft-js-emoji-plugin/lib/plugin';
 @import 'draft-js-static-toolbar-plugin/lib/plugin';
 @import 'draft-js-anchor-plugin/lib/plugin';
 
+// Ashley forum specific style
+@import './objects/_editor';
 @import './objects/_emojis';
-
-.card.forumlist .card-header .forum-count-col,
-.card.forumlist .card-header .forum-last-post-col,
-.card.topiclist .card-header .topic-count-col,
-.card.topiclist .card-header .topic-last-post-col {
-  font-size: 0.7rem;
-}
-
-.ashley-editor-widget {
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  padding: 1em;
-  min-height: 10em;
-  position: relative;
-  cursor: text;
-}
-
-.ashley-editor-toolbar {
-  position: relative;
-}
-
-.ashley-editor-buttons button {
-  width: 40px;
-}
+@import './objects/_forum_lists';
+@import './objects/conversation_post_edit';
+@import './objects/conversation_topic_detail';
+@import './objects/forum_detail';
+@import './objects/member_profile';
+@import './objects/moderation';
+@import './objects/search';
