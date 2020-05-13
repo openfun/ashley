@@ -7,7 +7,7 @@
     .moderation-col {
       font-size: 0.9rem;
       text-transform: uppercase;
-      color: $gray;
+      color: $table-head-color;
     }
   }
 
@@ -16,13 +16,13 @@
       margin: 0;
       padding-top: 10px;
       padding-bottom: 5px;
-      border-bottom: 1px solid $grayLighter;
+      border-bottom: 1px solid $gray-200;
     }
 
     .post-name {
       .post-created {
         font-size: 11px;
-        color: #666;
+        color: $gray-600;
       }
     }
 

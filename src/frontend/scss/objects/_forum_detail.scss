@@ -8,7 +8,7 @@
     .topic-last-post-col {
       font-size: 0.7rem;
       text-transform: uppercase;
-      color: $gray;
+      color: $table-head-color;
     }
   }
 
@@ -18,10 +18,10 @@
       height: 45px;
       line-height: 49px;
       text-align: center;
-      color: lighten($blueDark, 10%);
+      color: $read-color;
 
       &.unread {
-        color: lighten($red, 15%);
+        color: $unread-color;
       }
     }
 
@@ -29,7 +29,7 @@
       .topic-created,
       .topic-inline-pagination {
         font-size: 0.8rem;
-        color: #666;
+        color: $gray-600;
       }
 
       .topic-inline-pagination {
