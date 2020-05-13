@@ -1,21 +1,8 @@
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+
 // Relative path the the fontawesome webfonts (from the compiled CSS file)
 $fa-font-path: '../font';
 
-// Variables defined in the original machina code
-$black: #000;
-$blue: #049cdb;
-$blueDark: #0064cd;
-$gray: #555;
-$grayDark: #333;
-$grayDarker: #222;
-$grayLight: #999;
-$grayLighter: #eee;
-$green: #46a546;
-$greenLight: #7ac143;
-$orange: #f89406;
-$pink: #c3325f;
-$purple: #7a43b6;
-$red: #9d261d;
-$redLight: #b82010;
-$white: #fff;
-$yellow: #ffc40d;
+$unread-color: lighten($red, 20%);
+$read-color: lighten($blue, 15%);

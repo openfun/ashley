@@ -9,7 +9,7 @@
 
     .post-review {
       padding: 8px 0;
-      border-bottom: 3px solid $grayLighter;
+      border-bottom: 3px solid $gray-200;
 
       .post-content-wrapper {
         h4.subject {
@@ -20,7 +20,7 @@
           .attachments-title {
             margin-top: 10px;
             display: inline-block;
-            border-bottom: 1px solid $grayLight;
+            border-bottom: 1px solid $gray-500;
           }
 
           .attachment {
@@ -34,7 +34,7 @@
       }
 
       .post-sidebar {
-        border-left: 1px solid $grayLighter;
+        border-left: 1px solid $gray-200;
       }
     }
   }

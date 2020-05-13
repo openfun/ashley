@@ -10,7 +10,7 @@
       .avatar.empty {
         display: block;
         height: 150px;
-        background: $grayLighter;
+        background: $gray-200;
         text-align: center;
         display: inline-block;
 
@@ -34,7 +34,7 @@
     .post {
       margin-bottom: 0;
       padding-top: 10px;
-      border-bottom: 4px solid $grayLighter;
+      border-bottom: 4px solid $gray-200;
 
       .post-title {
         font-size: 16px;

@@ -17,6 +17,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
  - build the forum CSS theme inside ashley instead of using the compiled CSS
    file distributed with django-machina
+ - coalesce SASS color variables between django-machina and bootstrap
 
 ## [1.0.0-beta.1] - 2020-05-04
 

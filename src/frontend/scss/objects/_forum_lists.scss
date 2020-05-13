@@ -8,7 +8,7 @@
     .forum-last-post-col {
       font-size: 0.7rem;
       text-transform: uppercase;
-      color: $gray;
+      color: $table-head-color;
     }
   }
 
@@ -18,14 +18,14 @@
       height: 45px;
       line-height: 49px;
       text-align: center;
-      color: lighten($blueDark, 20%);
+      color: $read-color;
 
       &.unread {
-        color: lighten($red, 20%);
+        color: $unread-color;
       }
 
       &.link {
-        color: $grayLight;
+        color: $gray-500;
       }
     }
 
