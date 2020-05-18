@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.0-beta.2] - 2020-05-18
+
 ### Added
 
  - add dependency to bootstrap 4.4.1 and font-awesome 5.13.0
@@ -65,6 +67,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - Update sandbox settings to be able to run Ashley in an `iframe` on multiple
    external websites
 
-[Unreleased]: https://github.com/openfun/ashley/compare/v1.0.0-beta.1...master
+[Unreleased]: https://github.com/openfun/ashley/compare/v1.0.0-beta.2...master
+[1.0.0-beta.2]: https://github.com/openfun/ashley/compare/v1.0.0-beta.1...v1.0.0-beta.2
 [1.0.0-beta.1]: https://github.com/openfun/ashley/compare/v1.0.0-beta.0...v1.0.0-beta.1
 [1.0.0-beta.0]: https://github.com/openfun/ashley/compare/d767ba96aedcbc7d48fba5fefad2b93b9d623cc8...v1.0.0-beta.0
