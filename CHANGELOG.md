@@ -19,6 +19,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
    file distributed with django-machina
  - coalesce SASS color variables between django-machina and bootstrap
  - use a fluid container for a better iframe integration
+ - change SASS colors
 
 ## [1.0.0-beta.1] - 2020-05-04
 
