@@ -64,9 +64,12 @@ class Base(Configuration):
     # Note : The better solution is to send a flag Samesite=none, because
     # modern browsers are considering Samesite=Lax by default when the flag is
     # not specified.
-    # It will be possible to specify CSRF_COOKIE_SAMESITE="none" in Django 3.1
-    CSRF_COOKIE_SAMESITE = None
-    SESSION_COOKIE_SAMESITE = None
+    CSRF_COOKIE_SAMESITE = "None"
+    SESSION_COOKIE_SAMESITE = "None"
+
+    # Modern browsers require to have the `secure` attribute on cookies with `Samesite=none`
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
 
     # Privacy
     SECURE_REFERRER_POLICY = "same-origin"
@@ -135,7 +138,6 @@ class Base(Configuration):
     ]
 
     MIDDLEWARE = [
-        "ashley.middleware.SameSiteNoneMiddleware",
         "django.middleware.security.SecurityMiddleware",
         "django.contrib.sessions.middleware.SessionMiddleware",
         "django.middleware.locale.LocaleMiddleware",
@@ -247,6 +249,12 @@ class Development(Base):
     }
 
     INSTALLED_APPS = Base.INSTALLED_APPS + ["dev_tools"]
+
+    SESSION_COOKIE_SAMESITE = "Lax"
+    SESSION_COOKIE_SECURE = False
+
+    CSRF_COOKIE_SAMESITE = "Lax"
+    CSRF_COOKIE_SECURE = False
 
 
 class Test(Base):
