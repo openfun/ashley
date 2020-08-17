@@ -12,6 +12,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
  - upgrade django-machina to 1.1.1
  - upgrade django-haystack to 3.0b2
+ - upgrade django from 3.0 to 3.1
+
+## Removed
+
+ - remove `SameSiteNoneMiddleware`
 
 ## [1.0.0-beta.2] - 2020-05-18
 
