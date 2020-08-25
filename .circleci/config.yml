@@ -124,7 +124,7 @@ jobs:
           command: ~/.local/bin/flake8
       - run:
           name: Lint code with isort
-          command: ~/.local/bin/isort --recursive --check-only .
+          command: ~/.local/bin/isort --check-only .
       - run:
           name: Lint code with black
           command: ~/.local/bin/black src sandbox tests --check

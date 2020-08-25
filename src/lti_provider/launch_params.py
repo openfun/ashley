@@ -176,9 +176,9 @@ class LaunchParams(MutableMapping):
             raise KeyError("{} is not a valid launch param".format(item))
         try:
             return self._param_value(item)
-        except KeyError:
+        except KeyError as error:
             # catch and raise new KeyError in the proper context
-            raise KeyError(item)
+            raise KeyError(item) from error
 
     def __setitem__(self, key, value):
         if not self.valid_param(key):
