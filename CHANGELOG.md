@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+ - upgrade django-machina to 1.1.1
+ - upgrade django-haystack to 3.0b2
+
 ## [1.0.0-beta.2] - 2020-05-18
 
 ### Added

@@ -90,23 +90,16 @@ class LTIPassport(models.Model):
         """Get the string representation of an instance."""
         return self.title
 
-    # pylint: disable=arguments-differ
-    def save(self, *args, **kwargs):
-        """Generate the oauth consumer key and shared secret randomly upon creation.
-
-        Parameters
-        ----------
-        Args:
-            args (list) Passed onto parent's `save` method
-            dict (kwargs) : Passed onto parent's `save` method
-
-        """
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
+        """Generate the oauth consumer key and shared secret randomly upon creation."""
         self.full_clean()
         if not self.oauth_consumer_key:
             self.oauth_consumer_key = self.generate_consumer_key()
         if not self.shared_secret:
             self.shared_secret = self.generate_shared_secret()
-        super().save(*args, **kwargs)
+        super().save(force_insert, force_update, using, update_fields)
 
     @staticmethod
     def generate_consumer_key() -> str:

@@ -1,15 +1,14 @@
 """
 ashley URLs
 """
+from dev_tools import urls as dev_urls
+from dev_tools.apps import DevToolsAppConfig
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 from machina import urls as machina_urls
 
 from ashley.views import ForumLTIView
-
-from dev_tools import urls as dev_urls
-from dev_tools.apps import DevToolsAppConfig
 
 urlpatterns = [
     path("lti/forum/<uuid:uuid>", ForumLTIView.as_view(), name="forum.lti.view"),

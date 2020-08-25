@@ -48,7 +48,7 @@ class LTI:
         except LaunchParamException as error:
             raise LTIException(
                 "Exception while processing launch parameters : {}".format(error)
-            )
+            ) from error
 
         validator = LTIRequestValidator()
         oauth_endpoint = SignatureOnlyEndpoint(validator)
