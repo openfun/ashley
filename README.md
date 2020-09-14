@@ -28,3 +28,37 @@ the recommandations from our
 ## License
 
 This work is released under the MIT License (see [LICENSE](./LICENSE)).
+
+## Getting started
+
+Make sure you have a recent version of Docker and
+[Docker Compose](https://docs.docker.com/compose/install) installed on your laptop:
+
+```bash
+$ docker -v
+  Docker version 18.09.0, build 4d60db4
+
+$ docker-compose --version
+  docker-compose version 1.23.2, build 1110ad01
+```
+
+⚠️ You may need to run the following commands with `sudo` but this can be avoided by assigning your user to the `docker` group.
+
+## Project bootstrap
+
+The easiest way to start working on the project is to use our `Makefile` :
+
+```bash
+$ make bootstrap
+```
+
+This command builds the `app` container, installs front-end and back-end dependencies, builds the front-end application and styles, and performs database migrations. It's a good idea to use this command each time you are pulling code from the project repository to avoid dependency-related or migration-related issues.
+
+Now that your Docker services are ready to be used, start the service by running :
+
+```bash
+$ make run
+```
+
+You should be able to view the site at [localhost:8090](http://localhost:8090/)
+And an example of a forum at [localhost:8090/dev](http://localhost:8090/dev)
