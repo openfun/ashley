@@ -20,7 +20,11 @@ class LTIConsumerForm(forms.Form):
         queryset=LTIPassport.objects.all(), empty_label=None, label="Consumer"
     )
 
-    user_id = forms.CharField(label="User ID", max_length=100, initial="jojo",)
+    user_id = forms.CharField(
+        label="User ID",
+        max_length=100,
+        initial="jojo",
+    )
 
     course_id = forms.CharField(
         label="Course ID",
@@ -32,7 +36,10 @@ class LTIConsumerForm(forms.Form):
     )
 
     role = forms.ChoiceField(
-        choices=(("Student", _("Student")), ("Instructor", _("Instructor")),)
+        choices=(
+            ("Student", _("Student")),
+            ("Instructor", _("Instructor")),
+        )
     )
 
     presentation_locale = forms.ChoiceField(
