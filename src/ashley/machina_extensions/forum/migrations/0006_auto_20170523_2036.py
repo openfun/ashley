@@ -12,6 +12,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="forum", name="posts_count",),
-        migrations.RemoveField(model_name="forum", name="topics_count",),
+        migrations.RemoveField(
+            model_name="forum",
+            name="posts_count",
+        ),
+        migrations.RemoveField(
+            model_name="forum",
+            name="topics_count",
+        ),
     ]

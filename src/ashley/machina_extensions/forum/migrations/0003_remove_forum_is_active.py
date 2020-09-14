@@ -12,5 +12,8 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(model_name="forum", name="is_active",),
+        migrations.RemoveField(
+            model_name="forum",
+            name="is_active",
+        ),
     ]

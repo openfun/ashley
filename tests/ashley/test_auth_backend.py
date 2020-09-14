@@ -24,7 +24,9 @@ class LTIBackendTestCase(TestCase):
         self._auth_backend = LTIBackend()
 
     def _authenticate(
-        self, lti_parameters: dict, passport: LTIPassport,
+        self,
+        lti_parameters: dict,
+        passport: LTIPassport,
     ):
         url = "http://testserver/lti/launch"
         signed_parameters = sign_parameters(passport, lti_parameters, url)
