@@ -48,3 +48,6 @@ services:
     user: "${DOCKER_USER:-1000}"
     volumes:
       - .:/app
+
+  elasticsearch:
+    image: elasticsearch:7.9.1
