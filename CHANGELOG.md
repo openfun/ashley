@@ -14,6 +14,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - upgrade django-haystack to 3.0b2
  - upgrade django from 3.0 to 3.1
 
+### Fixed
+
+ - fix signature max length errors caused by the draft.js markup
+
 ## Removed
 
  - remove `SameSiteNoneMiddleware`
