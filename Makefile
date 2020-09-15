@@ -62,6 +62,7 @@ bootstrap: ## Prepare Docker images for the project
 bootstrap: \
   env.d/development/crowdin \
 	build \
+	build-front \
 	migrate
 .PHONY: bootstrap
 
