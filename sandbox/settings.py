@@ -205,10 +205,13 @@ class Base(Configuration):
     }
 
     # Machina
-    MACHINA_MARKUP_WIDGET = "ashley.editor.widgets.DraftEditor"
     MACHINA_MARKUP_LANGUAGE = ("ashley.editor.draftjs_renderer", {})
-    MACHINA_USER_DISPLAY_NAME_METHOD = "get_public_username"
+    MACHINA_MARKUP_MAX_LENGTH_VALIDATOR = (
+        "ashley.validators.MarkupNullableMaxLengthValidator"
+    )
+    MACHINA_MARKUP_WIDGET = "ashley.editor.widgets.DraftEditor"
     MACHINA_PROFILE_AVATARS_ENABLED = False
+    MACHINA_USER_DISPLAY_NAME_METHOD = "get_public_username"
 
 
 class Development(Base):
