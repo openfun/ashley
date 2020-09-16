@@ -1,17 +1,18 @@
 """Test suite for ashley authentication backend."""
 
-from urllib.parse import urlencode
+from urllib.parse import unquote, urlencode
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from django.test import RequestFactory, TestCase
+from lti_toolbox.factories import LTIConsumerFactory, LTIPassportFactory
+from lti_toolbox.lti import LTI
+from lti_toolbox.models import LTIPassport
+from oauthlib import oauth1
 
 from ashley.auth.backend import LTIBackend
-from lti_provider.factories import LTIConsumerFactory, LTIPassportFactory
-from lti_provider.lti import LTI
-from lti_provider.models import LTIPassport
 
-from tests.lti_provider.utils import CONTENT_TYPE, sign_parameters
+CONTENT_TYPE = "application/x-www-form-urlencoded"
 
 
 class LTIBackendTestCase(TestCase):
@@ -23,13 +24,53 @@ class LTIBackendTestCase(TestCase):
         self.request_factory = RequestFactory()
         self._auth_backend = LTIBackend()
 
+    @staticmethod
+    def _sign_parameters(passport, lti_parameters, url):
+        """
+
+        Args:
+            passport: The LTIPassport to use to sign the oauth request
+            lti_parameters: A dictionnary of parameters to sign
+            url: The LTI launch URL
+
+        Returns:
+            dict: The signed parameters
+        """
+
+        signed_parameters = lti_parameters.copy()
+        oauth_client = oauth1.Client(
+            client_key=passport.oauth_consumer_key, client_secret=passport.shared_secret
+        )
+        # Compute Authorization header which looks like:
+        # Authorization: OAuth oauth_nonce="80966668944732164491378916897",
+        # oauth_timestamp="1378916897", oauth_version="1.0", oauth_signature_method="HMAC-SHA1",
+        # oauth_consumer_key="", oauth_signature="frVp4JuvT1mVXlxktiAUjQ7%2F1cw%3D"
+        _uri, headers, _body = oauth_client.sign(
+            url,
+            http_method="POST",
+            body=lti_parameters,
+            headers={"Content-Type": CONTENT_TYPE},
+        )
+
+        # Parse headers to pass to template as part of context:
+        oauth_dict = dict(
+            param.strip().replace('"', "").split("=")
+            for param in headers["Authorization"].split(",")
+        )
+
+        signature = oauth_dict["oauth_signature"]
+        oauth_dict["oauth_signature"] = unquote(signature)
+        oauth_dict["oauth_nonce"] = oauth_dict.pop("OAuth oauth_nonce")
+        signed_parameters.update(oauth_dict)
+        return signed_parameters
+
     def _authenticate(
         self,
         lti_parameters: dict,
         passport: LTIPassport,
     ):
         url = "http://testserver/lti/launch"
-        signed_parameters = sign_parameters(passport, lti_parameters, url)
+        signed_parameters = self._sign_parameters(passport, lti_parameters, url)
         request = self.request_factory.post(
             url, data=urlencode(signed_parameters), content_type=CONTENT_TYPE
         )

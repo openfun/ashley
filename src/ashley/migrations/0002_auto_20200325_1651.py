@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("lti_provider", "0001_initial"),
+        ("lti_toolbox", "0001_initial"),
         ("ashley", "0001_initial"),
     ]
 
@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                     "lti_consumer",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
-                        to="lti_provider.LTIConsumer",
+                        to="lti_toolbox.LTIConsumer",
                     ),
                 ),
             ],

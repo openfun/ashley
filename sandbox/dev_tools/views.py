@@ -7,10 +7,9 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
+from lti_toolbox.factories import LTIConsumerFactory, LTIPassportFactory
+from lti_toolbox.models import LTIPassport
 from oauthlib import oauth1
-
-from lti_provider.factories import LTIConsumerFactory, LTIPassportFactory
-from lti_provider.models import LTIPassport
 
 from .forms import LTIConsumerForm
 

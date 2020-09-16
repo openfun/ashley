@@ -1,9 +1,8 @@
 """Factories for the ``forum`` application."""
 import factory
 from factory.django import DjangoModelFactory
+from lti_toolbox.factories import LTIConsumerFactory
 from machina.core.db.models import get_model
-
-from lti_provider.factories import LTIConsumerFactory
 
 Forum = get_model("forum", "Forum")  # pylint: disable=C0103
 

@@ -41,7 +41,6 @@ WORKDIR /builder
 # Copy required python dependencies
 COPY setup.py setup.cfg MANIFEST.in /builder/
 COPY ./src/ashley /builder/src/ashley/
-COPY ./src/lti_provider /builder/src/lti_provider/
 
 # Copy distributed application's statics
 COPY --from=front-builder \

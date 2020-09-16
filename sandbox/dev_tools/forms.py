@@ -2,8 +2,7 @@
 
 from django import forms
 from django.utils.translation import gettext_lazy as _
-
-from lti_provider.models import LTIPassport
+from lti_toolbox.models import LTIPassport
 
 
 class PassportChoiceField(forms.ModelChoiceField):

@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("lti_provider", "0001_initial"),
+        ("lti_toolbox", "0001_initial"),
         ("forum", "0011_auto_20190627_2132"),
     ]
 
@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 null=True,
                 on_delete=django.db.models.deletion.SET_NULL,
-                to="lti_provider.LTIConsumer",
+                to="lti_toolbox.LTIConsumer",
             ),
         ),
         migrations.AddField(

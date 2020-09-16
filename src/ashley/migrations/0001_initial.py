@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("auth", "0011_update_proxy_permissions"),
-        ("lti_provider", "0001_initial"),
+        ("lti_toolbox", "0001_initial"),
     ]
 
     operations = [
@@ -131,7 +131,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         null=True,
                         on_delete=django.db.models.deletion.CASCADE,
-                        to="lti_provider.LTIConsumer",
+                        to="lti_toolbox.LTIConsumer",
                     ),
                 ),
                 (
