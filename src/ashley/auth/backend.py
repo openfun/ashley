@@ -4,14 +4,13 @@ import logging
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
-
-from lti_provider.default.backend import LTIBackend as BaseLTIBackend
-from lti_provider.lti import LTI
+from lti_toolbox.backend import LTIBackend as ToolboxLTIBackend
+from lti_toolbox.lti import LTI
 
 logger = logging.getLogger(__name__)
 
 
-class LTIBackend(BaseLTIBackend):
+class LTIBackend(ToolboxLTIBackend):
     """
     Authentication backend using LTI launch request to authenticate a user.
     If a user does not exist in database, it creates it.

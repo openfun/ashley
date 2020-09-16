@@ -1,9 +1,8 @@
 """Factories for the ``ashley`` application."""
 import factory
 from factory.django import DjangoModelFactory
+from lti_toolbox.factories import LTIConsumerFactory
 from machina.core.db.models import get_model
-
-from lti_provider.factories import LTIConsumerFactory
 
 LTIContext = get_model("ashley", "LTIContext")  # pylint: disable=C0103
 User = get_model("ashley", "User")  # pylint: disable=C0103

@@ -7,11 +7,10 @@ from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.urls import reverse
 from django.utils import translation
+from lti_toolbox.lti import LTI
+from lti_toolbox.views import BaseLTIAuthView
 from machina.apps.forum_permission.shortcuts import assign_perm
 from machina.core.db.models import get_model
-
-from lti_provider.lti import LTI
-from lti_provider.views import BaseLTIView
 
 from .defaults import DEFAULT_FORUM_BASE_PERMISSIONS, DEFAULT_FORUM_ROLES_PERMISSIONS
 
@@ -21,7 +20,7 @@ LTIContext = get_model("ashley", "LTIContext")  # pylint: disable=C0103
 logger = logging.getLogger(__name__)
 
 
-class ForumLTIView(BaseLTIView):
+class ForumLTIView(BaseLTIAuthView):
     """Forum view called by an LTI launch request."""
 
     def _do_on_login(self, lti_request: LTI) -> HttpResponse:

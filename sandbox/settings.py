@@ -169,7 +169,8 @@ class Base(Configuration):
         # Ashley
         "ashley",
         "ashley.machina_extensions.forum",
-        "lti_provider",
+        # Django LTI Toolbox
+        "lti_toolbox",
         # Third party apps
         "dockerflow.django",
         # Django machina
@@ -242,7 +243,7 @@ class Development(Base):
         "loggers": {
             "oauthlib": {"handlers": ["console"], "level": "DEBUG", "propagate": True},
             "ashley": {"handlers": ["console"], "level": "DEBUG", "propagate": True},
-            "lti_provider": {
+            "lti_toolbox": {
                 "handlers": ["console"],
                 "level": "DEBUG",
                 "propagate": True,

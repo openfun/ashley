@@ -7,9 +7,8 @@ from django.contrib.auth.models import Group
 from django.db import models
 from django.db.models import Model
 from django.utils.translation import gettext_lazy as _
+from lti_toolbox.models import LTIConsumer
 from machina.core.db.models import model_factory
-
-from lti_provider.models import LTIConsumer
 
 logger = logging.getLogger(__name__)
 
