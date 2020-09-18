@@ -147,6 +147,11 @@ migrate:  ## run django migration for the ashley project.
 	@$(MANAGE) migrate
 .PHONY: migrate
 
+search-index: ## rebuild forum's index
+	@echo "$(BOLD)Building index$(RESET)"
+	@$(COMPOSE) exec ashley python ./sandbox/manage.py rebuild_index --noinput
+.PHONY: search-index
+
 # -- Frontend
 
 build-front: ## build front-end application

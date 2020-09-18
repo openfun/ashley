@@ -157,6 +157,10 @@ jobs:
           POSTGRES_DB: test_ashley
           POSTGRES_USER: fun
           POSTGRES_PASSWORD: pass
+      - image: elasticsearch:5
+    environment:
+      ELASTICSEARCH_HOST: localhost
+      ELASTICSEARCH_PORT: 9200
     working_directory: ~/fun
     steps:
       - checkout

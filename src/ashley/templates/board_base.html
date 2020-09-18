@@ -7,8 +7,7 @@
 {% endblock css %}
 
 {% block body %}
-{% block header %}
-{% endblock header %}
+{% block header %}{{ block.super }}{% endblock header %}
 <div class="my-0 px-2 container-fluid" id="main_container">
   <div class="row">
     <div class="col-12">
