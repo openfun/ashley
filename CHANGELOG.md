@@ -11,7 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
  - upgrade django-machina to 1.1.3
- - upgrade django-haystack to 3.0b2
+ - upgrade django-haystack to 3.0
  - upgrade django from 3.0 to 3.1
  - replace `lti_provider` app with `django-lti-toolbox`
 
