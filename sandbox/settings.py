@@ -169,6 +169,7 @@ class Base(Configuration):
         # Ashley
         "ashley",
         "ashley.machina_extensions.forum",
+        "ashley.machina_extensions.forum_permission",
         # Django LTI Toolbox
         "lti_toolbox",
         # Third party apps
@@ -181,7 +182,6 @@ class Base(Configuration):
         "machina.apps.forum_feeds",
         "machina.apps.forum_member",
         "machina.apps.forum_moderation",
-        "machina.apps.forum_permission",
         "machina.apps.forum_search",
         "machina.apps.forum_tracking",
     ]

@@ -27,6 +27,7 @@ _FORUM_ADMIN_PERMISSIONS = _FORUM_BASE_PERMISSIONS + [
     "can_delete_posts",
     "can_approve_posts",
     "can_reply_to_locked_topics",
+    "can_rename_forum",
 ]
 
 DEFAULT_FORUM_BASE_PERMISSIONS = getattr(

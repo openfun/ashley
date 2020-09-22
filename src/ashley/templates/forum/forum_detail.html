@@ -11,7 +11,13 @@
 {% block content %}
 <div class="row">
   <div class="col-12">
-    <h1>{{ forum.name }}</h1>
+    <h1>
+        {{ forum.name }}
+        {% get_permission 'can_rename_forum' forum request.user as can_rename_forum %}
+        {% if can_rename_forum %}
+            <a class="forum-action-rename" href="{% url 'forum:rename' forum.pk %}"><i class="fa fa-edit"> </i></a>
+        {% endif %}
+    </h1>
   </div>
 </div>
 {% if sub_forums %}
