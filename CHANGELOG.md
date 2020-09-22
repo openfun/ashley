@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+ - add permission `can_rename_forum`
+ - add form to edit the forum name
+
 ### Changed
 
  - upgrade django-machina to 1.1.3

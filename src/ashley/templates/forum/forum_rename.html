@@ -1,0 +1,40 @@
+{% extends "board_base.html" %}
+{% load i18n %}
+
+{% block sub_title %}{% trans "Rename the forum" %}{% endblock sub_title %}
+
+{% block content %}
+<div class="row member-profile-edit">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="m-0 h5 card-title">{% trans "Rename the forum" %}</h3>
+      </div>
+      <div class="card-body">
+        <form method="post" action="." class="form" enctype="multipart/form-data" novalidate>{% csrf_token %}
+          <div class="row">
+            <div class="col-md-12">
+              {% include "partials/form_field.html" with field=form.name %}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-actions">
+                <input type="submit" class="btn btn-large btn-primary" value="{% trans "Rename" %}" />
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block extra_css %}
+{{ form.media.css }}
+{% endblock extra_css %}
+
+{% block extra_js %}
+{{ form.media.js }}
+{% endblock extra_js %}

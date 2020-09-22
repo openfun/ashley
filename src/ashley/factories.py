@@ -4,6 +4,7 @@ from factory.django import DjangoModelFactory
 from lti_toolbox.factories import LTIConsumerFactory
 from machina.core.db.models import get_model
 
+Forum = get_model("forum", "Forum")  # pylint: disable=C0103
 LTIContext = get_model("ashley", "LTIContext")  # pylint: disable=C0103
 User = get_model("ashley", "User")  # pylint: disable=C0103
 
@@ -32,3 +33,13 @@ class LTIContextFactory(DjangoModelFactory):
 
     lti_consumer = factory.SubFactory(LTIConsumerFactory)
     lti_id = factory.Sequence(lambda n: f"context{n}")
+
+
+class ForumFactory(DjangoModelFactory):
+    """Factory to create a Forum"""
+
+    class Meta:
+        model = Forum
+
+    type = Forum.FORUM_POST
+    name = factory.Sequence(lambda n: f"forum{n}")
