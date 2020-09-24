@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
  - add permission `can_rename_forum`
  - add form to edit the forum name
+ - add management command `sync_group_permissions`
 
 ### Changed
 

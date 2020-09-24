@@ -12,18 +12,15 @@ class ForumRenameTestCase(TestCase):
 
     def setUp(self):
         super().setUp()
-        self.user_factory = UserFactory
-        self.lti_context_factory = LTIContextFactory
-        self.forum_factory = ForumFactory
 
     def test_basic_user(self):
         """
         A user without the `can_rename_forum` permission
         should not be able to rename it.
         """
-        user = self.user_factory()
-        lti_context = self.lti_context_factory(lti_consumer=user.lti_consumer)
-        forum = self.forum_factory(name="Initial forum name")
+        user = UserFactory()
+        lti_context = LTIContextFactory(lti_consumer=user.lti_consumer)
+        forum = ForumFactory(name="Initial forum name")
         forum.lti_contexts.add(lti_context)
 
         self.client.force_login(user, "ashley.auth.backend.LTIBackend")
@@ -43,9 +40,9 @@ class ForumRenameTestCase(TestCase):
         to rename it.
         """
 
-        user = self.user_factory()
-        lti_context = self.lti_context_factory(lti_consumer=user.lti_consumer)
-        forum = self.forum_factory(name="Initial forum name")
+        user = UserFactory()
+        lti_context = LTIContextFactory(lti_consumer=user.lti_consumer)
+        forum = ForumFactory(name="Initial forum name")
         forum.lti_contexts.add(lti_context)
 
         assign_perm("can_rename_forum", user, forum, True)
@@ -53,6 +50,7 @@ class ForumRenameTestCase(TestCase):
         self.client.force_login(user, "ashley.auth.backend.LTIBackend")
         response = self.client.get(f"/forum/admin/rename/{forum.pk}/")
         self.assertEqual(200, response.status_code)
+        self.assertContains(response, "Rename the forum")
 
         update_response = self.client.post(
             f"/forum/admin/rename/{forum.pk}/", data={"name": "Modified forum name"}

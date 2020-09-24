@@ -21,3 +21,15 @@ the following instructions:
 1) Replace the app `lti_provider` with `lti_toolbox` in your `INSTALLED_APPS` setting
 2) Execute the script `python upgrades/1.0.0-beta.3.py`
 3) Execute `python manage.py migrate`
+
+A new permission has been added in this release : `can_rename_forum`.
+By default, this permission will only be added to new users with administrator or
+instructor roles. If you want to update the group permissions on users already
+existing in the database, to reflect what is defined in the setting
+`ASHLEY_DEFAULT_FORUM_ROLES_PERMISSIONS`, you can execute the following
+management command :
+
+```python manage.py test_sync_permissions.py --apply```
+
+Note: You can execute the above command without the `--apply` option to do it in
+dry mode and see what changes will be applied to your database.

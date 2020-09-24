@@ -72,6 +72,7 @@ class ForumLTIView(BaseLTIAuthView):
             context.get_base_group(),
             DEFAULT_FORUM_BASE_PERMISSIONS,
         )
+        # pylint: disable=no-member
         for role, perms in DEFAULT_FORUM_ROLES_PERMISSIONS.items():
             self._assign_permissions(forum, context.get_role_group(role), perms)
 

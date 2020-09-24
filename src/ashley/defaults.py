@@ -1,6 +1,7 @@
 """This module contains default settings for Ashley application."""
 
 from django.conf import settings
+from django.utils.functional import lazy
 from draftjs_exporter.defaults import BLOCK_MAP as DEFAULT_BLOCK_MAP
 from draftjs_exporter.defaults import STYLE_MAP as DEFAULT_STYLE_MAP
 from draftjs_exporter.dom import DOM
@@ -30,19 +31,24 @@ _FORUM_ADMIN_PERMISSIONS = _FORUM_BASE_PERMISSIONS + [
     "can_rename_forum",
 ]
 
-DEFAULT_FORUM_BASE_PERMISSIONS = getattr(
-    settings, "ASHLEY_DEFAULT_FORUM_BASE_PERMISSIONS", _FORUM_BASE_PERMISSIONS
-)
+DEFAULT_FORUM_BASE_PERMISSIONS = lazy(
+    lambda: getattr(
+        settings, "ASHLEY_DEFAULT_FORUM_BASE_PERMISSIONS", _FORUM_BASE_PERMISSIONS
+    ),
+    list,
+)()
 
-DEFAULT_FORUM_ROLES_PERMISSIONS = getattr(
-    settings,
-    "ASHLEY_DEFAULT_FORUM_ROLES_PERMISSIONS",
-    {
-        "administrator": _FORUM_ADMIN_PERMISSIONS,
-        "instructor": _FORUM_ADMIN_PERMISSIONS,
-    },
-)
-
+DEFAULT_FORUM_ROLES_PERMISSIONS = lazy(
+    lambda: getattr(
+        settings,
+        "ASHLEY_DEFAULT_FORUM_ROLES_PERMISSIONS",
+        {
+            "administrator": _FORUM_ADMIN_PERMISSIONS,
+            "instructor": _FORUM_ADMIN_PERMISSIONS,
+        },
+    ),
+    dict,
+)()
 
 DEFAULT_DRAFTJS_EXPORTER_CONFIG = {
     "entity_decorators": {"LINK": link, "emoji": emoji},
@@ -52,7 +58,10 @@ DEFAULT_DRAFTJS_EXPORTER_CONFIG = {
     "engine": DOM.STRING,
 }
 
-DRAFTJS_EXPORTER_CONFIG = {
-    **DEFAULT_DRAFTJS_EXPORTER_CONFIG,
-    **getattr(settings, "ASHLEY_DRAFTJS_EXPORTER_CONFIG", {}),
-}
+DRAFTJS_EXPORTER_CONFIG = lazy(
+    lambda: {
+        **DEFAULT_DRAFTJS_EXPORTER_CONFIG,
+        **getattr(settings, "ASHLEY_DRAFTJS_EXPORTER_CONFIG", {}),
+    },
+    dict,
+)()
