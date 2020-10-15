@@ -41,6 +41,7 @@ COMPOSE_TEST_RUN     = $(COMPOSE_RUN)
 COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) ashley
 MANAGE               = $(COMPOSE_RUN_APP) python sandbox/manage.py
 WAIT_DB              = @$(COMPOSE_RUN) dockerize -wait tcp://$(DB_HOST):$(DB_PORT) -timeout 60s
+WAIT_ES              = @$(COMPOSE_RUN) dockerize -wait tcp://elasticsearch:9200 -timeout 60s
 
 # -- Node
 # We must run node with a /home because yarn tries to write to ~/.yarnrc. If the
@@ -146,6 +147,15 @@ migrate:  ## run django migration for the ashley project.
 	@$(WAIT_DB)
 	@$(MANAGE) migrate
 .PHONY: migrate
+
+search-index: ## rebuild forum's index
+	@echo "$(BOLD)Building index$(RESET)"
+	@$(COMPOSE) up -d postgresql
+	@$(WAIT_DB)
+	@$(COMPOSE) up -d elasticsearch
+	@$(WAIT_ES)
+	@$(MANAGE) rebuild_index --noinput
+.PHONY: search-index
 
 # -- Frontend
 

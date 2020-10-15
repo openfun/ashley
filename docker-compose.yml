@@ -8,6 +8,9 @@ services:
     ports:
       - "15432:5432"
 
+  elasticsearch:
+    image: elasticsearch:5
+
   ashley:
     build:
       context: .
@@ -29,6 +32,7 @@ services:
       - ./data/media:/data/media
     depends_on:
       - "postgresql"
+      - "elasticsearch"
 
   dockerize:
     image: jwilder/dockerize

@@ -151,12 +151,15 @@ jobs:
           DB_USER: fun
           DB_PASSWORD: pass
           DB_PORT: 5432
+          ELASTICSEARCH_HOST: localhost
+          ELASTICSEARCH_PORT: 9200
       # services
       - image: circleci/postgres:12-ram
         environment:
           POSTGRES_DB: test_ashley
           POSTGRES_USER: fun
           POSTGRES_PASSWORD: pass
+      - image: elasticsearch:5
     working_directory: ~/fun
     steps:
       - checkout
