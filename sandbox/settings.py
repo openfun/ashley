@@ -170,6 +170,7 @@ class Base(Configuration):
         "ashley",
         "ashley.machina_extensions.forum",
         "ashley.machina_extensions.forum_permission",
+        "ashley.machina_extensions.forum_search",
         # Django LTI Toolbox
         "lti_toolbox",
         # Third party apps
@@ -182,7 +183,6 @@ class Base(Configuration):
         "machina.apps.forum_feeds",
         "machina.apps.forum_member",
         "machina.apps.forum_moderation",
-        "machina.apps.forum_search",
         "machina.apps.forum_tracking",
     ]
 
@@ -202,7 +202,22 @@ class Base(Configuration):
 
     # Search engine
     HAYSTACK_CONNECTIONS = {
-        "default": {"ENGINE": "haystack.backends.simple_backend.SimpleEngine"},
+        "default": {
+            "ENGINE": "haystack.backends.elasticsearch5_backend.Elasticsearch5SearchEngine",
+            "URL": "{:s}:{!s}".format(
+                values.Value(
+                    "elasticsearch",
+                    environ_name="ELASTICSEARCH_HOST",
+                    environ_prefix=None,
+                ),
+                values.Value(
+                    9200, environ_name="ELASTICSEARCH_PORT", environ_prefix=None
+                ),
+            ),
+            "INDEX_NAME": values.Value(
+                "ashley", environ_name="ELASTICSEARCH_INDEX_NAME", environ_prefix=None
+            ),
+        },
     }
 
     # Machina
