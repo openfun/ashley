@@ -13,7 +13,7 @@ class DraftEditor(HiddenInput):
     template_name = "widgets/editor.html"
     props = {
         "placeholder": _("Please enter your message here..."),
-        "linkPlaceholder": _("Enter or paste your URL here and press enter"),
+        "linkPlaceholder": _("Fill-in or paste your URL here and press enter"),
     }
 
     def __init__(self, attrs=None, props=None):

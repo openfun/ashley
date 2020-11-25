@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashleyforum\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-23 12:38+0000\n"
-"PO-Revision-Date: 2020-09-23 12:49\n"
+"POT-Creation-Date: 2020-11-16 09:55+0000\n"
+"PO-Revision-Date: 2020-12-01 08:56\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -66,10 +66,10 @@ msgid "Last post added on"
 msgstr "Dernier message ajouté le"
 
 msgid "Display in parent-forums legend"
-msgstr ""
+msgstr "Afficher dans la liste des sous-forums du forum parent"
 
 msgid "Displays this forum on the legend of its parent-forum (sub forums list)"
-msgstr ""
+msgstr "Affiche ce forum dans la liste des sous-forums du forum parent"
 
 msgid "Forum"
 msgstr "Forum"
@@ -78,19 +78,19 @@ msgid "Forums"
 msgstr "Forums"
 
 msgid "A forum can not have a link forum as parent"
-msgstr ""
+msgstr "Un forum ne peut pas avoir un forum de type lien en tant que parent"
 
 msgid "A category can not have another category as parent"
-msgstr ""
+msgstr "Une catégorie ne peut avoir une autre catégorie en tant que parent"
 
 msgid "A link forum must have a link associated with it"
-msgstr ""
+msgstr "Un forum de type lien doit impérativement avoir un lien associé"
 
 msgid "Forum settings"
 msgstr "Paramètres du forum"
 
 msgid "Link forum settings"
-msgstr ""
+msgstr "Paramètres du forum de type lien"
 
 msgid "'{}' forum successfully moved"
 msgstr "Forum '{}' déplacé avec succès"
@@ -105,10 +105,10 @@ msgid "Permissions successfully copied"
 msgstr "Permissions copiées avec succès"
 
 msgid "Choose either a user ID, the anonymous user or the authenticated user"
-msgstr ""
+msgstr "Choisir un ID d'utilisateur, un utilisateur anonyme ou un utilisateur authentifié"
 
 msgid "Choose a group ID"
-msgstr ""
+msgstr "Choisissez un identifiant de groupe"
 
 msgid "Anonymous user"
 msgstr "Utilisateur anonyme"
@@ -120,40 +120,40 @@ msgid "Permissions successfully applied"
 msgstr "Permissions appliquées avec succès"
 
 msgid "Machina: Forum"
-msgstr ""
+msgstr "Machina : Forum"
 
 msgid "Anonymous"
-msgstr ""
+msgstr "Anonyme"
 
 msgid "Please select this option if you want to edit the permissions of the anonymous user"
-msgstr ""
+msgstr "Veuillez sélectionner cette option si vous souhaitez modifier les permissions de tous les utilisateurs anonymes"
 
 msgid "Authenticated"
-msgstr ""
+msgstr "Authentifié"
 
 msgid "Please select this option if you want to edit the permissions of every (non-specific) logged in user"
-msgstr ""
+msgstr "Veuillez sélectionner cette option si vous souhaitez modifier les permissions de tous des utilisateurs authentifiés"
 
 msgid "Choose either a user ID or check either the anonymous or authenticated user checkbox"
-msgstr ""
+msgstr "Choisissez un identifiant utilisateur ou bien cochez la case utilisateur authentifié ou utilisateur anonyme"
 
 msgid "Not set"
 msgstr "Non défini"
 
 msgid "Granted"
-msgstr ""
+msgstr "Autorisé"
 
 msgid "Not granted"
-msgstr ""
+msgstr "Non autorisé"
 
 msgid "Topic forum"
-msgstr ""
+msgstr "Forum de discussion"
 
 msgid "Poster"
-msgstr ""
+msgstr "Auteur"
 
 msgid "Subject"
-msgstr ""
+msgstr "Sujet"
 
 msgid "Default topic"
 msgstr "Discussion par défaut"
@@ -204,52 +204,52 @@ msgid "A topic can not be associated with a category or a link forum"
 msgstr "Une discussion de peut pas être associée à une catégorie ou à un lien"
 
 msgid "Anonymous user forum key"
-msgstr ""
+msgstr "Clé de forum associée à l'utilisateur anonyme"
 
 msgid "Content"
-msgstr ""
+msgstr "Contenu"
 
 msgid "Username"
-msgstr ""
+msgstr "Nom d'utilisateur"
 
 msgid "Attach a signature"
-msgstr ""
+msgstr "Joindre une signature"
 
 msgid "Update reason"
-msgstr ""
+msgstr "Raison de la modification"
 
 msgid "Lastly updated by"
-msgstr ""
+msgstr "Mis à jour par"
 
 msgid "Updates count"
-msgstr ""
+msgstr "Nombre de mises à jour"
 
 msgid "Post"
-msgstr ""
+msgstr "Message"
 
 msgid "Posts"
 msgstr "Messages"
 
 msgid "A user id or an anonymous key must be associated with a post."
-msgstr ""
+msgstr "Un identifiant d'utilisateur ou une clé anonyme doit être associé à un message."
 
 msgid "A user id or an anonymous key must be associated with a post, but not both."
-msgstr ""
+msgstr "Un message doit être associé à un identifiant d'utilisateur ou à une clé anonyme, mais pas aux deux."
 
 msgid "A username must be specified if the poster is anonymous"
-msgstr ""
+msgstr "Un nom d'utilisateur doit être spécifié si l'auteur est anonyme"
 
 msgid "Machina: Forum conversations"
-msgstr ""
+msgstr "Machina : Discussions"
 
 msgid "Enter your subject"
-msgstr ""
+msgstr "Saisissez le sujet de la discussion"
 
 msgid "Message"
-msgstr ""
+msgstr "Message"
 
 msgid "Enter your message"
-msgstr ""
+msgstr "Saisissez votre message"
 
 msgid "Lock topic"
 msgstr "Verrouiller la discussion"
@@ -258,52 +258,52 @@ msgid "Post topic as"
 msgstr "Publier la discussion comme"
 
 msgid "Poll question"
-msgstr ""
+msgstr "Question du sondage"
 
 msgid "Enter a question to associate a poll with the topic or leave blank to not create a poll."
 msgstr "Entrez une question pour associer un sondage à la discussion, ou laissez le champ vide pour ne pas créer de sondage."
 
 msgid "Maximum number of poll options per user"
-msgstr ""
+msgstr "Nombre maximum de choix par utilisateur"
 
 msgid "This is the number of options each user may select when voting."
-msgstr ""
+msgstr "Il s'agit du nombre de choix que chaque utilisateur peut sélectionner lorsqu'il participe au sondage."
 
 msgid "For how many days the poll should be run?"
-msgstr ""
+msgstr "Indiquez la durée du sondage (nombre de jours)"
 
 msgid "Enter 0 or leave blank for a never ending poll."
-msgstr ""
+msgstr "Entrez 0 ou laisser le champ vide si vous souhaitez que le sondage soit permanent."
 
 msgid "Allow re-voting?"
-msgstr ""
+msgstr "Autoriser le changement de vote ?"
 
 msgid "If enabled users are able to change their vote."
-msgstr ""
+msgstr "Si cette option est activée, les utilisateurs pourront modifier leur vote."
 
 msgid "You must set the maximum number of poll options per user when creating polls"
-msgstr ""
+msgstr "Vous devez définir le nombre maximum de réponses possibles par utilisateur lors de la création d'un sondage"
 
 msgid "File"
-msgstr ""
+msgstr "Fichier"
 
 msgid "Comment"
-msgstr ""
+msgstr "Commentaire"
 
 msgid "Attachment"
-msgstr ""
+msgstr "Pièce jointe"
 
 msgid "Attachments"
-msgstr ""
+msgstr "Pièces jointes"
 
 msgid "Machina: Forum attachments"
-msgstr ""
+msgstr "Machina : Pièces jointes"
 
 msgid "Poll duration, in days"
-msgstr ""
+msgstr "Durée du sondage, en jours"
 
 msgid "Allow vote changes"
-msgstr ""
+msgstr "Autoriser les modifications de vote"
 
 msgid "Topic poll"
 msgstr "Sondage"
@@ -312,73 +312,73 @@ msgid "Topic polls"
 msgstr "Sondages"
 
 msgid "Poll"
-msgstr ""
+msgstr "Sondage"
 
 msgid "Poll option text"
-msgstr ""
+msgstr "Texte du choix proposé"
 
 msgid "Topic poll option"
-msgstr ""
+msgstr "Choix de réponse"
 
 msgid "Topic poll options"
-msgstr ""
+msgstr "Choix de réponse"
 
 msgid "Voter"
-msgstr ""
+msgstr "Votant"
 
 msgid "Poll option"
-msgstr ""
+msgstr "Choix du sondage"
 
 msgid "Vote's date"
-msgstr ""
+msgstr "Date du vote"
 
 msgid "Topic poll vote"
-msgstr ""
+msgstr "Vote du sondage"
 
 msgid "Topic poll votes"
-msgstr ""
+msgstr "Votes du sondage"
 
 msgid "A user id or an anonymous key must be used."
-msgstr ""
+msgstr "Un identifiant utilisateur ou une clé anonyme doit être utilisé."
 
 msgid "A user id or an anonymous key must be used, but not both."
-msgstr ""
+msgstr "Un identifiant utilisateur ou une clé anonyme doit être utilisé, mais pas les deux."
 
 msgid "Machina: Forum polls"
-msgstr ""
+msgstr "Machina : Sondages"
 
 msgid "Enter a poll option"
-msgstr ""
+msgstr "Saisissez une réponse possible pour ce sondage"
 
 msgid "You must specify an option when voting."
-msgstr ""
+msgstr "Vous devez choisir une option lors du vote."
 
 msgid "You have tried to vote for too many options."
-msgstr ""
+msgstr "Vous avez sélectionné trop de réponses dans votre vote."
 
 msgid "Your vote has been cast."
-msgstr ""
+msgstr "Votre vote a été pris en compte."
 
 msgid "This message will be validated before appearing on the forum."
-msgstr ""
+msgstr "Ce message passera par un processus de modération avant d'apparaître sur le forum."
 
 msgid "There are some errors in the attachments you submitted."
-msgstr ""
+msgstr "Il y a des erreurs dans les pièces jointes que vous avez envoyées."
 
 msgid "This message has been posted successfully."
-msgstr ""
+msgstr "Votre message a bien été envoyé."
 
 msgid "There are some errors in the poll options you submitted."
-msgstr ""
+msgstr "Il y a des erreurs dans les options du sondage que vous avez transmises."
 
 msgid "This message has been edited successfully."
-msgstr ""
+msgstr "Ce message a été modifié avec succès."
 
 msgid "This message has been deleted successfully."
-msgstr ""
+msgstr "Ce message a été supprimé avec succès."
 
 msgid "Machina: Forum feeds"
-msgstr ""
+msgstr "Machina : Flux"
 
 msgid "Latest topics"
 msgstr "Dernières discussions"
@@ -399,16 +399,16 @@ msgid "Total posts"
 msgstr "Nombre total de messages"
 
 msgid "Forum profile"
-msgstr ""
+msgstr "Profil"
 
 msgid "Forum profiles"
-msgstr ""
+msgstr "Profils"
 
 msgid "Machina: Forum members"
-msgstr ""
+msgstr "Machina : Utilisateurs"
 
 msgid "The profile has been edited successfully."
-msgstr ""
+msgstr "Le profil a été modifié avec succès."
 
 msgid "You subscribed to this topic successfully."
 msgstr "Vous êtes désormais abonné à cette discussion."
@@ -417,7 +417,7 @@ msgid "You unsubscribed from this topic successfully."
 msgstr "Vous êtes désormais désabonné de cette discussion."
 
 msgid "Machina: Forum moderation"
-msgstr ""
+msgstr "Machina : Modération"
 
 msgid "Select a destination forum"
 msgstr "Sélectionnez un forum de destination"
@@ -447,52 +447,52 @@ msgid "Would you want to change this topic to an announce?"
 msgstr "Voulez-vous transformer cette discussion en annonce ?"
 
 msgid "This post has been approved successfully."
-msgstr ""
+msgstr "Cette publication a été approuvée avec succès."
 
 msgid "This post has been disapproved successfully."
-msgstr ""
+msgstr "Ce message a été rejeté avec succès."
 
 msgid "Permission codename"
-msgstr ""
+msgstr "Nom de code de la permission"
 
 msgid "Forum permission"
-msgstr ""
+msgstr "Permission du forum"
 
 msgid "Has perm"
-msgstr ""
+msgstr "A la permissions"
 
 msgid "Target anonymous user"
-msgstr ""
+msgstr "Cible tout utilisateur anonyme"
 
 msgid "Target any logged in user"
-msgstr ""
+msgstr "Cible tout utilisateur connecté"
 
 msgid "User forum permission"
-msgstr ""
+msgstr "Permission utilisateur"
 
 msgid "User forum permissions"
-msgstr ""
+msgstr "Permissions utilisateur"
 
 msgid "A permission should target either a specific user, an anonymous user or any authenticated user"
-msgstr ""
+msgstr "Une permission doit cibler un utilisateur spécifique, un utilisateur anonyme ou tout utilisateur authentifié"
 
 msgid "Group"
-msgstr ""
+msgstr "Groupe"
 
 msgid "Group forum permission"
-msgstr ""
+msgstr "Permission de groupe"
 
 msgid "Group forum permissions"
-msgstr ""
+msgstr "Permissions de groupe"
 
 msgid "Machina: Forum permissions"
-msgstr ""
+msgstr "Machina : Permissions"
 
 msgid "Can see forum"
-msgstr ""
+msgstr "Peut voir le forum"
 
 msgid "Can read forum"
-msgstr ""
+msgstr "Peut lire le forum"
 
 msgid "Can start new topics"
 msgstr "Peut créer de nouvelles discussions"
@@ -501,7 +501,7 @@ msgid "Can reply to topics"
 msgstr "Peut répondre aux discussions"
 
 msgid "Can post announcements"
-msgstr ""
+msgstr "Peut publier des annonces"
 
 msgid "Can post stickies"
 msgstr "Peut poster des discussions épinglées"
@@ -546,79 +546,81 @@ msgid "Can add posts in locked topics"
 msgstr "Peut ajouter des messages dans des discussions verrouillées"
 
 msgid "Machina: Forum searches"
-msgstr ""
+msgstr "Machina : Recherche"
 
 msgid "Search only in topic subjects"
 msgstr "Rechercher uniquement dans les titres des discussions"
 
 msgid "Search for poster"
-msgstr ""
+msgstr "Rechercher par utilisateur"
 
 msgid "Enter a user name to limit the search to a specific user."
 msgstr "Entrez un nom d'utilisateur pour limiter la recherche à un utilisateur spécifique."
 
 msgid "Search in specific forums"
-msgstr ""
+msgstr "Rechercher dans des forums spécifiques"
 
 msgid "Select the forums you wish to search in."
-msgstr ""
+msgstr "Sélectionnez les forums dans lesquels vous souhaitez effectuer une recherche."
 
 msgid "Search for keywords"
-msgstr ""
+msgstr "Rechercher par mots-clés"
 
 msgid "Keywords or phrase"
-msgstr ""
+msgstr "Mots clés"
 
 msgid "Poster name"
-msgstr ""
+msgstr "Nom d'utilisateur"
 
 msgid "Forum track"
-msgstr ""
+msgstr "Suivi d'un forum"
 
 msgid "Forum tracks"
-msgstr ""
+msgstr "Suivi des forums"
 
 msgid "Topic track"
-msgstr ""
+msgstr "Suivi d'une discussion"
 
 msgid "Topic tracks"
-msgstr ""
+msgstr "Suivis des discussions"
 
 msgid "Machina: Forum tracking"
-msgstr ""
+msgstr "Machina : Suivi des discussions"
 
 msgid "Forums have been marked read."
-msgstr ""
+msgstr "Les forums ont été marquées comme lus."
 
 msgid "Topics have been marked read."
 msgstr "Les discussions ont été marquées comme lues."
 
 msgid "Neither Pillow nor PIL could be imported: {}"
-msgstr ""
+msgstr "Impossible d'importer PIL ni Pillow : {}"
 
 msgid "Creation date"
-msgstr ""
+msgstr "Date de création"
 
 msgid "Update date"
-msgstr ""
+msgstr "Date de mise à jour"
 
 msgid "Could not import MACHINA_MARKUP_WIDGET {}: {}"
-msgstr ""
+msgstr "Impossible d'importer MACHINA_MARKUP_WIDGET {}: {}"
 
 msgid "Could not import MACHINA_MARKUP_LANGUAGE {}: {}"
-msgstr ""
+msgstr "Impossible d'importer MACHINA_MARKUP_LANGUAGE {}: {}"
 
 msgid "MACHINA_MARKUP_LANGUAGE setting is required"
-msgstr ""
+msgstr "Le paramètre MACHINA_MARKUP_LANGUAGE est obligatoire"
 
 msgid "Files of size greater than {} are not allowed. Your file is {}"
-msgstr ""
+msgstr "Les fichiers d'une taille supérieure à {} ne sont pas autorisés. La taille de votre fichier est de {}"
 
 msgid "Images of width lesser than {}px or greater than {}px or are not allowed. The width of your image is {}px"
-msgstr ""
+msgstr "Les images de largeur inférieure à {} px ou supérieure à {} px ne sont pas autorisées.\n"
+"La largeur de votre image est de {} px"
 
 msgid "Images of height lesser than {}px or greater than {}px or are not allowed. The height of your image is {}px"
-msgstr ""
+msgstr "Les images de hauteur inférieure à {} px ou supérieure à {} px ne sont pas autorisées.\n"
+"La hauteur de votre image est de {} px"
 
 msgid "List of forums"
 msgstr "Liste des forums"
@@ -627,19 +629,19 @@ msgid "Quick actions"
 msgstr "Actions rapides"
 
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 msgid "Details"
-msgstr ""
+msgstr "Détails"
 
 msgid "Move up"
-msgstr ""
+msgstr "Déplacer vers le haut"
 
 msgid "Move down"
-msgstr ""
+msgstr "Déplacer vers le bas"
 
 msgid "Add a sub-forum"
-msgstr ""
+msgstr "Ajouter un sous-forum"
 
 msgid "Delete"
 msgstr "Supprimer"
@@ -654,61 +656,61 @@ msgid "Link:"
 msgstr "Lien :"
 
 msgid "Edit user permissions"
-msgstr ""
+msgstr "Modifier les permissions de l'utilisateur"
 
 msgid "Edit authenticated user permissions"
-msgstr ""
+msgstr "Modifier les permissions des utilisateurs authentifiées"
 
 msgid "Home"
-msgstr ""
+msgstr "Accueil"
 
 msgid "Permission"
-msgstr ""
+msgstr "Permission"
 
 msgid "Save"
-msgstr ""
+msgstr "Sauvegarder"
 
 msgid "Edit group permissions"
-msgstr ""
+msgstr "Modifier les permissions de groupe"
 
 msgid "Please correct the error below."
-msgstr ""
+msgstr "Veuillez corriger l'erreur ci-dessous."
 
 msgid "Please correct the errors below."
-msgstr ""
+msgstr "Veuillez corriger les erreurs ci-dessous."
 
 msgid "Please select a user in order to update its permissions"
-msgstr ""
+msgstr "Veuillez sélectionner un utilisateur pour mettre à jour ses permissions"
 
 msgid "Select"
-msgstr ""
+msgstr "Sélectionner"
 
 msgid "Please select a group in order to update its permissions"
-msgstr ""
+msgstr "Veuillez sélectionner un groupe afin de mettre à jour ses permissions"
 
 msgid "Copy permissions from another forum"
-msgstr ""
+msgstr "Copier les permissions depuis un autre forum"
 
 msgid "Please select a forum in order to copy its permissions configuration to the current forum"
-msgstr ""
+msgstr "Veuillez sélectionner un forum afin de copier la configuration de ses permissions sur le forum actuel"
 
 msgid "Copy"
-msgstr ""
+msgstr "Copier"
 
 msgid "Search"
-msgstr ""
+msgstr "Recherche"
 
 msgid "Advanced search"
-msgstr ""
+msgstr "Recherche avancée"
 
 msgid "Subscriptions"
-msgstr ""
+msgstr "Abonnements"
 
 msgid "View my posts"
-msgstr ""
+msgstr "Voir mes messages"
 
 msgid "Moderation queue"
-msgstr ""
+msgstr "File d'attente de modération"
 
 msgid "Mark subforums read"
 msgstr "Marquer les sous-forums comme lus"
@@ -723,7 +725,7 @@ msgid "Announcements"
 msgstr "Annonces"
 
 msgid "RSS feed"
-msgstr ""
+msgstr "Flux RSS"
 
 #, python-format
 msgid "By: <a href=\"%(poster_url)s\">%(username)s</a>"
@@ -755,10 +757,10 @@ msgid "View unread topics"
 msgstr "Voir les discussions non lues"
 
 msgid "Statistics"
-msgstr ""
+msgstr "Statistiques"
 
 msgid "Total posts:"
-msgstr ""
+msgstr "Nombre total de messages :"
 
 msgid "Total topics:"
 msgstr "Nombre total de discussions :"
@@ -770,47 +772,47 @@ msgid "Add another file"
 msgstr "Ajouter un autre fichier"
 
 msgid "You may select <b>1</b> option"
-msgstr ""
+msgstr "Vous pouvez sélectionner <b>1</b> option"
 
 #, python-format
 msgid "You may select up to <b>%(max_options)s</b> options"
-msgstr ""
+msgstr "Vous pouvez sélectionner jusqu'à <b>%(max_options)s</b> options"
 
 msgid "Vote"
-msgstr ""
+msgstr "Voter"
 
 msgid "Change your vote"
-msgstr ""
+msgstr "Modifier votre vote"
 
 msgid "Poll options"
-msgstr ""
+msgstr "Choix proposés"
 
 msgid "Add a poll option"
-msgstr ""
+msgstr "Ajouter un choix"
 
 msgid "<b>Note:</b>&nbsp;Deleting poll options of an existing poll will delete the associated votes."
-msgstr ""
+msgstr "<b>Remarque :</b>&nbsp;La suppression d'un choix à sondage existant supprimera les votes associés."
 
 msgid "Preview:"
-msgstr ""
+msgstr "Aperçu :"
 
 msgid "Total votes:"
-msgstr ""
+msgstr "Nombre total de votes :"
 
 msgid "Submit"
-msgstr ""
+msgstr "Envoyer"
 
 msgid "View results"
-msgstr ""
+msgstr "Voir les résultats"
 
 msgid "Options"
-msgstr ""
+msgstr "Options"
 
 msgid "Post reply"
 msgstr "Poster une réponse"
 
 msgid "Subscribe"
-msgstr ""
+msgstr "S'abonner"
 
 msgid "Unsubscribe"
 msgstr "Se désabonner"
@@ -883,8 +885,8 @@ msgstr "le"
 #, python-format
 msgid "edited %(counter)s time in total."
 msgid_plural "edited %(counter)s times in total."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "modifié %(counter)s fois au total."
+msgstr[1] "modifié %(counter)s fois au total."
 
 msgid "Reason:"
 msgstr "Motif :"
@@ -919,29 +921,33 @@ msgid "<h2><strong>%(counter)s</strong></h2>\n"
 "                      <p><small>Post</small></p>"
 msgid_plural "<h2><strong>%(counter)s</strong></h2>\n"
 "                      <p class=\"mb-1\"><small>Posts</small></p>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<h2><strong>%(counter)s</strong></h2>\n"
+"                      <p><small>Publication</small></p>"
+msgstr[1] "<h2><strong>%(counter)s</strong></h2>\n"
+"                      <p class=\"mb-1\"><small>Publications</small></p>"
 
 #, python-format
 msgid "<h2><strong>%(counter)s</strong></h2>\n"
 "                      <p><small>Topic</small></p>"
 msgid_plural "<h2><strong>%(counter)s</strong></h2>\n"
 "                      <p class=\"mb-1\"><small>Topics</small></p>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "<h2><strong>%(counter)s</strong></h2>\n"
+"                      <p><small>Discussion</small></p>"
+msgstr[1] "<h2><strong>%(counter)s</strong></h2>\n"
+"                      <p class=\"mb-1\"><small>Discussions</small></p>"
 
 msgid "Recent posts"
-msgstr ""
+msgstr "Publication récente"
 
 msgid "View all"
-msgstr ""
+msgstr "Tout voir"
 
 #, python-format
 msgid "On %(creation_date)s"
-msgstr ""
+msgstr "Le %(creation_date)s"
 
 msgid "Edit forum profile"
-msgstr ""
+msgstr "Modifier le profil du forum"
 
 msgid "Topics that you are subscribed to"
 msgstr "Discussions auxquelles vous êtes abonné"
@@ -977,46 +983,46 @@ msgstr "Les messages de %(username)s"
 #, python-format
 msgid "%(counter)s post found"
 msgid_plural "%(counter)s posts found"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(counter)s message trouvé"
+msgstr[1] "%(counter)s messages trouvés"
 
 msgid "No posts found"
-msgstr ""
+msgstr "Aucune publication trouvée"
 
 msgid "Disapprove"
-msgstr ""
+msgstr "Rejeter"
 
 msgid "Approve"
-msgstr ""
+msgstr "Approuver"
 
 msgid "New post"
-msgstr ""
+msgstr "Nouvelle publication"
 
 msgid "<b>1</b> option may be selected"
-msgstr ""
+msgstr "<b>1</b> option peut être sélectionnée"
 
 #, python-format
 msgid "Up to <b>%(max_options)s</b> options may be selected"
-msgstr ""
+msgstr "Vous pouvez sélectionner jusqu'à <b>%(max_options)s</b> options"
 
 #, python-format
 msgid "%(topic_length)s posts found"
-msgstr ""
+msgstr "%(topic_length)s messages trouvés"
 
 msgid "No posts awaiting approval."
-msgstr ""
+msgstr "Aucune publication en attente d'approbation."
 
 msgid "Approve post"
-msgstr ""
+msgstr "Approuver la publication"
 
 msgid "Are you sure you want to approve this post?"
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir approuver ce message ?"
 
 msgid "Disapprove post"
-msgstr ""
+msgstr "Rejeter le message"
 
 msgid "Are you sure you want to disapprove this post? This post will be deleted."
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir désapprouver ce message ? Ce message sera supprimé."
 
 msgid "Are you sure you want to delete this topic?"
 msgstr "Êtes-vous sûr de vouloir supprimer cette discussion ?"
@@ -1031,25 +1037,25 @@ msgid "Change topic type"
 msgstr "Modifier le type de discussion"
 
 msgid "Search forums"
-msgstr ""
+msgstr "Rechercher dans les forums"
 
 msgid "New search"
-msgstr ""
+msgstr "Nouvelle recherche"
 
 #, python-format
 msgid "Your search has returned <b>%(number_of_results)s</b> result"
 msgid_plural "Your search has returned <b>%(number_of_results)s</b> results"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Votre recherche a trouvé <b>%(number_of_results)s</b> résultat"
+msgstr[1] "Votre recherche a trouvé <b>%(number_of_results)s</b> résultats"
 
 msgid "Results"
-msgstr ""
+msgstr "Résultats"
 
 msgid "No results."
-msgstr ""
+msgstr "Aucun résultat."
 
 msgid "Are you sure you want to mark forums read?"
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir marquer les forums comme lus ?"
 
 msgid "Are you sure you want to mark topics read?"
 msgstr "Êtes-vous sûr de vouloir marquer les discussions comme lues ?"
@@ -1057,22 +1063,22 @@ msgstr "Êtes-vous sûr de vouloir marquer les discussions comme lues ?"
 #, python-format
 msgid "%(topic_length)s unread topic found"
 msgid_plural "%(topic_length)s unread topics found"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(topic_length)s sujet non lus"
+msgstr[1] "%(topic_length)s sujets non lus"
 
 msgid "There are no unread topics."
-msgstr ""
+msgstr "Il n'y a aucune discussion non lue."
 
 msgid "Forum index"
-msgstr ""
+msgstr "Accueil du forum"
 
 #: editor/widgets.py:15
 msgid "Please enter your message here..."
-msgstr ""
+msgstr "Veuillez entrer votre message ici ..."
 
 #: editor/widgets.py:16
-msgid "Enter or paste your URL here and press enter"
-msgstr ""
+msgid "Fill-in or paste your URL here and press enter"
+msgstr "Saisissez ou collez votre URL ici et appuyez sur Entrée"
 
 #: machina_extensions/forum_permission/defaults.py:22
 msgid "Can rename a forum"
