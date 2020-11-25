@@ -20,6 +20,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - upgrade django-haystack to 3.0
  - upgrade django from 3.0 to 3.1
  - replace `lti_provider` app with `django-lti-toolbox`
+ - update translations
 
 ### Fixed
 
