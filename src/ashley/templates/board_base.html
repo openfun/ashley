@@ -7,25 +7,36 @@
 {% endblock css %}
 
 {% block body %}
-{% block header %}{{ block.super }}{% endblock header %}
-<div class="my-0 px-2 container-fluid" id="main_container">
-  <div class="row">
-    <div class="col-12">
-      {% block breadcrumb %}{% include "partials/breadcrumb.html" %}{% endblock breadcrumb %}
+    {% block header %}
+    {% endblock header %}
+    <div class="my-0 px-2 container-fluid" id="main_container">
+        <div class="row">
+            <div class="col-12">
+                {% block breadcrumb %}{% include "partials/breadcrumb.html" %}{% endblock breadcrumb %}
+            </div>
+        </div>
+
+        {% block search %}
+        <div class="row">
+            <form class="form-inline my-2 ml-3 my-lg-0" role="search" action="{% url 'forum_search:search' %}">
+                <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="q" required>
+                <button class="btn btn-primary btn-sm my-2 my-sm-0" type="submit">{% trans "Search" %}</button>
+                <a class="small pl-2" href="{% url 'forum_search:search' %}">{% trans "Advanced search" %}</a>
+            </form>
+        </div>
+        {% endblock search %}
+
+        <div class="row">
+            <div class="col-12 pt-3">
+                {% block messages %}{% include "partials/messages.html" %}{% endblock messages %}
+            </div>
+        </div>
+        {% block content %}
+        {% endblock content %}
     </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <br />
-      {% block messages %}{% include "partials/messages.html" %}{% endblock messages %}
-    </div>
-  </div>
-  {% block content %}
-  {% endblock content %}
-</div>
 {% endblock body %}
 
 {% block js %}
-{{ block.super }}
-<script src="{% static 'ashley/js/ashley.js' %}" type="text/javascript" charset="utf-8"></script>
+    {{ block.super }}
+    <script src="{% static 'ashley/js/ashley.js' %}" type="text/javascript" charset="utf-8"></script>
 {% endblock js %}

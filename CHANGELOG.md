@@ -22,6 +22,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - replace `lti_provider` app with `django-lti-toolbox`
  - update translations
  - activate search functionality
+ - update search form template
 
 ### Fixed
 
