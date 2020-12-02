@@ -1,3 +1,9 @@
+.ashley-editor-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
 .ashley-editor-widget {
   border: 1px solid $gray-400;
   border-radius: 0.25rem;
@@ -8,7 +14,10 @@
 }
 
 .ashley-editor-toolbar {
-  position: relative;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 2;
 }
 
 .ashley-editor-buttons button {
