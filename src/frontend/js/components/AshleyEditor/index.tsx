@@ -36,8 +36,6 @@ const AshleyEditor = (props: MyEditorProps) => {
     return EditorState.createEmpty();
   });
 
-  const toolbarRef = useRef(null as HTMLDivElement | null);
-  const editorContainerRef = useRef(null as HTMLDivElement | null);
   const editorRef = useRef(null as PluginEditor | null);
 
   // Instantiate plugins in a state to avoid instantiation on every render
@@ -86,19 +84,8 @@ const AshleyEditor = (props: MyEditorProps) => {
   };
 
   return (
-    <div>
-      <div
-        className="ashley-editor-widget"
-        ref={editorContainerRef}
-        onClick={focusEditor}
-        style={
-          toolbarRef.current
-            ? {
-                top: `${toolbarRef.current.offsetHeight}px`,
-              }
-            : {}
-        }
-      >
+    <div className="ashley-editor-wrapper">
+      <div className="ashley-editor-widget" onClick={focusEditor}>
         <Editor
           ref={editorRef}
           editorState={editorState}
@@ -109,17 +96,7 @@ const AshleyEditor = (props: MyEditorProps) => {
         />
         <emojiPlugin.EmojiSuggestions />
       </div>
-      <div
-        className="ashley-editor-toolbar"
-        ref={toolbarRef}
-        style={
-          editorContainerRef.current
-            ? {
-                top: `-${editorContainerRef.current.offsetHeight}px`,
-              }
-            : {}
-        }
-      >
+      <div className="ashley-editor-toolbar">
         <toolbarPlugin.Toolbar>
           {(externalProps: any) => (
             <div className="ashley-editor-buttons">

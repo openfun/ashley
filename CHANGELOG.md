@@ -27,6 +27,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
  - fix signature max length errors caused by the draft.js markup
+ - fix Draft.js editor resize issue with static toolbar
 
 ## Removed
 
