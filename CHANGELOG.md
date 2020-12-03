@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.0-beta.3] - 2020-12-03
+
 ### Added
 
  - add permission `can_rename_forum`
@@ -92,7 +94,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - Update sandbox settings to be able to run Ashley in an `iframe` on multiple
    external websites
 
-[Unreleased]: https://github.com/openfun/ashley/compare/v1.0.0-beta.2...master
+[Unreleased]: https://github.com/openfun/ashley/compare/v1.0.0-beta.3...master
+[1.0.0-beta.3]: https://github.com/openfun/ashley/compare/v1.0.0-beta.2...v1.0.0-beta.3
 [1.0.0-beta.2]: https://github.com/openfun/ashley/compare/v1.0.0-beta.1...v1.0.0-beta.2
 [1.0.0-beta.1]: https://github.com/openfun/ashley/compare/v1.0.0-beta.0...v1.0.0-beta.1
 [1.0.0-beta.0]: https://github.com/openfun/ashley/compare/d767ba96aedcbc7d48fba5fefad2b93b9d623cc8...v1.0.0-beta.0

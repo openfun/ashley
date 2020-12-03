@@ -1,7 +1,7 @@
 {
   "name": "ashley",
-  "version": "1.0.0-beta.2",
-  "description": "A self-hosted alternative discussion forum for OpenEdx",
+  "version": "1.0.0-beta.3",
+  "description": "A self-hosted discussion forum for learning",
   "scripts": {
     "build": "tsc --noEmit && webpack",
     "build-production": "tsc --noEmit && webpack --mode=production",
