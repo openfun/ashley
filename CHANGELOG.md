@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- `upgrades` directory is missing from the published docker image
+
 ## [1.0.0-beta.3] - 2020-12-03
 
 ### Added
