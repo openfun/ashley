@@ -70,6 +70,7 @@ COPY --from=back-builder /install /usr/local
 
 # Copy runtime-required files
 COPY ./sandbox /app/sandbox
+COPY ./upgrades /app/upgrades
 COPY ./docker/files/usr/local/bin/entrypoint /usr/local/bin/entrypoint
 
 # Gunicorn
