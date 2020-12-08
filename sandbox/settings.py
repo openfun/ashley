@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import tempfile
 
 from configurations import Configuration, values
 from machina import MACHINA_MAIN_STATIC_DIR, MACHINA_MAIN_TEMPLATE_DIR
@@ -195,7 +196,9 @@ class Base(Configuration):
         "machina_attachments": {
             "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
             "LOCATION": values.Value(
-                "/tmp", environ_name="TMP_ATTACHMENT_DIR", environ_prefix=None
+                tempfile.gettempdir(),
+                environ_name="TMP_ATTACHMENT_DIR",
+                environ_prefix=None,
             ),
         },
     }
