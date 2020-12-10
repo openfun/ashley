@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- enable sentry_sdk in the sandbox
+
 ### Fixed
 
 - `upgrades` directory is missing from the published docker image
