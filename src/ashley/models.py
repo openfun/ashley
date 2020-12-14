@@ -41,17 +41,14 @@ class AbstractUser(DjangoAbstractUser):
         max_length=150,
         verbose_name=_("Public username"),
         help_text=_("This username will be displayed with the user's posts"),
-        blank=False,
+        blank=True,
     )
+
+    REQUIRED_FIELDS: List[str] = []
 
     def get_public_username(self):
         """Getter for the public username of the user."""
-        return self.public_username
-
-    def save(self, *args, **kwargs):
-        if not self.public_username:
-            self.public_username = self.username
-        super().save(*args, **kwargs)
+        return self.public_username or _("Anonymous")
 
     class Meta:
         """Options for the ``AbstractUser`` model."""

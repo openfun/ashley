@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- email and public_username are now optional for LTI authentication
+
 ### Added
 
 - enable sentry_sdk in the sandbox
