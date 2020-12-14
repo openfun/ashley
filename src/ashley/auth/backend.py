@@ -1,6 +1,7 @@
 """Authentication backend for Ashley"""
 
 import logging
+from typing import List
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
@@ -31,14 +32,15 @@ class LTIBackend(ToolboxLTIBackend):
         if not lti_consumer:
             raise PermissionDenied
 
-        email = self._get_mandatory_param(
-            lti_request, "lis_person_contact_email_primary"
-        )
         remote_user_id = self._get_remote_user_id(lti_request)
+
+        # Try to get optional values from LTI request
+        email = lti_request.get_param("lis_person_contact_email_primary", "")
+        public_username = self._get_public_username(lti_request)
 
         logger.debug(
             "User %s (consumer = %s) authenticated from LTI request",
-            username,
+            remote_user_id,
             lti_consumer.slug,
         )
         user_model = get_user_model()
@@ -54,7 +56,7 @@ class LTIBackend(ToolboxLTIBackend):
                 email=email,
                 lti_consumer=lti_consumer,
                 lti_remote_user_id=remote_user_id,
-                public_username=remote_user_id,
+                public_username=public_username,
             )
             logger.debug("User %s created in database", username)
 
@@ -63,21 +65,64 @@ class LTIBackend(ToolboxLTIBackend):
             raise PermissionDenied()
         return user
 
-    @staticmethod
-    def _get_remote_user_id(lti_request: LTI):
+    def _get_remote_user_id(self, lti_request: LTI):
         """
-        Get the remote user id.
+        Get the remote unique user identifier.
         It can be in different LTI parameters, depends on the LTI consumer.
         """
-        parameters_to_test = [
-            # OpenEdx
-            "lis_person_sourcedid",
-            # Moodle
-            "ext_user_username",
-        ]
-        for param in parameters_to_test:
-            user_id = lti_request.get_param(param)
-            if user_id:
-                return user_id
+        user_id = self._get_lti_param_with_fallback(
+            lti_request,
+            [
+                # OpenEdx
+                "lis_person_sourcedid",
+                # Moodle
+                "ext_user_username",
+                # Fallback to anonymous user_id
+                "user_id",
+            ],
+        )
+        if user_id:
+            return user_id
         logger.debug("Unable to find remote user id in LTI request")
         raise PermissionDenied()
+
+    def _get_public_username(self, lti_request: LTI):
+        """
+        Try to get a human-friendly remote user id in the LTI request.
+        It tries different LTI parameters, because it depends on the LTI consumer.
+        If not found, it returns ""
+        """
+        return self._get_lti_param_with_fallback(
+            lti_request,
+            [
+                # OpenEdx
+                "lis_person_sourcedid",
+                # Moodle
+                "ext_user_username",
+            ],
+            default_value="",
+        )
+
+    @staticmethod
+    def _get_lti_param_with_fallback(
+        lti_request: LTI, parameter_names: List[str], default_value=None
+    ):
+        """
+        Depending on the LTI consumer, LTI parameters name can differ for the same value.
+        This utility method allows to search for a value in the LTI request, by giving multiple
+        parameter names, by order of preference.
+
+        Args:
+            lti_request: the LTI request
+            parameter_names: The name of the LTI parameters to get, by order of preference
+            default_value: value returned if none of these LTI parameters is found
+
+        Returns:
+            The value found in the LTI request, or default_value otherwise
+
+        """
+        for param in parameter_names:
+            value = lti_request.get_param(param)
+            if value:
+                return value
+        return default_value

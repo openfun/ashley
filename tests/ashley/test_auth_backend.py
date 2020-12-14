@@ -96,6 +96,7 @@ class LTIBackendTestCase(TestCase):
 
         auth_user = self._authenticate(
             {
+                "user_id": "643f1625-f240-4a5a-b6eb-89b317807963",
                 "lti_message_type": "basic-lti-launch-request",
                 "lti_version": "LTI-1p0",
                 "resource_link_id": "aaa",
@@ -118,6 +119,7 @@ class LTIBackendTestCase(TestCase):
 
         new_user = self._authenticate(
             {
+                "user_id": "1c6cd9c1-ca4c-41fe-b369-912075a5d3ce",
                 "lti_message_type": "basic-lti-launch-request",
                 "lti_version": "LTI-1p0",
                 "resource_link_id": "aaa",
@@ -203,7 +205,7 @@ class LTIBackendTestCase(TestCase):
         consumer = LTIConsumerFactory(slug="consumer")
         passport = LTIPassportFactory(title="consumer1_passport1", consumer=consumer)
 
-        # Missing param : lis_person_sourcedid
+        # Missing param : lis_person_sourcedid or ext_user_username or user_id
         with self.assertRaises(PermissionDenied):
             self._authenticate(
                 {
@@ -216,18 +218,65 @@ class LTIBackendTestCase(TestCase):
                 passport,
             )
 
-        # Missing param : lis_person_contact_email_primary
-        with self.assertRaises(PermissionDenied):
-            self._authenticate(
-                {
-                    "lti_message_type": "basic-lti-launch-request",
-                    "lti_version": "LTI-1p0",
-                    "resource_link_id": "aaa",
-                    "context_id": "course-v1:fooschool+authbackend+0001",
-                    "lis_person_sourcedid": "ashley",
-                },
-                passport,
-            )
+    def test_optional_public_username(self):
+        """
+        Ensure that we can authenticate with success if the public username is
+        not found in the LTI request
+        """
+
+        consumer = LTIConsumerFactory(slug="consumer")
+        passport = LTIPassportFactory(title="consumer1_passport1", consumer=consumer)
+
+        user_count = get_user_model().objects.count()
+
+        new_user = self._authenticate(
+            {
+                "user_id": "3fd0ff83-a62d-4a12-9716-4d48821ae24f",
+                "lti_message_type": "basic-lti-launch-request",
+                "lti_version": "LTI-1p0",
+                "resource_link_id": "aaa",
+                "context_id": "course-v1:fooschool+authbackend+0001",
+                "lis_person_contact_email_primary": "user_without_username@example.com",
+            },
+            passport,
+        )
+
+        self.assertEqual("", new_user.public_username)
+        self.assertEqual(consumer, new_user.lti_consumer)
+        self.assertEqual("user_without_username@example.com", new_user.email)
+        self.assertEqual(
+            "3fd0ff83-a62d-4a12-9716-4d48821ae24f@consumer", new_user.username
+        )
+        self.assertEqual(user_count + 1, get_user_model().objects.count())
+
+    def test_optional_email(self):
+        """
+        Ensure that we can authenticate with success if the user email is
+        not found in the LTI request
+        """
+
+        consumer = LTIConsumerFactory(slug="consumer")
+        passport = LTIPassportFactory(title="consumer1_passport1", consumer=consumer)
+
+        user_count = get_user_model().objects.count()
+
+        new_user = self._authenticate(
+            {
+                "user_id": "7275a984-1e77-4084-9fe6-e54d0deba0e7",
+                "lti_message_type": "basic-lti-launch-request",
+                "lti_version": "LTI-1p0",
+                "resource_link_id": "aaa",
+                "context_id": "course-v1:fooschool+authbackend+0001",
+                "lis_person_sourcedid": "user_without_email",
+            },
+            passport,
+        )
+
+        self.assertEqual("user_without_email", new_user.public_username)
+        self.assertEqual("", new_user.email)
+        self.assertEqual(consumer, new_user.lti_consumer)
+        self.assertEqual("user_without_email@consumer", new_user.username)
+        self.assertEqual(user_count + 1, get_user_model().objects.count())
 
     def test_moodle_launch_request(self):
         """
