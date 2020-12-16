@@ -1,5 +1,5 @@
 """Authentication backend for Ashley"""
-
+import hashlib
 import logging
 from typing import List
 
@@ -37,6 +37,21 @@ class LTIBackend(ToolboxLTIBackend):
         # Try to get optional values from LTI request
         email = lti_request.get_param("lis_person_contact_email_primary", "")
         public_username = self._get_public_username(lti_request)
+
+        # Handle special case for OpenedX studio :
+        # When OpenedX studio initiates a LTI request to render ashley in a
+        # xblock, it always sends "student" as the user_id. This is a problem,
+        # because all openedX studio users of the same LTI consumer would
+        # share the same user account on ashley. And they would have an
+        # instructor access to every forums related to their LTI consumer.
+        # To resolve this problem, we generate a user id based on the
+        # context_id.
+        if self._is_open_edx_studio(lti_request):
+            context_id = self._get_mandatory_param(lti_request, "context_id")
+            # generate an identifier in a normalized format, based on the context id
+            # pylint: disable=too-many-function-args
+            generated_id = hashlib.shake_128(context_id.encode("utf-8")).hexdigest(20)
+            remote_user_id = f"openedxstudio-{generated_id}"
 
         logger.debug(
             "User %s (consumer = %s) authenticated from LTI request",
@@ -126,3 +141,16 @@ class LTIBackend(ToolboxLTIBackend):
             if value:
                 return value
         return default_value
+
+    @staticmethod
+    def _is_open_edx_studio(lti_request):
+        """
+        Detects if the LTI launch request is coming from OpenedX studio.
+        """
+        return (
+            lti_request.get_param("user_id") == "student"
+            and not lti_request.get_param("lis_person_contact_email_primary")
+            and not lti_request.get_param("lis_person_sourcedid")
+            and not lti_request.get_param("ext_user_username")
+            and lti_request.roles == ["instructor"]
+        )

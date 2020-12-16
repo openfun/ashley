@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - email and public_username are now optional for LTI authentication
+- detect and generate unique user id for OpenedX studio users
 
 ### Added
 
