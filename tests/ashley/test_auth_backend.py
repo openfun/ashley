@@ -278,6 +278,92 @@ class LTIBackendTestCase(TestCase):
         self.assertEqual("user_without_email@consumer", new_user.username)
         self.assertEqual(user_count + 1, get_user_model().objects.count())
 
+    def test_openedx_studio_launch_request(self):
+        """
+        Ensure that a launch request initiated by OpenedX studio is accepted by the
+        authentication backend AND that a user_id specific to the context_id is
+        generated.
+        """
+
+        consumer = LTIConsumerFactory(slug="consumer")
+        passport = LTIPassportFactory(title="consumer1_passport1", consumer=consumer)
+
+        user_count = get_user_model().objects.count()
+
+        # User 1 is using ashley from openedx studio in the course "TEST1"
+        user1 = self._authenticate(
+            {
+                "context_id": "course-v1:TEST1+0001+2020_T1",
+                "context_label": "TEST1",
+                "context_title": "test course 1",
+                "custom_component_display_name": "Forum",
+                "launch_presentation_return_url": "",
+                "lis_result_sourcedid": "course-v1%3ATEST1%2B0001%2B2020_T1:-c7b2c44b1d",
+                "lti_message_type": "basic-lti-launch-request",
+                "lti_version": "LTI-1p0",
+                "resource_link_id": "-c7b2c44b1d",
+                "roles": "Instructor",
+                "user_id": "student",
+            },
+            passport,
+        )
+
+        # A new ashley user should have been created
+        self.assertEqual(user_count + 1, get_user_model().objects.count())
+        self.assertEqual("", user1.public_username)
+        self.assertEqual("", user1.email)
+        self.assertEqual(consumer, user1.lti_consumer)
+        self.assertNotEqual("student@consumer", user1.username)
+
+        # User 2 is using ashley from openedx studio in the course "TEST1"
+        # (it is basically the same LTI launch request than user 1)
+        user2 = self._authenticate(
+            {
+                "context_id": "course-v1:TEST1+0001+2020_T1",
+                "context_label": "TEST1",
+                "context_title": "test course 1",
+                "custom_component_display_name": "Forum",
+                "launch_presentation_return_url": "",
+                "lis_result_sourcedid": "course-v1%3ATEST1%2B0001%2B2020_T1:-c7b2c44b1d",
+                "lti_message_type": "basic-lti-launch-request",
+                "lti_version": "LTI-1p0",
+                "resource_link_id": "-c7b2c44b1d",
+                "roles": "Instructor",
+                "user_id": "student",
+            },
+            passport,
+        )
+
+        # user1 and user2 should be the same. No new user should have been created, since they
+        # came from the same LTI context_id.
+        self.assertEqual(user_count + 1, get_user_model().objects.count())
+        self.assertEqual(user1, user2)
+
+        # User 3 is using ashley from openedx studio in the course "TEST2"
+        user3 = self._authenticate(
+            {
+                "context_id": "course-v1:TEST2+0001+2020_T1",
+                "context_label": "TEST2",
+                "context_title": "test course 2",
+                "custom_component_display_name": "Forum",
+                "launch_presentation_return_url": "",
+                "lis_result_sourcedid": "course-v1%3ATEST2%2B0001%2B2020_T1:-a2a2a2a2a2",
+                "lti_message_type": "basic-lti-launch-request",
+                "lti_version": "LTI-1p0",
+                "resource_link_id": "-a2a2a2a2a2",
+                "roles": "Instructor",
+                "user_id": "student",
+            },
+            passport,
+        )
+        # A new ashley user should have been created for user 3
+        self.assertEqual(user_count + 2, get_user_model().objects.count())
+        self.assertEqual("", user3.public_username)
+        self.assertEqual("", user3.email)
+        self.assertEqual(consumer, user3.lti_consumer)
+        self.assertNotEqual("student@consumer", user3.username)
+        self.assertNotEqual(user1, user3)
+
     def test_moodle_launch_request(self):
         """
         Ensure that a launch request initiated by Moodle is
