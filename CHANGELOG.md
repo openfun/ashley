@@ -8,14 +8,15 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- enable sentry_sdk in the sandbox
+- allow users with empty username to define it
+
 ### Changed
 
 - email and public_username are now optional for LTI authentication
 - detect and generate unique user id for OpenedX studio users
-
-### Added
-
-- enable sentry_sdk in the sandbox
 
 ### Fixed
 

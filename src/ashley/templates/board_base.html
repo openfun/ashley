@@ -27,6 +27,16 @@
         {% endblock search %}
 
         <div class="row">
+            {% block username_warning %}
+                {% if request.user is not None and not request.user.public_username %}
+                    <div class="col-12 pt-3">
+                        <div class="alert alert-info fade show">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            {% trans "Welcome to the discussion forum! First of all, please set a display name that will be associated with your messages." %} <a class="btn btn-sm btn-primary" href="{% url 'forum.username.change' %}">{% trans "Set my display name" %}</a>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endblock username_warning %}
             <div class="col-12 pt-3">
                 {% block messages %}{% include "partials/messages.html" %}{% endblock messages %}
             </div>

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashleyforum\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-16 09:55+0000\n"
-"PO-Revision-Date: 2020-12-01 15:10\n"
+"POT-Creation-Date: 2020-12-21 17:59+0000\n"
+"PO-Revision-Date: 2020-12-21 18:04\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -1100,6 +1100,23 @@ msgstr "Nom d'utilisateur public"
 msgid "This username will be displayed with the user's posts"
 msgstr "Ce nom d'utilisateur sera associé aux messages de l'utilisateur"
 
+#: templates/ashley/change_username.html:5
+#: templates/ashley/change_username.html:14
+msgid "Please set your display name"
+msgstr "Veuillez définir votre nom d'utilisateur"
+
+#: templates/ashley/change_username.html:25
+msgid "This display name will be associated with all your messages and cannot be changed once defined."
+msgstr "Votre nom d'utilisateur sera associé à tous vos messages et ne pourra pas être modifié une fois défini."
+
+#: templates/board_base.html:35
+msgid "Welcome to the discussion forum! First of all, please set a display name that will be associated with your messages."
+msgstr "Bienvenue sur le forum ! Avant toute chose, veuillez définir un nom d'utilisateur qui sera associé à vos messages."
+
+#: templates/board_base.html:35
+msgid "Set my display name"
+msgstr "Définir mon nom d'utilisateur"
+
 #: templates/forum/forum_rename.html:4 templates/forum/forum_rename.html:11
 msgid "Rename the forum"
 msgstr "Renommer le forum"
@@ -1107,4 +1124,9 @@ msgstr "Renommer le forum"
 #: templates/forum/forum_rename.html:23
 msgid "Rename"
 msgstr "Renommer"
+
+#: views.py:127
+#, python-format
+msgid "Welcome %(username)s, your username is now registered."
+msgstr "Bienvenue %(username)s, votre nom d'utilisateur a bien été pris en compte."
 
