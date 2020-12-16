@@ -1,0 +1,52 @@
+{% extends "board_base.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block sub_title %}{% trans "Please set your display name" %}{% endblock sub_title %}
+
+{% block username_warning %}{% endblock username_warning %}
+
+{% block content %}
+<div class="row member-profile-edit">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="m-0 h5 card-title">{% trans "Please set your display name" %}</h3>
+      </div>
+      <div class="card-body">
+        <form method="post" class="form" enctype="multipart/form-data" novalidate>{% csrf_token %}
+          <div class="row">
+            <div class="col-md-12">
+                {% with field=form.public_username %}
+                <div id="div_id_{{ field.html_name }}" class="form-group{% if field.errors %} has-error{% endif %}">
+                  <div class="controls">
+                    <label class="control-label" for="{{ field.auto_id }}">{{ field.label }}</label>
+                    {{ field|add_class:'form-control' }}
+                    <p class="help-block text-muted"><small>{% trans "This display name will be associated with all your messages and cannot be changed once defined." %}</small></p>
+                    {% for error in field.errors %}<p class="text-danger error">{{ error }}</p>{% endfor %}
+                  </div>
+                </div>
+                {% endwith %}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-actions">
+                <input type="submit" class="btn btn-large btn-primary" value="{% trans "Save" %}" />
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block extra_css %}
+{{ form.media.css }}
+{% endblock extra_css %}
+
+{% block extra_js %}
+{{ form.media.js }}
+{% endblock extra_js %}
