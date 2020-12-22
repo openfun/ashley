@@ -1,6 +1,6 @@
 {
   "name": "ashley",
-  "version": "1.0.0-beta.3",
+  "version": "1.0.0-beta.4",
   "description": "A self-hosted discussion forum for learning",
   "scripts": {
     "build": "tsc --noEmit && webpack",
