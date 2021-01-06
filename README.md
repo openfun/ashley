@@ -62,3 +62,29 @@ $ make run
 
 You should be able to test the forum at [http://localhost:8090/dev/](http://localhost:8090/dev/).
 This is the development view that emulates a LTI consumer.
+
+## Django admin
+
+You can access the Django admin site of the forum at [http://localhost:8090/admin/](http://localhost:8090/admin/)
+
+You first need to create a superuser account. 
+
+```bash
+$ make superuser
+```
+
+## Troubleshooting
+
+### ElasticSearch service out with an Exit 137
+
+```bash
+$ docker-compose ps
+```
+> ashley_elasticsearch_1   /docker-entrypoint.sh elas ...   Exit 137
+
+This is due to a lack of memory.
+N.B. for Mac users, the default Docker's configuration is also 2GB which means that Elasticsearch will automatically exit.
+
+To fix this issue, you need to upgrade your default configuration. 
+
+
