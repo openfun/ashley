@@ -38,6 +38,10 @@
         }
       }
 
+      blockquote {
+        @include blockquote;
+      }
+
       .post-signature {
         margin-top: 20px;
         margin-bottom: 20px;

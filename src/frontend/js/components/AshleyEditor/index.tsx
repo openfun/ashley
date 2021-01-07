@@ -9,6 +9,7 @@ import {
   OrderedListButton,
   UnderlineButton,
   UnorderedListButton,
+  BlockquoteButton,
 } from 'draft-js-buttons';
 import createEmojiPlugin, { EmojiPluginConfig } from 'draft-js-emoji-plugin';
 import Editor from 'draft-js-plugins-editor';
@@ -108,6 +109,7 @@ const AshleyEditor = (props: MyEditorProps) => {
               <HeadlineOneButton {...externalProps} />
               <HeadlineTwoButton {...externalProps} />
               <HeadlineThreeButton {...externalProps} />
+              <BlockquoteButton {...externalProps} />
               <UnorderedListButton {...externalProps} />
               <OrderedListButton {...externalProps} />
               <emojiPlugin.EmojiSelect {...externalProps} />

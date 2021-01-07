@@ -11,6 +11,10 @@
   min-height: 10em;
   position: relative;
   cursor: text;
+
+  blockquote {
+    @include blockquote;
+  }
 }
 
 .ashley-editor-toolbar {
