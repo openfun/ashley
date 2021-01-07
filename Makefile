@@ -157,6 +157,11 @@ search-index: ## rebuild forum's index
 	@$(MANAGE) rebuild_index --noinput
 .PHONY: search-index
 
+superuser: ## create a Django superuser
+	@echo "$(BOLD)Creating a Django superuser$(RESET)"
+	@$(COMPOSE_RUN_APP) python sandbox/manage.py createsuperuser
+.PHONY: superuser
+
 # -- Frontend
 
 build-front: ## build front-end application
