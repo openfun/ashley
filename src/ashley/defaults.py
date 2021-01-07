@@ -65,3 +65,8 @@ DRAFTJS_EXPORTER_CONFIG = lazy(
     },
     dict,
 )()
+
+
+INDEXABLE_USER_DISPLAY_NAME_METHOD = getattr(
+    settings, "ASHLEY_INDEXABLE_USER_DISPLAY_NAME_METHOD", "get_public_username"
+)

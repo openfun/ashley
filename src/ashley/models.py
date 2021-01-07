@@ -48,6 +48,10 @@ class AbstractUser(DjangoAbstractUser):
 
     def get_public_username(self):
         """Getter for the public username of the user."""
+        return self.public_username
+
+    def get_public_username_with_default(self):
+        """Getter for the public username of the user."""
         return self.public_username or _("Anonymous")
 
     class Meta:

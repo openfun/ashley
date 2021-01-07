@@ -9,11 +9,12 @@ from django.conf import settings
 from django.core.management import call_command
 from django.test import TestCase
 from django.test.utils import override_settings
+from django.urls import reverse
 from django.utils import timezone
 from machina.apps.forum_permission.shortcuts import assign_perm
 from machina.core.db.models import get_model
 
-from ashley.factories import PostFactory, TopicFactory, UserFactory
+from ashley.factories import ForumFactory, PostFactory, TopicFactory, UserFactory
 
 Forum = get_model("forum", "Forum")
 
@@ -398,6 +399,49 @@ class ForumSearchTestCase(TestCase):
         )
         self.assertContains(response, post1.topic.slug)
         self.assertContains(response, post5.topic.slug)
+
+    def test_forum_search_empty_public_username(self):
+        """
+        A topic posted by a user that has not defined a public_username
+        should be indexed with no error.
+        """
+
+        user = UserFactory(public_username="")
+        forum = ForumFactory()
+
+        # Create a topic and a post
+        topic = TopicFactory(subject="yahl2vooPh", poster=user, forum=forum)
+        post = PostFactory(subject="dooV7ei3ju", topic=topic, poster=user)
+
+        # Index the post in Elasticsearch
+        call_command("rebuild_index", interactive=False)
+
+        user2 = UserFactory()
+        assign_perm("can_read_forum", user2, post.topic.forum)
+        self.client.force_login(user2)
+        response = self.client.get(
+            f"/forum/search/?q=dooV7ei3ju&search_poster_name={post.poster.get_public_username()}\
+                    &search_forums={post.topic.forum.pk}"
+        )
+
+        self.assertContains(
+            response, "Your search has returned <b>1</b> result", html=True
+        )
+
+        # Ensure that the default display name is present
+        user_profile_url = reverse("forum_member:profile", kwargs={"pk": user.id})
+        self.assertContains(
+            response, f'<a href="{user_profile_url}">Anonymous</a>', html=True
+        )
+
+        # Ensure that the default display name is not indexed
+        response = self.client.get(
+            f"/forum/search/?q=dooV7ei3ju&search_poster_name={post.poster.get_public_username()}\
+                            &search_forums={post.topic.forum.pk}&search_poster_name=Anonymous"
+        )
+        self.assertContains(
+            response, "Your search has returned <b>0</b> results", html=True
+        )
 
     def tearDown(self):
         haystack.connections["default"].get_backend().clear()

@@ -253,7 +253,7 @@ class Base(Configuration):
     )
     MACHINA_MARKUP_WIDGET = "ashley.editor.widgets.DraftEditor"
     MACHINA_PROFILE_AVATARS_ENABLED = False
-    MACHINA_USER_DISPLAY_NAME_METHOD = "get_public_username"
+    MACHINA_USER_DISPLAY_NAME_METHOD = "get_public_username_with_default"
 
     # Sentry
     SENTRY_DSN = values.Value(None, environ_name="SENTRY_DSN")
