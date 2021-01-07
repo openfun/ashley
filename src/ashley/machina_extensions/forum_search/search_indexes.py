@@ -6,13 +6,15 @@
 
 from haystack import indexes
 from machina.core.db.models import get_model
-from machina.core.loading import get_class
+
+from ashley import defaults
 
 Post = get_model("forum_conversation", "Post")
 
-get_forum_member_display_name = get_class(
-    "forum_member.shortcuts", "get_forum_member_display_name"
-)
+
+def get_indexable_forum_member_display_name(user):
+    """ Given a specific user, returns their related display name. """
+    return getattr(user, defaults.INDEXABLE_USER_DISPLAY_NAME_METHOD)()
 
 
 class PostIndex(indexes.SearchIndex, indexes.Indexable):
@@ -29,7 +31,7 @@ class PostIndex(indexes.SearchIndex, indexes.Indexable):
     )
 
     poster = indexes.IntegerField(model_attr="poster_id", null=True)
-    poster_name = indexes.EdgeNgramField()
+    poster_name = indexes.EdgeNgramField(null=True)
 
     forum = indexes.IntegerField(model_attr="topic__forum_id")
     forum_slug = indexes.CharField()
@@ -48,7 +50,11 @@ class PostIndex(indexes.SearchIndex, indexes.Indexable):
     @staticmethod
     def prepare_poster_name(obj):
         """ Returns the poster's name """
-        return get_forum_member_display_name(obj.poster) if obj.poster else obj.username
+        return (
+            get_indexable_forum_member_display_name(obj.poster)
+            if obj.poster
+            else obj.username
+        )
 
     @staticmethod
     def prepare_forum_slug(obj):
