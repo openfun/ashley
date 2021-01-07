@@ -1,0 +1,6 @@
+@mixin blockquote {
+  background: $gray-100;
+  border-left: 10px solid $gray-400;
+  color: $gray-600;
+  padding: 0.5em 10px;
+}

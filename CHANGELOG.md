@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
  - upgrade django-machina from 1.1.3 to 1.1.4
+ - add button to insert quotes in the draftjs editor
 
 ## [1.0.0-beta.4] - 2020-12-22
 
