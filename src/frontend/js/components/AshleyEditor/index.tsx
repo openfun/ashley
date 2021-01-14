@@ -1,5 +1,19 @@
-import { convertFromRaw, convertToRaw, EditorState, RichUtils } from 'draft-js';
+import {
+  convertFromRaw,
+  convertToRaw,
+  EditorState,
+  RichUtils,
+  Modifier,
+} from 'draft-js';
 import createLinkPlugin from '@draft-js-plugins/anchor';
+import Editor from '@draft-js-plugins/editor';
+import PluginEditor from '@draft-js-plugins/editor/lib';
+import createToolbarPlugin, {
+  Separator,
+} from '@draft-js-plugins/static-toolbar';
+import createEmojiPlugin, { EmojiPluginConfig } from 'draft-js-emoji-plugin';
+import React, { useEffect, useRef, useState } from 'react';
+import ReactDOM from 'react-dom';
 import {
   BoldButton,
   HeadlineOneButton,
@@ -10,15 +24,10 @@ import {
   UnderlineButton,
   UnorderedListButton,
   BlockquoteButton,
+  CodeBlockButton,
 } from '@draft-js-plugins/buttons';
-import createEmojiPlugin, { EmojiPluginConfig } from 'draft-js-emoji-plugin';
-import Editor from '@draft-js-plugins/editor';
-import PluginEditor from '@draft-js-plugins/editor/lib';
-import createToolbarPlugin, {
-  Separator,
-} from '@draft-js-plugins/static-toolbar';
-import React, { useEffect, useRef, useState } from 'react';
-import ReactDOM from 'react-dom';
+
+import createCodeEditorPlugin from '../../draftjs-plugins/code-editor';
 
 interface MyEditorProps {
   autofocus?: boolean;
@@ -42,20 +51,21 @@ export const AshleyEditor = (props: MyEditorProps) => {
   const editorRef = useRef(null as PluginEditor | null);
 
   // Instantiate plugins in a state to avoid instantiation on every render
-  const [{ emojiPlugin, linkPlugin, toolbarPlugin }] = useState(() => {
-    return {
-      emojiPlugin: createEmojiPlugin(props.emojiConfig),
-      linkPlugin: createLinkPlugin({
-        linkTarget: '_blank',
-        placeholder: props.linkPlaceholder,
-        theme: {
-          input: 'ashley-editor-link-input',
-          inputInvalid: 'ashley-editor-link-input-invalid',
-          link: 'ashley-editor-link',
-        },
-      }),
-      toolbarPlugin: createToolbarPlugin(),
-    };
+  const [
+    { emojiPlugin, linkPlugin, toolbarPlugin, codeEditorPlugin },
+  ] = useState({
+    emojiPlugin: createEmojiPlugin(props.emojiConfig),
+    linkPlugin: createLinkPlugin({
+      linkTarget: '_blank',
+      placeholder: props.linkPlaceholder,
+      theme: {
+        input: 'ashley-editor-link-input',
+        inputInvalid: 'ashley-editor-link-input-invalid',
+        link: 'ashley-editor-link',
+      },
+    }),
+    toolbarPlugin: createToolbarPlugin(),
+    codeEditorPlugin: createCodeEditorPlugin(),
   });
 
   useEffect(() => {
@@ -63,6 +73,31 @@ export const AshleyEditor = (props: MyEditorProps) => {
       focusEditor();
     }
   }, []);
+
+  // On HandlePastedText modify the current block in order to not create a different block for each pasted line
+  const handlePastedText = (
+    pastedText: string,
+    html: string | undefined,
+    stateEditor: EditorState,
+  ) => {
+    const selection = stateEditor.getSelection();
+    const contentState = stateEditor.getCurrentContent();
+    const startKey = selection.getStartKey();
+    const currentBlock = contentState.getBlockForKey(startKey);
+
+    if (currentBlock.getType() === 'code-block') {
+      const newContent = Modifier.replaceText(
+        stateEditor.getCurrentContent(),
+        stateEditor.getSelection(),
+        pastedText,
+      );
+      editorChange(
+        EditorState.push(stateEditor, newContent, 'insert-characters'),
+      );
+      return 'handled';
+    }
+    return 'not-handled';
+  };
 
   const editorChange = (stateEditor: EditorState) => {
     props.target.value = JSON.stringify(
@@ -93,9 +128,10 @@ export const AshleyEditor = (props: MyEditorProps) => {
           ref={editorRef}
           editorState={editorState}
           onChange={editorChange}
-          plugins={[toolbarPlugin, emojiPlugin, linkPlugin]}
+          plugins={[toolbarPlugin, emojiPlugin, linkPlugin, codeEditorPlugin]}
           placeholder={props.placeholder}
           handleKeyCommand={keyBinding}
+          handlePastedText={handlePastedText}
         />
         <emojiPlugin.EmojiSuggestions />
       </div>
@@ -112,6 +148,7 @@ export const AshleyEditor = (props: MyEditorProps) => {
               <HeadlineTwoButton {...externalProps} />
               <HeadlineThreeButton {...externalProps} />
               <BlockquoteButton {...externalProps} />
+              <CodeBlockButton {...externalProps} />
               <UnorderedListButton {...externalProps} />
               <OrderedListButton {...externalProps} />
               <emojiPlugin.EmojiSelect {...externalProps} />

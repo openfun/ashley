@@ -17,6 +17,9 @@
 @import '@draft-js-plugins/static-toolbar/lib/plugin';
 @import '@draft-js-plugins/anchor/lib/plugin';
 
+//highlight code style
+@import 'highlight.js/styles/github';
+
 // Ashley forum specific style
 @import './objects/_editor';
 @import './objects/_emojis';

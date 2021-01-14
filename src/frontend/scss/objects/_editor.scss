@@ -66,3 +66,19 @@
   color: $link-color;
   text-decoration: underline;
 }
+
+.ashley-editor-widget {
+  .public-DraftStyleDefault-pre {
+    background-color: $gray-100;
+    border: 1px solid $gray-400;
+    display: block;
+    font-size: 0.9em;
+    line-height: 1.2;
+    margin: 0.5em 0;
+    padding: 20px;
+    width: 75%;
+    pre {
+      margin-bottom: 0;
+    }
+  }
+}
