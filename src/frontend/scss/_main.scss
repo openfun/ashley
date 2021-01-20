@@ -14,8 +14,8 @@
 // Import Draft-js related stylesheet
 @import 'draft-js/dist/Draft';
 @import 'draft-js-emoji-plugin/lib/plugin';
-@import 'draft-js-static-toolbar-plugin/lib/plugin';
-@import 'draft-js-anchor-plugin/lib/plugin';
+@import '@draft-js-plugins/static-toolbar/lib/plugin';
+@import '@draft-js-plugins/anchor/lib/plugin';
 
 // Ashley forum specific style
 @import './objects/_editor';

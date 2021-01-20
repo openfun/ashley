@@ -1325,6 +1325,46 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.2.tgz#8f03a22a04de437254e8ce8cc84ba39689288752"
   integrity sha512-HyYEUDeIj5rRQU2Hk5HTB2uHsbRQpF70nvMhVzi+VJR0X+xNEhjPui4/kBf3VeH/wqD28PT4sVOm8qqLjBrSZg==
 
+"@draft-js-plugins/anchor@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@draft-js-plugins/anchor/-/anchor-4.0.0.tgz#45a7d7471968add2eecb7fe1b4dcf4a9c2e289e8"
+  integrity sha512-Ywbt8o3euTtsUDZkrqz6yRXRe5KDGQSVQWEIzQYiNxJW43CiRZHd3ZzmifiUD9QiyKWzP2g8ZorvPlczVXmmLQ==
+  dependencies:
+    "@draft-js-plugins/utils" "^4.0.0"
+    clsx "^1.0.4"
+    prepend-http "3"
+    prop-types "^15.5.8"
+    tlds "^1.216.0"
+
+"@draft-js-plugins/buttons@4.0.0", "@draft-js-plugins/buttons@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@draft-js-plugins/buttons/-/buttons-4.0.0.tgz#63215c6a3231a22ffd0b2e2c545ef9d850034fc6"
+  integrity sha512-BYfEpVgCi/pIPmf05fRGxADpzfsYbtXb2R0kM48huLORYcOZ4wpMfCeNe0zzp8EfqwG+z8aAd6+pcjc9BcO/Bg==
+  dependencies:
+    clsx "^1.0.4"
+
+"@draft-js-plugins/editor@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@draft-js-plugins/editor/-/editor-4.0.0.tgz#a97b2cc69243648342606ad2e984f05aa499aee5"
+  integrity sha512-yt8jDqGrbRRgPKY/x3MHuVm2N1Lu33ILAAOfjl8BU2IPQVYPpO/fMu+/hnRvUmHJsj0nMOGbiDzAmIlZ3A/KMA==
+  dependencies:
+    immutable "~3.8.2"
+    prop-types "^15.5.8"
+
+"@draft-js-plugins/static-toolbar@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@draft-js-plugins/static-toolbar/-/static-toolbar-4.0.0.tgz#44c1fc7d237c4bc1f07f93820cbde8fc212493ec"
+  integrity sha512-gSmmXP4ziuoQ4haCNxu5V9HyJe+uswGLzr443pP/Wwhy81L5DnNMtWdP1cqYWGLVNCCjUIQQ8nm3buH17eFBCw==
+  dependencies:
+    "@draft-js-plugins/buttons" "^4.0.0"
+    "@draft-js-plugins/utils" "^4.0.0"
+    prop-types "^15.5.8"
+
+"@draft-js-plugins/utils@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@draft-js-plugins/utils/-/utils-4.0.0.tgz#978f0da0e97c8ffc7b7151033a9d2582735867c1"
+  integrity sha512-PPzXns3xmEyTu66ZXEvfGi5uYhKaS5VynQ3S5BBokfjV0uTRLQEf2DN5jLl9QFPfrQXRQCgcqcSR4YppbkOh/g==
+
 "@fortawesome/fontawesome-free@5.15.1":
   version "5.15.1"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.15.1.tgz#ccfef6ddbe59f8fe8f694783e1d3eb88902dc5eb"
@@ -3037,24 +3077,6 @@ dot-prop@^5.2.0:
   dependencies:
     is-obj "^2.0.0"
 
-draft-js-anchor-plugin@2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/draft-js-anchor-plugin/-/draft-js-anchor-plugin-2.0.3.tgz#3b6e659794c7590e1fafa529c178249b17298461"
-  integrity sha512-3G7E6EFSsTGbt3zPXAkuhGIhX74TLc7KoQLzb4SduEyG/jvWgDkJoTHTjFztnyDYp1+lEh3cmJOgeCPv3uEjeA==
-  dependencies:
-    clsx "^1.0.4"
-    draft-js-plugins-utils "2.0.2"
-    prepend-http "1.0.4"
-    prop-types "^15.5.8"
-    tlds "^1.197.0"
-
-draft-js-buttons@2.0.2, draft-js-buttons@^2.0.1:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/draft-js-buttons/-/draft-js-buttons-2.0.2.tgz#d96d0dcec9e224a9d62f2543a50f5f1cbef84000"
-  integrity sha512-qC3vkZ4ZvKe86Uskf5CsZxgo4Rt6ITAE51sbiI5YCMasanXdMVRwbF4fQonMyahds1tgj9EeBNePOBnlKTz9gQ==
-  dependencies:
-    clsx "^1.0.4"
-
 draft-js-emoji-plugin@2.1.3:
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/draft-js-emoji-plugin/-/draft-js-emoji-plugin-2.1.3.tgz#c5fb2884c9bdbf4b07e51b1d49ec89a58aca54f4"
@@ -3069,27 +3091,6 @@ draft-js-emoji-plugin@2.1.3:
     react-custom-scrollbars "^4.2.0"
     react-icons "^2.2.6"
     to-style "^1.3.3"
-
-draft-js-plugins-editor@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/draft-js-plugins-editor/-/draft-js-plugins-editor-3.0.0.tgz#196d1e065e2c29faebaab4ec081b734fdef294a2"
-  integrity sha512-bFEL0FUIPg9VK3KSeBZ3D+uMqQEVe4Cv7++LWCMASRH02jy6x2f87NRxSZLzTQES5+oL6Qg+OEUlaTn409145A==
-  dependencies:
-    immutable "~3.7.4"
-    prop-types "^15.5.8"
-
-draft-js-plugins-utils@2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/draft-js-plugins-utils/-/draft-js-plugins-utils-2.0.2.tgz#b2f8572808a2b921e079ff44d03ac7e74fb2c598"
-  integrity sha512-PXbNnMDYzu7CS72+Sx1vnwqE7lcW7q9+4LiZryOjYRbv0iwdf1pj9Wgcj52JGhBK1kkUtaKR8pH1x7DkaYbHoQ==
-
-draft-js-static-toolbar-plugin@3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/draft-js-static-toolbar-plugin/-/draft-js-static-toolbar-plugin-3.0.1.tgz#fcb22e683a82d9acafba6e61adaa149168a51482"
-  integrity sha512-CBBwc2O5A0UVES4ZsOQUIezvYRrqzoyE0k9gep3v2uQVEzJuc1wmIV0MROey9pUY+UivBQ4T9WVkwFBpf8NU1w==
-  dependencies:
-    draft-js-buttons "^2.0.1"
-    prop-types "^15.5.8"
 
 draft-js@0.11.7:
   version "0.11.7"
@@ -3843,6 +3844,11 @@ immutable@~3.7.4:
   version "3.7.6"
   resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.7.6.tgz#13b4d3cb12befa15482a26fe1b2ebae640071e4b"
   integrity sha1-E7TTyxK++hVIKib+Gy665kAHHks=
+
+immutable@~3.8.2:
+  version "3.8.2"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
+  integrity sha1-wkOZUUVbs5kT2vKBN28VMOEErfM=
 
 import-lazy@^2.1.0:
   version "2.1.0"
@@ -5597,10 +5603,10 @@ prelude-ls@~1.1.2:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
   integrity sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=
 
-prepend-http@1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/prepend-http/-/prepend-http-1.0.4.tgz#d4f4562b0ce3696e41ac52d0e002e57a635dc6dc"
-  integrity sha1-1PRWKwzjaW5BrFLQ4ALlemNdxtw=
+prepend-http@3:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/prepend-http/-/prepend-http-3.0.1.tgz#3e724d58fd5867465b300bb9615009fa2f8ee3b6"
+  integrity sha512-BLxfZh+m6UiAiCPZFJ4+vYoL7NrRs5XgCTRrjseATAggXhdZKKxn+JUNmuVYWY23bDHgaEHodxw8mnmtVEDtHw==
 
 prepend-http@^2.0.0:
   version "2.0.0"
@@ -6644,10 +6650,10 @@ throat@^5.0.0:
   resolved "https://registry.yarnpkg.com/throat/-/throat-5.0.0.tgz#c5199235803aad18754a667d659b5e72ce16764b"
   integrity sha512-fcwX4mndzpLQKBS1DVYhGAcYaYt7vsHNIvQV+WXMvnow5cgjPphq5CaayLaGsjRdSCKZFNGt7/GYAuXaNOiYCA==
 
-tlds@^1.197.0:
-  version "1.207.0"
-  resolved "https://registry.yarnpkg.com/tlds/-/tlds-1.207.0.tgz#459264e644cf63ddc0965fece3898913286b1afd"
-  integrity sha512-k7d7Q1LqjtAvhtEOs3yN14EabsNO8ZCoY6RESSJDB9lst3bTx3as/m1UuAeCKzYxiyhR1qq72ZPhpSf+qlqiwg==
+tlds@^1.216.0:
+  version "1.216.0"
+  resolved "https://registry.yarnpkg.com/tlds/-/tlds-1.216.0.tgz#9749abcbe1bafb4f7b22d44391bd7bf64fa8a435"
+  integrity sha512-y9A+eMRKLdAOclcFRTk3durpvCWiEdWcQhCOopCO654pckH9+o5Z5VgBsTTAFqtyxB8yFRXSG1q7BCCeHyrm0w==
 
 tmpl@1.0.x:
   version "1.0.4"
