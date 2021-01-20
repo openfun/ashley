@@ -1,5 +1,5 @@
 import { convertFromRaw, convertToRaw, EditorState, RichUtils } from 'draft-js';
-import createLinkPlugin from 'draft-js-anchor-plugin';
+import createLinkPlugin from '@draft-js-plugins/anchor';
 import {
   BoldButton,
   HeadlineOneButton,
@@ -10,11 +10,13 @@ import {
   UnderlineButton,
   UnorderedListButton,
   BlockquoteButton,
-} from 'draft-js-buttons';
+} from '@draft-js-plugins/buttons';
 import createEmojiPlugin, { EmojiPluginConfig } from 'draft-js-emoji-plugin';
-import Editor from 'draft-js-plugins-editor';
-import PluginEditor from 'draft-js-plugins-editor/lib';
-import createToolbarPlugin, { Separator } from 'draft-js-static-toolbar-plugin';
+import Editor from '@draft-js-plugins/editor';
+import PluginEditor from '@draft-js-plugins/editor/lib';
+import createToolbarPlugin, {
+  Separator,
+} from '@draft-js-plugins/static-toolbar';
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 
