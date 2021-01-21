@@ -99,6 +99,13 @@ class AbstractLTIContext(Model):
         """
         return self.GROUP_DELIMITER.join([self.GROUP_PREFIX, str(self.id)])
 
+    def get_group_role_name(self, role) -> str:
+        """
+        Get the name of the group for a given role
+        By default it is of the form "cg:{context.id}:role:{role}"
+        """
+        return self.GROUP_DELIMITER.join([self.base_group_name, "role", role])
+
     def get_role_groups(self, roles: List[str]) -> List[Group]:
         """
         Get the Django Groups corresponding to a list of LTI Context Roles
@@ -115,7 +122,7 @@ class AbstractLTIContext(Model):
         All LTI user authenticated within this LTI context and having this role
         should be in this group.
         """
-        group_name = self.GROUP_DELIMITER.join([self.base_group_name, "role", role])
+        group_name = self.get_group_role_name(role)
         return self._get_or_create_group(group_name)
 
     @staticmethod
@@ -150,6 +157,18 @@ class AbstractLTIContext(Model):
             if group not in current_groups:
                 logger.debug("Add user %s to group %s", user, group)
                 user.groups.add(group)
+
+    def get_user_roles(self, user) -> List[str]:
+        """
+        Return list of roles name without group pattern
+        cg:{context.id}:role: for this user in this LTI Context
+        """
+        role_group_prefix = self.get_group_role_name("")
+        user_role_groups = user.groups.filter(
+            name__startswith=role_group_prefix
+        ).values_list("name", flat=True)
+        roles = [group.replace(role_group_prefix, "") for group in user_role_groups]
+        return roles
 
     class Meta:
         """Options for the ``AbstractLTIContext`` model."""

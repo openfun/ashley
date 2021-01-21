@@ -8,6 +8,8 @@ from draftjs_exporter.dom import DOM
 
 from ashley.editor.decorators import emoji, link
 
+_FORUM_ROLE_INSTRUCTOR = "instructor"
+
 _FORUM_BASE_PERMISSIONS = [
     "can_see_forum",
     "can_read_forum",
@@ -44,7 +46,7 @@ DEFAULT_FORUM_ROLES_PERMISSIONS = lazy(
         "ASHLEY_DEFAULT_FORUM_ROLES_PERMISSIONS",
         {
             "administrator": _FORUM_ADMIN_PERMISSIONS,
-            "instructor": _FORUM_ADMIN_PERMISSIONS,
+            _FORUM_ROLE_INSTRUCTOR: _FORUM_ADMIN_PERMISSIONS,
         },
     ),
     dict,
