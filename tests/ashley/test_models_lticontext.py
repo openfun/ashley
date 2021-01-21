@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group
 from django.test import TestCase
 from machina.core.db.models import get_model
 
-from ashley.factories import LTIContextFactory, UserFactory
+from ashley.factories import LTIConsumerFactory, LTIContextFactory, UserFactory
 
 GroupForumPermission = get_model(  # pylint: disable=C0103
     "forum_permission", "GroupForumPermission"
@@ -111,4 +111,53 @@ class LTIContextTestCase(TestCase):
                 f"{context2.base_group_name}:role:instructor",
             ],
             list(user.groups.values_list("name", flat=True)),
+        )
+
+    def test_get_group_role_name(self):
+        """get_group_role_name should return the name of the role with the specific pattern"""
+        context = LTIContextFactory()
+
+        # Ensure that the get_group_role_name generator respect a specific name pattern
+        self.assertEqual(f"cg:{context.id}:role:", context.get_group_role_name(""))
+        # Test with a actual group name label
+        name_instructor_group = f"cg:{context.id}:role:instructor"
+        self.assertEqual(
+            name_instructor_group, context.get_group_role_name("instructor")
+        )
+
+    def test_get_user_roles(self):
+        """get_user_roles should return the list of the roles names
+        without the specific patterns cg:{context.id}:role: only the label
+        of the roles
+        """
+        lti_consumer = LTIConsumerFactory()
+        context = LTIContextFactory(lti_consumer=lti_consumer)
+
+        # Create two users
+        user = UserFactory(lti_consumer=lti_consumer)
+        user2 = UserFactory(lti_consumer=lti_consumer)
+
+        # Sync user groups in context with multiple roles
+        context.sync_user_groups(user, ["role1", "role2"])
+        # check that the list of roles is returned
+        self.assertCountEqual(
+            ["role1", "role2"],
+            context.get_user_roles(user),
+        )
+        # add an extra group
+        instructor_group = Group.objects.create(
+            name=f"{context.base_group_name}:role:instructor"
+        )
+        user.groups.add(instructor_group)
+        # check that the list of roles is returned
+        self.assertCountEqual(
+            ["role1", "role2", "instructor"],
+            context.get_user_roles(user),
+        )
+        # check that group that are not roles get ignored
+        other_group = Group.objects.create(name=f"{context.base_group_name}:other)")
+        user2.groups.add(other_group)
+        self.assertCountEqual(
+            [],
+            context.get_user_roles(user2),
         )

@@ -31,8 +31,12 @@
                   <div class="topic-created">
                   {% if topic.poster %}
                     {% url 'forum_member:profile' topic.poster_id as poster_url %}
-                    {% blocktrans trimmed with poster_url=poster_url username=topic.poster|forum_member_display_name creation_date=topic.created %}
-                      By: <a href="{{ poster_url }}">{{ username }}</a> on {{ creation_date }}
+                    {% blocktrans trimmed with poster_url=poster_url username=topic.poster|forum_member_display_name %}
+                      By: <a href="{{ poster_url }}">{{ username }}</a> 
+                    {% endblocktrans %}
+                    {% include "partials/user_icon.html" with topic=topic user=topic.poster %}
+                    {% blocktrans trimmed with creation_date=topic.created %}
+                      on {{ creation_date }}
                     {% endblocktrans %}
                   {% else %}
                     {% blocktrans trimmed with poster_username=topic.first_post.username creation_date=topic.created %}
@@ -54,6 +58,7 @@
             {% blocktrans trimmed with poster_url=poster_url username=last_post.poster|forum_member_display_name %}
               By: <a href="{{ poster_url }}">{{ username }}</a>
             {% endblocktrans %}
+             {% include "partials/user_icon.html" with topic=last_post.topic user=last_post.poster %}
           {% else %}
             {% blocktrans trimmed with poster_username=last_post.username %}
               By: {{ poster_username }}

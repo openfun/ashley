@@ -77,6 +77,7 @@
         {% blocktrans trimmed with poster_url=poster_url username=node.last_post.poster|forum_member_display_name %}
         By: <a href="{{ poster_url }}">{{ username }}</a>
         {% endblocktrans %}
+        {% include "partials/user_icon.html" with topic=node.last_post.topic user=node.last_post.poster %}
         {% else %}
         {% blocktrans trimmed with poster_username=node.last_post.username %}
         By: {{ poster_username }}
@@ -150,6 +151,7 @@
         {% blocktrans trimmed with poster_url=poster_url username=node.last_post.poster|forum_member_display_name %}
         By: <a href="{{ poster_url }}">{{ username }}</a>
         {% endblocktrans %}
+        {% include "partials/user_icon.html" with topic=node.last_post.topic user=node.last_post.poster %}
         {% else %}
         {% blocktrans trimmed with poster_username=node.last_post.username %}
         By: {{ poster_username }}

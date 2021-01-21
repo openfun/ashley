@@ -1,0 +1,8 @@
+{% load i18n %}
+{% load custom_tags %}
+
+{% if topic|is_user_instructor:user %}
+    <i class="icon_writer fas fa-award" aria-hidden="true" title="{%trans 'Instructor'%}">
+    <span class="sr-only">{%trans 'Instructor'%}</span>
+    </i>
+{% endif %}
