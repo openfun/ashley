@@ -28,7 +28,7 @@ interface MyEditorProps {
   linkPlaceholder?: string;
 }
 
-const AshleyEditor = (props: MyEditorProps) => {
+export const AshleyEditor = (props: MyEditorProps) => {
   const [editorState, setEditorState] = useState(() => {
     if (props.target.value) {
       const jsonContent = JSON.parse(props.target.value);

@@ -32,9 +32,6 @@ module.exports = {
         use: [
           {
             loader: 'babel-loader',
-            options: {
-              babelrc: true,
-            },
           },
         ],
       },

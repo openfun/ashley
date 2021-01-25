@@ -202,7 +202,7 @@ lint-front-tslint: ## lint TypeScript sources
 .PHONY: lint-front-tslint
 
 test-front: ## run front-end tests
-	@$(YARN) test --runInBand --passWithNoTests
+	@$(YARN) test --runInBand
 .PHONY: test-front
 
 watch-sass: ## watch changes in Sass files
