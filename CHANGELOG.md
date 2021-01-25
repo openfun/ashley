@@ -17,6 +17,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
  - fix serialization error in search index update
 
+### Added
+
+ - add frontend test for draft-js editor
+
 ## [1.0.0-beta.4] - 2020-12-22
 
 ### Added

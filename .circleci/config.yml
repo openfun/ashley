@@ -401,7 +401,7 @@ jobs:
           name: Run tests
           # Circle CI needs the tests to be run sequentially, otherwise it hangs. See Jest docs below:
           # (https://jestjs.io/docs/en/troubleshooting#tests-are-extremely-slow-on-docker-and-or-continuous-integration-ci-server)
-          command: yarn test --runInBand --passWithNoTests
+          command: yarn test --runInBand
 
   test-front-package:
     docker:
