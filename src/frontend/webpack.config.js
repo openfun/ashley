@@ -32,7 +32,9 @@ module.exports = {
         use: [
           {
             loader: 'babel-loader',
-            options: require('./babel.config'),
+            options: {
+              babelrc: true,
+            },
           },
         ],
       },
