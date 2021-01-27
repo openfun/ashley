@@ -60,7 +60,7 @@ class LTIBackend(ToolboxLTIBackend):
         )
         user_model = get_user_model()
         try:
-            return user_model.objects.get(
+            user = user_model.objects.get(
                 lti_consumer=lti_consumer, lti_remote_user_id=remote_user_id
             )
         except user_model.DoesNotExist:
