@@ -170,7 +170,7 @@ class Base(Configuration):
         "django.contrib.auth.middleware.AuthenticationMiddleware",
         "django.contrib.messages.middleware.MessageMiddleware",
         "dockerflow.django.middleware.DockerflowMiddleware",
-        "machina.apps.forum_permission.middleware.ForumPermissionMiddleware",
+        "ashley.machina_extensions.forum_permission.middleware.ForumPermissionMiddleware",
     ]
 
     AUTHENTICATION_BACKENDS = [
@@ -341,6 +341,9 @@ class Production(Base):
     configuration (and derived configurations):
     DJANGO_ALLOWED_HOSTS="foo.com,foo.fr"
     """
+
+    # Session storage engine
+    SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 
     # Security
     ALLOWED_HOSTS = values.ListValue(None)
