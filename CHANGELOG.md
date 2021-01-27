@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
  - upgrade django-machina from 1.1.3 to 1.1.4
  - add button to insert quotes in the draftjs editor
+ - limit forum listing to the current user LTIContext id
 
 ### Fixed
 

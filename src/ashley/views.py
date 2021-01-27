@@ -20,6 +20,7 @@ from machina.apps.forum_permission.viewmixins import (
 from machina.core.db.models import get_model
 from machina.core.loading import get_class
 
+from . import SESSION_LTI_CONTEXT_ID
 from .defaults import DEFAULT_FORUM_BASE_PERMISSIONS, DEFAULT_FORUM_ROLES_PERMISSIONS
 
 Forum = get_model("forum", "Forum")  # pylint: disable=C0103
@@ -48,6 +49,9 @@ class ForumLTIView(BaseLTIAuthView):
 
         # Synchronize the user groups related to the current LTI context
         context.sync_user_groups(self.request.user, lti_request.roles)
+
+        # Store the current user LTI context in session
+        self.request.session[SESSION_LTI_CONTEXT_ID] = context.id
 
         # Get or create the requested forum
         forum_uuid = self.kwargs["uuid"]

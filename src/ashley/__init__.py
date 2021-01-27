@@ -11,3 +11,6 @@ ASHLEY_MAIN_TEMPLATE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
     "templates",
 )
+
+# Name of the session entry containing the current LTI context ID
+SESSION_LTI_CONTEXT_ID = "ltictx"
