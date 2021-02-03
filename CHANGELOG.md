@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
  - fix serialization error in search index update
+ - remove deprecated url in favor of re_path 
 
 ### Added
 
