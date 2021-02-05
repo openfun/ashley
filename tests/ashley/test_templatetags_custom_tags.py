@@ -1,13 +1,15 @@
 """Test suite for ashley custom tags"""
 import logging
-import re
 from typing import List
 
 from django.template import Context, Template
 from django.test import TestCase
+from django.test.html import parse_html
 from django.urls import reverse
+from lxml import etree
 from machina.apps.forum_permission.shortcuts import assign_perm
 from machina.core.loading import get_class
+from with_asserts.mixin import AssertHTMLMixin
 
 from ashley.defaults import (
     DEFAULT_FORUM_BASE_PERMISSIONS,
@@ -29,7 +31,7 @@ get_forum_member_display_name = get_class(
 logger = logging.getLogger(__name__)
 
 
-class TestIsUserInstructorTag(TestCase):
+class TestIsUserInstructorTag(TestCase, AssertHTMLMixin):
     """
     Integration tests to validate that the filter is_user_instructor
     can detect if user is instructor of a forum
@@ -57,11 +59,6 @@ class TestIsUserInstructorTag(TestCase):
         """Grant a list of permissions for a group on a specific forum."""
         for perm in permissions:
             assign_perm(perm, group, forum, True)
-
-    @staticmethod
-    def _trim(answer):
-        """Get rid of space and \n to be able to compare the render of template"""
-        return re.sub(r"\s+", "", answer)
 
     @staticmethod
     def test_can_tell_if_the_user_is_instructor_of_this_forum():
@@ -120,31 +117,10 @@ class TestIsUserInstructorTag(TestCase):
         check that the instructor icon is present on the different views
         as expected
         """
-        icon = (
-            '<i class="icon_writer fas fa-award" aria-hidden="true" title="Instructor">'
-            + '<span class="sr-only">Instructor</span></i>'
-        )
-
-        def get_html(user, selector=""):
-            """render template provided"""
-            username = get_forum_member_display_name(user)
-            html = f'{selector}By: <a href="/forum/member/profile/{user.id}/">{username}</a>{icon}'
-            return self._trim(html)
-
-        def get_html_topic_by(user):
-            """expected rendered where topic has been created by """
-            selector = 'topic-created">'
-            return get_html(user, selector)
-
-        def get_html_post_by(user):
-            """expected rendered from post has been created by """
-            selector = 'topic-last-post">'
-            return get_html(user, selector)
-
         lti_consumer = LTIConsumerFactory()
         # Create two users
-        user1 = UserFactory(public_username="instructor", lti_consumer=lti_consumer)
-        user2 = UserFactory(public_username="student", lti_consumer=lti_consumer)
+        user1 = UserFactory(public_username="Valéry", lti_consumer=lti_consumer)
+        user2 = UserFactory(public_username="François", lti_consumer=lti_consumer)
         # Create an LTI Context
         context = LTIContextFactory(lti_consumer=lti_consumer)
         # Sync user1 groups in context with role "instructor"
@@ -160,68 +136,120 @@ class TestIsUserInstructorTag(TestCase):
         self._init_forum(forum, context)
 
         # Set up topic
-        topic1 = TopicFactory(forum=forum, poster=user1, subject="topic by instructor")
+        topic1 = TopicFactory(forum=forum, poster=user1)
 
         # Set up post
         PostFactory.create(
             topic=topic1,
             poster=user1,
-            subject="post by instructor",
         )
 
+        # log user1
         self.client.force_login(user1)
 
         # accessing forum view
         response = self.client.get(reverse("forum:index"))
+        with self.assertHTML(response, ".forum-last-post") as (html,):
+            fragment = parse_html(str(etree.tostring(html)))
+            # control that the instructor's icon is present
+            self.assertTrue(
+                parse_html(
+                    '<i class="icon_writer fas fa-award" aria-hidden="true" title="Instructor">'
+                    '<span class="sr-only">Instructor</span>'
+                    "</i>"
+                )
+                in fragment
+            )
+            # control that it's the right user's profil link
+            self.assertTrue(
+                parse_html(f'<a href="/forum/member/profile/{user1.id}/">Valéry</a>')
+                in fragment
+            )
 
-        # check that it contains the icon instructor
-        self.assertIn(get_html(user1), self._trim(response.content.decode("utf-8")))
         # accessing forum topic listing view
         response = self.client.get(
             reverse("forum:forum", kwargs={"slug": forum.slug, "pk": forum.pk})
         )
         # check that the topic creation writer contains the icon for instructor's role
-        self.assertIn(
-            get_html_topic_by(user1),
-            self._trim(response.content.decode("utf-8")),
-        )
+        with self.assertHTML(response, ".topic-created") as (html,):
+            fragment = parse_html(str(etree.tostring(html)))
+            # control that the instructor's icon is present
+            self.assertTrue(
+                parse_html(
+                    '<i class="icon_writer fas fa-award" aria-hidden="true" title="Instructor">'
+                    '<span class="sr-only">Instructor</span>'
+                    "</i>"
+                )
+                in fragment
+            )
+            # control that it's the right user's profil link
+            self.assertTrue(
+                parse_html(f'<a href="/forum/member/profile/{user1.id}/">Valéry</a>')
+                in fragment
+            )
+
         # check that the last post creation writer contains the icon for instructor's role
-        self.assertIn(
-            get_html_post_by(user1),
-            self._trim(response.content.decode("utf-8")),
-        )
+        with self.assertHTML(response, ".topic-last-post") as (html,):
+            fragment = parse_html(str(etree.tostring(html)))
+            # control that the instructor's icon is present
+            self.assertTrue(
+                parse_html(
+                    '<i class="icon_writer fas fa-award" aria-hidden="true" title="Instructor">'
+                    '<span class="sr-only">Instructor</span>'
+                    "</i>"
+                )
+                in fragment
+            )
+            # control that it's the right user's profil link
+            self.assertTrue(
+                parse_html(f'<a href="/forum/member/profile/{user1.id}/">Valéry</a>')
+                in fragment
+            )
 
         # user2 add a post to the topic, last message is now from a student
         PostFactory.create(
             topic=topic1,
             poster=user2,
-            subject="post by student",
         )
 
         # reload the topic list view
         response = self.client.get(
             reverse("forum:forum", kwargs={"slug": forum.slug, "pk": forum.pk})
         )
-        # check that the topic creation writer is still from our instructor and has the icon
-        self.assertIn(
-            get_html_topic_by(user1),
-            self._trim(response.content.decode("utf-8")),
-        )
+
+        with self.assertHTML(response, ".topic-created") as (html,):
+            fragment = parse_html(str(etree.tostring(html)))
+            # control that the instructor's icon is present
+            self.assertTrue(
+                parse_html(
+                    '<i class="icon_writer fas fa-award" aria-hidden="true" title="Instructor">'
+                    '<span class="sr-only">Instructor</span>'
+                    "</i>"
+                )
+                in fragment
+            )
+            # control that it's the right profil link
+            self.assertTrue(
+                parse_html(f'<a href="/forum/member/profile/{user1.id}/">Valéry</a>')
+                in fragment
+            )
+
         # check that the last post creation writer is not the previous one with the icon
-        self.assertNotIn(
-            get_html_post_by(user1),
-            self._trim(response.content.decode("utf-8")),
-        )
-        # check that the last post creation writer doesn't contain the icon for user student
-        self.assertNotIn(
-            get_html_post_by(user2),
-            self._trim(response.content.decode("utf-8")),
-        )
+        with self.assertHTML(response, ".topic-last-post") as (html,):
+            fragment = parse_html(str(etree.tostring(html)))
+            # check that there's no more icon as the post has been created by a student
+            self.assertFalse(parse_html("Instructor") in fragment)
+
+            # control that it's the right profil link
+            self.assertTrue(
+                parse_html(f'<a href="/forum/member/profile/{user2.id}/">François</a>')
+                in fragment
+            )
 
         # accessing forum view
         response = self.client.get(reverse("forum:index"))
         # check that there's no more icon in this view as a new post has been created by a student
-        self.assertNotContains(response, icon)
+        self.assertNotContains(response, "icon_writer fas fa-award")
 
         # access list of posts from the topic
         response = self.client.get(
@@ -235,17 +263,33 @@ class TestIsUserInstructorTag(TestCase):
                 },
             )
         )
-        # check that for the posts in this topic we have the one from the instructor with the icon
-        self.assertIn(get_html(user1), self._trim(response.content.decode("utf-8")))
-        # check that there is no icon for the student's one
-        self.assertNotIn(get_html(user2), self._trim(response.content.decode("utf-8")))
-
-        # access post an answer it should list the other posts of the topic
+        # access 'post an answer' it should list the other posts of the topic
         response = self.client.get(
             f"/forum/forum/{forum.slug}-{forum.pk}/topic/{topic1.slug}-{topic1.pk}/post/create/"
         )
-
         # check that for the posts in this topic we have the one from the instructor with the icon
-        self.assertIn(get_html(user1), self._trim(response.content.decode("utf-8")))
-        # check that there is no icon for the student
-        self.assertNotIn(get_html(user2), self._trim(response.content.decode("utf-8")))
+        with self.assertHTML(response, ".text-muted") as (
+            first_post,
+            second_post,
+        ):
+            # check that for the message on first position there is no icon for the student
+            html_first_post = parse_html(str(etree.tostring(first_post)))
+            self.assertFalse(parse_html("Instructor") in html_first_post)
+            self.assertTrue(
+                parse_html(f'<a href="/forum/member/profile/{user2.id}/">François</a>')
+                in html_first_post
+            )
+            # check that for the second message we have the instructor's icon
+            html_second_post = parse_html(str(etree.tostring(second_post)))
+            self.assertTrue(
+                parse_html(
+                    '<i class="icon_writer fas fa-award" aria-hidden="true" title="Instructor">'
+                    '<span class="sr-only">Instructor</span>'
+                    "</i>"
+                )
+                in html_second_post
+            )
+            self.assertTrue(
+                parse_html(f'<a href="/forum/member/profile/{user1.id}/">Valéry</a>')
+                in html_second_post
+            )
