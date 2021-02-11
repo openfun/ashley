@@ -129,7 +129,7 @@ lint-isort: ## automatically re-arrange python imports in back-end code base
 
 lint-mypy: ## type check back-end python sources with mypy
 	@echo 'lint:mypy started…'
-	@$(COMPOSE_TEST_RUN_APP) mypy src
+	@$(COMPOSE_TEST_RUN_APP) mypy src/ashley
 .PHONY: lint-mypy
 
 lint-pylint: ## lint back-end python sources with pylint
