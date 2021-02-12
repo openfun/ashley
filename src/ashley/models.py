@@ -4,6 +4,7 @@ from typing import List
 
 from django.contrib.auth.models import AbstractUser as DjangoAbstractUser
 from django.contrib.auth.models import Group
+from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.db.models import Model
 from django.utils.translation import gettext_lazy as _
@@ -139,6 +140,11 @@ class AbstractLTIContext(Model):
         """
         Synchronize the group membership of a user for this LTI Context
         """
+        # Control user is part of this lti_context
+        if user.lti_consumer_id != self.lti_consumer_id:
+            raise PermissionDenied(
+                ("The User and LTIContext must be part of the same LTI Consumer")
+            )
 
         current_groups = list(user.groups.filter(name__startswith=self.base_group_name))
         target_groups = self.get_role_groups(roles) + [self.get_base_group()]

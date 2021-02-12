@@ -2,6 +2,7 @@
 Tests for the ashley.models.LTIContext model.
 """
 from django.contrib.auth.models import Group
+from django.core.exceptions import PermissionDenied
 from django.test import TestCase
 from machina.core.db.models import get_model
 
@@ -54,14 +55,18 @@ class LTIContextTestCase(TestCase):
     def test_sync_user_groups(self):
         """Test group synchronization"""
 
-        # Create 2 LTI Contexts
-        context1, context2 = LTIContextFactory.create_batch(2)
+        # Create a LTI Consumer
+        lti_consumer = LTIConsumerFactory()
+
+        # Create 2 LTI Contexts for lti_consumer
+        context1 = LTIContextFactory(lti_consumer=lti_consumer)
+        context2 = LTIContextFactory(lti_consumer=lti_consumer)
 
         # Create an unrelated django group
         unrelated_group = Group.objects.create(name="unrelated_django_group")
 
         # Initialize a user with no group
-        user = UserFactory()
+        user = UserFactory(lti_consumer=lti_consumer)
         self.assertEqual(0, user.groups.count())
 
         # Sync user groups in context1 with role "student"
@@ -112,6 +117,23 @@ class LTIContextTestCase(TestCase):
             ],
             list(user.groups.values_list("name", flat=True)),
         )
+
+        # Create another LTIConsumer
+        lti_consumer2 = LTIConsumerFactory()
+
+        # Create a LTI Context for lti_consumer2
+        context3 = LTIContextFactory(lti_consumer=lti_consumer2)
+
+        # Create a user for this LTI Context
+        user2 = UserFactory(lti_consumer=lti_consumer2)
+
+        # Check the PermissionDenied gets called as the user in not part of this LTIContext
+        with self.assertRaises(PermissionDenied):
+            context3.sync_user_groups(user, ["instructor"])
+
+        # Check the PermissionDenied gets called as the user in not part of this LTIContext
+        with self.assertRaises(PermissionDenied):
+            context2.sync_user_groups(user2, [])
 
     def test_get_group_role_name(self):
         """get_group_role_name should return the name of the role with the specific pattern"""
