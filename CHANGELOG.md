@@ -20,6 +20,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - fix serialization error in search index update
  - remove deprecated url in favor of re_path 
  - prevent inactive users from authenticating via LTI
+ - prevent linking a User to a LTIContext related to different LTI Consumer
 
 ### Added
 
