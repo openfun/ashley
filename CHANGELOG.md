@@ -14,6 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - add button to insert quotes in the draftjs editor
  - limit forum listing to the current user LTIContext id
  - add code blocks in the editor and auto-highlight code in the forum
+ - create a forum for each LTIContext id
 
 ### Fixed
 
