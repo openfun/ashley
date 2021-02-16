@@ -21,9 +21,8 @@ class AbstractForum(MachinaAbstractForum):
     # django-machina's parent abstract model. This is a known issue in pylint-django with
     # foreign keys models referenced by their name.
     # (See https://github.com/PyCQA/pylint-django#known-issues )
-
     lti_id = models.UUIDField(
-        null=False, default=uuid.uuid4, editable=False, unique=True
+        null=False, default=uuid.uuid4, editable=False, unique=False
     )
 
     lti_contexts = models.ManyToManyField(LTIContext)

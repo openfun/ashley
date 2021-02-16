@@ -55,12 +55,19 @@ class ForumLTIView(BaseLTIAuthView):
 
         # Get or create the requested forum
         forum_uuid = self.kwargs["uuid"]
-        forum, forum_created = Forum.objects.get_or_create(
-            lti_id=forum_uuid,
-            type=Forum.FORUM_POST,
-            defaults={"name": lti_request.context_title},
-        )
-        if forum_created:
+        # The requested forum must exist in this context or needs to be created
+        try:
+            forum = Forum.objects.get(
+                lti_id=forum_uuid,
+                type=Forum.FORUM_POST,
+                lti_contexts__id=context.id,
+            )
+        except Forum.DoesNotExist:
+            forum = Forum.objects.create(
+                lti_id=forum_uuid,
+                type=Forum.FORUM_POST,
+                name=lti_request.context_title,
+            )
             logger.debug("Forum %s created", forum_uuid)
             self._init_forum(forum, context)
 
