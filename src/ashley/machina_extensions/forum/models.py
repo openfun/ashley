@@ -22,7 +22,7 @@ class AbstractForum(MachinaAbstractForum):
     # foreign keys models referenced by their name.
     # (See https://github.com/PyCQA/pylint-django#known-issues )
     lti_id = models.UUIDField(
-        null=False, default=uuid.uuid4, editable=False, unique=False
+        null=False, default=uuid.uuid4, editable=False, unique=False, db_index=True
     )
 
     lti_contexts = models.ManyToManyField(LTIContext)

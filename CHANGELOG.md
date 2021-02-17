@@ -15,7 +15,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - limit forum listing to the current user LTIContext id
  - add code blocks in the editor and auto-highlight code in the forum
  - create a forum for each LTIContext id
-
+ - add index to the Forum model
+ 
 ### Fixed
 
  - fix serialization error in search index update
