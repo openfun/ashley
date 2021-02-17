@@ -1,4 +1,4 @@
-import { createEvent } from '@testing-library/dom';
+import { createEvent, queryByRole } from '@testing-library/dom';
 import { render, fireEvent, screen } from '@testing-library/react';
 import React from 'react';
 import { AshleyEditor } from '.';
@@ -140,5 +140,29 @@ describe('AshleyEditor', () => {
         },
       ]),
     );
+  });
+
+  it('renders the editor with a list of users to mention', () => {
+    const target = document.createElement('input');
+    // load the editor with no list of users to mention
+    render(<AshleyEditor target={target} />);
+    // check that list box containing the list of active users is not present
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+
+    // load the editor with a list of active users to mention
+    const mentionUsers = [
+      { name: 'Paul', link: 'profil/user/10' },
+      { name: 'Joséphine', link: 'profil/user/2' },
+    ];
+    const { container } = render(
+      <AshleyEditor target={target} mentions={mentionUsers} />,
+    );
+
+    // check that list box exists
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+    // check list contains the two users
+    expect(screen.getAllByRole('option')).toHaveLength(2);
+    screen.getByRole('option', { name: /joséphine/i });
+    screen.getByRole('option', { name: /paul/i });
   });
 });

@@ -1,5 +1,4 @@
 """This module contains django widgets related to Ashley WYSIWYG editor """
-
 import json
 
 from django.forms.widgets import HiddenInput
@@ -25,6 +24,9 @@ class DraftEditor(HiddenInput):
     def get_context(self, name, value, attrs):
         """Add props to context."""
         context = super().get_context(name, value, attrs)
+
+        # add to props the list of active users for the current topic
+        self.props["mentions"] = context.get("widget").get("attrs").get("mention_users")
         context["widget"]["props"] = mark_safe(json.dumps(self.props))  # nosec
         return context
 

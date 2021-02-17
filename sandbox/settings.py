@@ -193,6 +193,7 @@ class Base(Configuration):
         # Ashley
         "ashley",
         "ashley.machina_extensions.forum",
+        "ashley.machina_extensions.forum_conversation",
         "ashley.machina_extensions.forum_permission",
         "ashley.machina_extensions.forum_search",
         # Django LTI Toolbox
@@ -201,7 +202,6 @@ class Base(Configuration):
         "dockerflow.django",
         # Django machina
         "machina",
-        "machina.apps.forum_conversation",
         "machina.apps.forum_conversation.forum_attachments",
         "machina.apps.forum_conversation.forum_polls",
         "machina.apps.forum_feeds",
@@ -254,6 +254,9 @@ class Base(Configuration):
     MACHINA_MARKUP_WIDGET = "ashley.editor.widgets.DraftEditor"
     MACHINA_PROFILE_AVATARS_ENABLED = False
     MACHINA_USER_DISPLAY_NAME_METHOD = "get_public_username_with_default"
+    MIGRATION_MODULES = {
+        "forum_conversation": "machina.apps.forum_conversation.migrations",
+    }
 
     # Sentry
     SENTRY_DSN = values.Value(None, environ_name="SENTRY_DSN")

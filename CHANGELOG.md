@@ -28,6 +28,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
  - add frontend test for draft-js editor
  - add a ribbon icon when an instructor is the writer of a post or a topic
+ - add feature in AshleyEditor to mention any active user in the current topic
 
 ## [1.0.0-beta.4] - 2020-12-22
 

@@ -8,11 +8,15 @@ import {
 import createLinkPlugin from '@draft-js-plugins/anchor';
 import Editor from '@draft-js-plugins/editor';
 import PluginEditor from '@draft-js-plugins/editor/lib';
+import createMentionPlugin, {
+  defaultSuggestionsFilter,
+  MentionData,
+} from '@draft-js-plugins/mention';
 import createToolbarPlugin, {
   Separator,
 } from '@draft-js-plugins/static-toolbar';
 import createEmojiPlugin, { EmojiPluginConfig } from 'draft-js-emoji-plugin';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import {
   BoldButton,
@@ -26,7 +30,6 @@ import {
   BlockquoteButton,
   CodeBlockButton,
 } from '@draft-js-plugins/buttons';
-
 import createCodeEditorPlugin from '../../draftjs-plugins/code-editor';
 
 interface MyEditorProps {
@@ -35,6 +38,7 @@ interface MyEditorProps {
   target: HTMLInputElement;
   emojiConfig?: EmojiPluginConfig;
   linkPlaceholder?: string;
+  mentions?: MentionData[];
 }
 
 export const AshleyEditor = (props: MyEditorProps) => {
@@ -121,6 +125,30 @@ export const AshleyEditor = (props: MyEditorProps) => {
     return 'not-handled';
   };
 
+  const PluginRenderers = [<emojiPlugin.EmojiSuggestions key="emoji" />];
+  const plugins = [toolbarPlugin, emojiPlugin, linkPlugin, codeEditorPlugin];
+
+  if (props.mentions) {
+    const [{ mentionPlugin }] = useState({
+      mentionPlugin: createMentionPlugin(),
+    });
+    const [open, setOpen] = useState(true);
+    const [suggestions, setSuggestions] = useState(props.mentions);
+    const onSearchChange = useCallback(({ value }: { value: string }) => {
+      setSuggestions(defaultSuggestionsFilter(value, props.mentions!));
+    }, []);
+    plugins.push(mentionPlugin);
+    PluginRenderers.push(
+      <mentionPlugin.MentionSuggestions
+        key="mentions"
+        open={open}
+        onOpenChange={setOpen}
+        suggestions={suggestions}
+        onSearchChange={onSearchChange}
+      />,
+    );
+  }
+
   return (
     <div className="ashley-editor-wrapper">
       <div className="ashley-editor-widget" onClick={focusEditor}>
@@ -128,12 +156,12 @@ export const AshleyEditor = (props: MyEditorProps) => {
           ref={editorRef}
           editorState={editorState}
           onChange={editorChange}
-          plugins={[toolbarPlugin, emojiPlugin, linkPlugin, codeEditorPlugin]}
+          plugins={plugins}
           placeholder={props.placeholder}
           handleKeyCommand={keyBinding}
           handlePastedText={handlePastedText}
         />
-        <emojiPlugin.EmojiSuggestions />
+        {PluginRenderers.map((Plugin) => Plugin)}
       </div>
       <div className="ashley-editor-toolbar">
         <toolbarPlugin.Toolbar>

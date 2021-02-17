@@ -6,7 +6,7 @@ from draftjs_exporter.defaults import BLOCK_MAP as DEFAULT_BLOCK_MAP
 from draftjs_exporter.defaults import STYLE_MAP as DEFAULT_STYLE_MAP
 from draftjs_exporter.dom import DOM
 
-from ashley.editor.decorators import emoji, link
+from ashley.editor.decorators import emoji, link, mention
 
 _FORUM_ROLE_INSTRUCTOR = "instructor"
 
@@ -53,7 +53,7 @@ DEFAULT_FORUM_ROLES_PERMISSIONS = lazy(
 )()
 
 DEFAULT_DRAFTJS_EXPORTER_CONFIG = {
-    "entity_decorators": {"LINK": link, "emoji": emoji},
+    "entity_decorators": {"LINK": link, "emoji": emoji, "mention": mention},
     "composite_decorators": [],
     "block_map": DEFAULT_BLOCK_MAP,
     "style_map": DEFAULT_STYLE_MAP,
