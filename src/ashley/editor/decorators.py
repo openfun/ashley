@@ -35,3 +35,27 @@ def emoji(props):
     (https://www.draft-js-plugins.com/plugin/emoji)
     """
     return DOM.create_element("span", {"class": "emoji"}, props["children"])
+
+
+def mention(props):
+    """
+    Decorator for the `mention` entity in Draft.js ContentState.
+
+    This entity is added by the `draft-js-mention-plugin` plugin.
+    (https://www.draft-js-plugins.com/plugin/mention)
+    """
+
+    user_id = props.get("mention").get("user")
+    name = props.get("mention").get("name")
+
+    if name and user_id:
+        return DOM.create_element(
+            "a",
+            {
+                "class": "mention",
+                "href": f"/forum/member/profile/{user_id}/",
+            },
+            DOM.create_element("span", {"class": "mention"}, f"@{name}"),
+        )
+
+    return None

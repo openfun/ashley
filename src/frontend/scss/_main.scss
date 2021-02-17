@@ -14,8 +14,9 @@
 // Import Draft-js related stylesheet
 @import 'draft-js/dist/Draft';
 @import 'draft-js-emoji-plugin/lib/plugin';
-@import '@draft-js-plugins/static-toolbar/lib/plugin';
 @import '@draft-js-plugins/anchor/lib/plugin';
+@import '@draft-js-plugins/mention/lib/plugin';
+@import '@draft-js-plugins/static-toolbar/lib/plugin';
 
 //highlight code style
 @import 'highlight.js/styles/github';
@@ -28,6 +29,7 @@
 @import './objects/conversation_topic_detail';
 @import './objects/forum_detail';
 @import './objects/member_profile';
+@import './objects/mentions';
 @import './objects/moderation';
 @import './objects/search';
 @import './objects/user_badge';
