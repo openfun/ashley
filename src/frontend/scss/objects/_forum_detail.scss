@@ -4,6 +4,7 @@
 
 .card.topiclist {
   .card-header {
+    .topic-name-col,
     .topic-count-col,
     .topic-last-post-col {
       font-size: 0.7rem;
@@ -11,7 +12,6 @@
       color: $table-head-color;
     }
   }
-
   .card-body {
     .topic-icon {
       width: 50px;
@@ -45,6 +45,42 @@
     .topic-last-post {
       font-size: 0.9rem;
       line-height: 1rem;
+    }
+  }
+  .card-title {
+    .sortoptions {
+      line-height: 0.7em;
+    }
+  }
+  .sorted {
+    .sortoptions {
+      position: absolute;
+      top: 0.2em;
+      a {
+        position: relative;
+        width: 14px;
+        height: 14px;
+        display: inline-block;
+        background: url(../img/sorting-icons.svg) 0 0 no-repeat;
+        background-size: 14px auto;
+      }
+
+      a.ascending {
+        background-position: 0 -28px;
+        :focus,
+        :hover {
+          background-position: 0 -42px;
+        }
+      }
+
+      a.descending {
+        top: 1px;
+        background-position: 0 -56px;
+        :focus,
+        :hover {
+          background-position: 0 -70px;
+        }
+      }
     }
   }
 }

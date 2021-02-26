@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+ - Allow sorting discussion topics
+
 ### Changed
 
  - Clean built frontend files before each build
