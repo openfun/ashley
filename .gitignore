@@ -55,7 +55,9 @@ db.sqlite3
 
 # Site media
 /data/
-src/ashley/static/ashley/
+src/ashley/static/ashley/css/
+src/ashley/static/ashley/js/
+src/ashley/static/ashley/font/
 
 # JS dependencies
 node_modules

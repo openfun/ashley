@@ -9,16 +9,31 @@
     <div class="card topiclist">
       <div class="p-0 card-header">
         <div class="row m-0 px-3 py-2">
-          <div class="pl-0 col-md-8 col-sm-9 col-12 topic-name-col"><h3 class="m-0 card-title h5 text-dark">{% trans topic_list_title %}</h3></div>
-          <div class="col-md-1 d-none d-md-block text-center text-nowrap topic-count-col">{% trans "Replies" %}</div>
-          <div class="col-md-1 d-none d-md-block text-center text-nowrap topic-count-col">{% trans "Views" %}</div>
-          <div class="pr-0 col-md-2 col-sm-3 d-none d-sm-block text-nowrap topic-last-post-col">{% trans "Last post" %}</div>
+              <div class="pl-0 col-md-6 col-sm-9 col-12 topic-name-col sortable {{ header.0.class_attrib }}">
+                <h3 class="m-0 card-title h5 text-dark">
+                      <a href="{{ header.0.url_order }}">{% trans topic_list_title %}</a>
+                      {% include "forum_conversation/partials/topic_list_header_sort.html" with col=header.0%}
+                </h3>
+              </div>
+              <div class="col-md-2 d-none d-md-block text-center text-nowrap topic-count-col sortable {{ header.1.class_attrib }}">
+                    <a href="{{ header.1.url_order }}">{% trans "Replies" %}</a>
+                    {% include "forum_conversation/partials/topic_list_header_sort.html" with col=header.1%}
+              </div>
+              <div class="col-md-2 d-none d-md-block text-center text-nowrap topic-count-col sortable {{ header.2.class_attrib }}">
+                        <a href="{{ header.2.url_order }}">{% trans "Views" %}</a>
+                        {% include "forum_conversation/partials/topic_list_header_sort.html" with col=header.2%}
+              </div>
+              <div class="pr-0 col-md-2 col-sm-3 d-none d-sm-block text-nowrap topic-last-post-col sortable {{ header.3.class_attrib }}">
+                        <a href="{{ header.3.url_order }}">{% trans "Last post" %}</a>
+                        {% include "forum_conversation/partials/topic_list_header_sort.html" with col=header.3%}
+              </div>
         </div>
       </div>
+   
       <div class="p-0 card-body">{% if not force_all_unread and unread_topics == None %}{% get_unread_topics topics request.user as unread_topics %}{% endif %}
       {% for topic in topics %}
       <div class="row m-0 px-3 py-2 border-bottom">
-        <div class="pl-0 col-md-8 col-sm-9 col-xs-11 topic-name">
+        <div class="pl-0 col-md-6 col-sm-9 col-xs-11 topic-name">
           <div class="topic-inline-pagination float-right d-none d-sm-block">{% topic_pages_inline_list topic %}</div>
           <table class="topic-data-table">
             <tr>
@@ -49,8 +64,8 @@
             </tr>
           </table>
         </div>
-        <div class="py-2 col-md-1 d-none d-md-block text-center topic-count">{{ topic.posts_count|add:"-1" }}</div>
-        <div class="py-2 col-md-1 d-none d-md-block text-center topic-count">{{ topic.views_count }}</div>
+        <div class="py-2 col-md-2 d-none d-md-block text-center topic-count">{{ topic.posts_count|add:"-1" }}</div>
+        <div class="py-2 col-md-2 d-none d-md-block text-center topic-count">{{ topic.views_count }}</div>
         <div class="py-2 col-md-2 col-sm-3 d-none d-sm-block topic-last-post">
         {% with last_post=topic.last_post %}
           {% if last_post.poster %}
