@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+ - Allow sorting discussion topics by title, number of replies, number of views
+   or date of latest replie.
+
 ## [1.0.0-beta.5] - 2020-03-01
 
 ### Changed

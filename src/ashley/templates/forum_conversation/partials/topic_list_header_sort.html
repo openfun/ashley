@@ -1,0 +1,7 @@
+{% load i18n %}
+
+<span class="sortoptions">
+    <a class="sortremove" href="{{ col.url_remove }}" title="{% translate "Remove from sorting" %}"></a>
+    {% if col.sort_priority > 0 %}<span class="sortpriority" title="{% blocktranslate with priority_number=col.sort_priority %}Sorting priority: {{ priority_number }}{% endblocktranslate %}">{{ col.sort_priority }}</span>{% endif %}
+    <a href="{{ col.url_toggle }}" class="toggle {% if col.ascending %}ascending{% else %}descending{% endif %}" title="{% translate "Toggle sorting" %}"></a>
+</span>
