@@ -4,6 +4,7 @@
 
 .card.topiclist {
   .card-header {
+    .topic-name-col,
     .topic-count-col,
     .topic-last-post-col {
       font-size: 0.7rem;
@@ -11,7 +12,6 @@
       color: $table-head-color;
     }
   }
-
   .card-body {
     .topic-icon {
       width: 50px;
@@ -46,6 +46,78 @@
       font-size: 0.9rem;
       line-height: 1rem;
     }
+  }
+  .card-title {
+    .sortoptions {
+      line-height: 0.7em;
+    }
+  }
+  .sorted {
+    :hover a.sortremove {
+      visibility: visible;
+    }
+    a.sortremove {
+      visibility: hidden;
+    }
+    .sortoptions {
+      position: absolute;
+      top: 0.2em;
+      a {
+        position: relative;
+        width: 14px;
+        height: 14px;
+        display: inline-block;
+        background: url(../img/sorting-icons.svg) 0 0 no-repeat;
+        background-size: 14px auto;
+      }
+      a.sortremove {
+        background-position: 0 0;
+
+        :after {
+          content: '\\';
+          position: absolute;
+          top: -6px;
+          left: 3px;
+          font-weight: 200;
+          font-size: 18px;
+          color: #999;
+        }
+        :focus:after,
+        :hover:after {
+          color: #447e9b;
+        }
+
+        :focus,
+        :hover {
+          background-position: 0 -14px;
+        }
+      }
+      a.ascending {
+        background-position: 0 -28px;
+        :focus,
+        :hover {
+          background-position: 0 -42px;
+        }
+      }
+
+      a.descending {
+        top: 1px;
+        background-position: 0 -56px;
+        :focus,
+        :hover {
+          background-position: 0 -70px;
+        }
+      }
+    }
+  }
+
+  .sortpriority {
+    font-size: 10px;
+    min-width: 12px;
+    text-align: center;
+    vertical-align: 3px;
+    margin-left: 2px;
+    margin-right: 2px;
   }
 }
 
