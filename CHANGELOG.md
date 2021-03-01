@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.0-beta.5] - 2020-03-01
+
 ### Changed
 
  - upgrade django-machina from 1.1.3 to 1.1.4
@@ -16,11 +18,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - add code blocks in the editor and auto-highlight code in the forum
  - create a forum for each LTIContext id
  - add index to the Forum model
- 
+
 ### Fixed
 
  - fix serialization error in search index update
- - remove deprecated url in favor of re_path 
+ - remove deprecated url in favor of re_path
  - prevent inactive users from authenticating via LTI
  - prevent linking a User to a LTIContext related to different LTI Consumer
 
@@ -132,7 +134,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - Update sandbox settings to be able to run Ashley in an `iframe` on multiple
    external websites
 
-[Unreleased]: https://github.com/openfun/ashley/compare/v1.0.0-beta.4...master
+[Unreleased]: https://github.com/openfun/ashley/compare/v1.0.0-beta.5...master
+[1.0.0-beta.5]: https://github.com/openfun/ashley/compare/v1.0.0-beta.4...v1.0.0-beta.5
 [1.0.0-beta.4]: https://github.com/openfun/ashley/compare/v1.0.0-beta.3...v1.0.0-beta.4
 [1.0.0-beta.3]: https://github.com/openfun/ashley/compare/v1.0.0-beta.2...v1.0.0-beta.3
 [1.0.0-beta.2]: https://github.com/openfun/ashley/compare/v1.0.0-beta.1...v1.0.0-beta.2
