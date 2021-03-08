@@ -28,7 +28,7 @@ PermissionRequiredMixin: BasePermissionRequiredMixin = get_class(
 
 
 class ForumView(BaseForumView):  # pylint: disable=too-many-ancestors
-    """ Displays a forum and its topics  """
+    """Displays a forum and its topics."""
 
     # header columns
     list_display = ["subject", "posts_count", "views_count", "last_post_on"]
@@ -38,14 +38,14 @@ class ForumView(BaseForumView):  # pylint: disable=too-many-ancestors
         self.params = {}
 
     def get(self, request, **kwargs):
-        """ Handles GET requests. """
+        """Handles GET requests."""
         # collect the current params for the order by in request
         self.params = dict(request.GET.items())
         response = super().get(request, **kwargs)
         return response
 
     def get_queryset(self):
-        """ Returns the list of items for this view ordered by asked params """
+        """Returns the list of items for this view ordered by asked params."""
         query = super().get_queryset()
         ordering = self.get_ordering()
         if ordering:
@@ -54,7 +54,7 @@ class ForumView(BaseForumView):  # pylint: disable=too-many-ancestors
         return query
 
     def get_context_data(self, **kwargs):
-        """ Returns the context data to provide to the template. """
+        """Returns the context data to provide to the template."""
         context = super().get_context_data(**kwargs)
         # add sort header links containing asc, desc, remove, toggle, primary links
         context["header"] = list(self.result_headers())
@@ -62,8 +62,8 @@ class ForumView(BaseForumView):  # pylint: disable=too-many-ancestors
 
     def result_headers(self):
         """
-        Generate the list column headers with appropriate links
-        based on admin list ordering in django
+        Generates the list column headers with appropriate links
+        Based on admin list ordering in Django
         """
         ordering_field_columns = self.get_ordering_field_columns()
         logger.debug("Ordering field columns %s", ordering_field_columns)
@@ -120,9 +120,9 @@ class ForumView(BaseForumView):  # pylint: disable=too-many-ancestors
 
     def get_ordering(self):
         """
-        return the current ordering asc/desc and priority from params
-        to build the order_by for this view
-        based on admin list ordering in django
+        Returns the current ordering asc/desc and priority from params to build
+        the order_by for this view.
+        Based on admin list ordering in Django
         """
         params = self.params
         if ORDER_VAR in params:
@@ -144,9 +144,9 @@ class ForumView(BaseForumView):  # pylint: disable=too-many-ancestors
 
     def get_ordering_field_columns(self):
         """
-        Return a dictionary of ordering field columns id from order params in request
-        with value asc/desc
-        based on admin list ordering in django
+        Returns a dictionary of ordering field columns id from order params in
+        request with value asc/desc.
+        Based on admin list ordering in Django
         """
         ordering_fields = {}
         if ORDER_VAR in self.params:
@@ -161,8 +161,8 @@ class ForumView(BaseForumView):  # pylint: disable=too-many-ancestors
 
     def get_query_string(self, new_params=None, remove=None):
         """
-        Build the query_string for this link
-        based on admin list ordering in django
+        Build the query_string for this link.
+        Based on admin list ordering in Django
         """
         if new_params is None:
             new_params = {}
@@ -183,14 +183,14 @@ class ForumView(BaseForumView):  # pylint: disable=too-many-ancestors
 
 
 class ForumRenameView(PermissionRequiredMixin, UpdateView):
-    """ Allows the current user to update its forum profile. """
+    """Allows the current user to update its forum profile."""
 
     model = Forum
     fields = ["name"]
     template_name = "forum/forum_rename.html"
 
     def get_success_url(self):
-        """ Returns the success URL to redirect the user to. """
+        """Returns the success URL to redirect the user to."""
         return reverse(
             "forum:forum",
             kwargs={
@@ -201,5 +201,5 @@ class ForumRenameView(PermissionRequiredMixin, UpdateView):
 
     # pylint: disable=unused-argument
     def perform_permissions_check(self, user, obj, perms):
-        """ Performs the permissions check. """
+        """Performs the permissions check."""
         return self.request.forum_permission_handler.can_rename_forum(obj, user)

@@ -1,21 +1,11 @@
-import logging
-
 from django.test import TestCase
 from machina.apps.forum_permission.shortcuts import assign_perm
 
-from ashley.factories import (
-    ForumFactory,
-    PostFactory,
-    TopicFactory,
-    TopicSortHeaderFactory,
-    UserFactory,
-)
-
-logger = logging.getLogger(__name__)
+from ashley.factories import ForumFactory, PostFactory, TopicFactory, UserFactory
 
 
 class TestForumView(TestCase):
-    """ Displays a forum and its topics overridden from django machina  """
+    """Displays a forum and its topics overridden from django machina."""
 
     def setUp(self):
         super().setUp()
@@ -42,6 +32,23 @@ class TestForumView(TestCase):
         # Setup
         self.url_list_topic = f"/forum/forum/{self.forum.slug}-{self.forum.pk}/"
 
+    def build_column_order(self, orders):
+        """
+        Create sort orders for topic list view with default value.
+        Build blocks by replacing attributes declared in orders from default_block
+        """
+        default_block = {
+            "sorted": False,
+            "ascending": False,
+            "sort_priority": 0,
+            "url_primary": "?o=",
+            "url_remove": "?o=",
+            "url_toggle": "?o=",
+            "class_attrib": "",
+        }
+
+        return [{**default_block, **i} for i in orders]
+
     def assertContentBefore(self, response, text1, text2, failing_msg=None):
         """
         Testing utility asserting that text1 appears before text2 in response
@@ -56,14 +63,14 @@ class TestForumView(TestCase):
         )
 
     def test_browsing_works(self):
-        """ default url should return a 200 """
+        """Default url should return a 200."""
         # Run
         response = self.client.get(self.url_list_topic)
         # Check
-        assert response.status_code == 200
+        self.assertEqual(response.status_code, 200)
 
     def test_default_sorting(self):
-        """ by default view is sorted by last_post_on """
+        """By default view is sorted by last_post_on."""
         # Run
         response = self.client.get(self.url_list_topic)
         # Should have 4 columns sortable
@@ -81,7 +88,7 @@ class TestForumView(TestCase):
         # Check we have expected default header links for CTAs
         self.assertEqual(
             response.context["header"],
-            TopicSortHeaderFactory.build_column_order(
+            self.build_column_order(
                 [
                     {
                         "url_primary": "?o=0",
@@ -100,7 +107,7 @@ class TestForumView(TestCase):
         )
 
     def test_sorting_by_subject(self):
-        """ test sorting by subject """
+        """Test sorting by subject."""
         # Setup add param sorting on subject
         # subject is index 0 for column 1
         url = f"{self.url_list_topic}?o=0"
@@ -117,7 +124,7 @@ class TestForumView(TestCase):
         # Check we have expected default header links for each possible CTAs
         self.assertEqual(
             response.context["header"],
-            TopicSortHeaderFactory.build_column_order(
+            self.build_column_order(
                 [
                     {
                         "sorted": True,
@@ -147,7 +154,7 @@ class TestForumView(TestCase):
         )
 
     def test_sorting_by_views_count_desc(self):
-        """ test sorting by view count desc"""
+        """Test sorting by view count desc."""
         # Setup add param sorting on subject
         url = f"{self.url_list_topic}?o=-2"
         # Run
@@ -162,7 +169,7 @@ class TestForumView(TestCase):
         # Check we have expected default header links for each possible CTAs
         self.assertEqual(
             response.context["header"],
-            TopicSortHeaderFactory.build_column_order(
+            self.build_column_order(
                 [
                     {
                         "url_primary": "?o=0.-2",
@@ -192,7 +199,7 @@ class TestForumView(TestCase):
         )
 
     def test_sorting_by_combined_fields(self):
-        """ test sorting by combined fields number of views, subject and date"""
+        """Test sorting by combined fields number of views, subject and date."""
         # For the test we introduce 3 new topics
         # All 3 have same view_counts and 2 have same title
         PostFactory(
@@ -246,7 +253,7 @@ class TestForumView(TestCase):
         # Check we have expected default header links for each possible actions
         self.assertEqual(
             response.context["header"],
-            TopicSortHeaderFactory.build_column_order(
+            self.build_column_order(
                 [
                     {
                         "sorted": True,
@@ -285,38 +292,38 @@ class TestForumView(TestCase):
         )
 
     def test_sorting_unknown_index_column(self):
-        """ try to request an order on a column that doesn't exist """
+        """Try to request an order on a column that doesn't exist."""
         # there's only 4 columns, o=3 is the maximum
         url = f"{self.url_list_topic}?o=5"
         # Run
         response = self.client.get(url)
         # Check
-        assert response.status_code == 200
+        self.assertEqual(response.status_code, 200)
 
         # Should have 0 sorted column as the one asked is unknown
         self.assertContains(response, "sorted ", count=0)
 
     def test_sorting_on_label_column(self):
-        """try to request an order on a column with a label instead of a number"""
+        """Try to request an order on a column with a label instead of a number."""
         # there's only 4 columns, o=3 is the maximum and a number is expected
         # point is used to separate fields
         url = f"{self.url_list_topic}?o=DATE,POST,TOPIC"
         # Run
         response = self.client.get(url)
         # Check
-        assert response.status_code == 200
+        self.assertEqual(response.status_code, 200)
 
         # Should have 0 sorted column as the one asked is unknown
         self.assertContains(response, "sorted ", count=0)
 
     def test_sorting_on_mixing_type_column(self):
-        """try to request mixin good and bad params"""
+        """Try to request mixin good and invalid params."""
         # there's only 4 columns, o=3 is the maximum and a number is expected
         url = f"{self.url_list_topic}?o=DATE.0.7"
         # Run
         response = self.client.get(url)
         # Check
-        assert response.status_code == 200
+        self.assertEqual(response.status_code, 200)
 
         # Should have 1 sorted column as the other two are unknown format
         self.assertContains(response, "sorted ", count=1)
@@ -325,7 +332,7 @@ class TestForumView(TestCase):
         self.assertContentBefore(response, "TOPIC A", "TOPIC B")
         self.assertContentBefore(response, "TOPIC B", "TOPIC C")
 
-    def test_sorting_context_wisiwig(self):
+    def test_sorting_header_template_render(self):
         """Test the relation between our context header and links created in the view
         to ensure it's used
         """
@@ -336,7 +343,7 @@ class TestForumView(TestCase):
 
         self.assertEqual(
             response.context["header"],
-            TopicSortHeaderFactory.build_column_order(
+            self.build_column_order(
                 [
                     {
                         "sorted": True,

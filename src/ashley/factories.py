@@ -98,22 +98,3 @@ class PostFactory(DjangoModelFactory):
             "entityMap": {},
         }
         return json.dumps(data)
-
-
-class TopicSortHeaderFactory:
-    """Factory to create sort orders for topic list view with default value"""
-
-    @staticmethod
-    def build_column_order(orders):
-        """build blocks by replacing attributes declared in orders from default_block"""
-        default_block = {
-            "sorted": False,
-            "ascending": False,
-            "sort_priority": 0,
-            "url_primary": "?o=",
-            "url_remove": "?o=",
-            "url_toggle": "?o=",
-            "class_attrib": "",
-        }
-
-        return [{**default_block, **i} for i in orders]
