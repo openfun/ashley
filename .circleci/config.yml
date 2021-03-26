@@ -328,6 +328,13 @@ jobs:
           name: Build front-end application
           command: yarn build
       - run:
+          name: Use formatjs-cli to generate frontend.json file
+          command: yarn extract-translations
+      - persist_to_workspace:
+          root: ~/fun
+          paths:
+            - src/frontend/i18n/frontend.json
+      - run:
           name: Build application styles
           command: yarn sass
       - save_cache:

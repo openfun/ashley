@@ -1,0 +1,11 @@
+{
+  "components.ButtonChangeRoleCta.modalConfirmation": "Are you certain you want to confirm this action ?",
+  "components.ButtonChangeRoleCta.modalPromoteTitle": "Promote {userName} to moderator",
+  "components.ButtonChangeRoleCta.modalRevokeTitle": "Revoke {userName} to moderator",
+  "components.ListModerators.amountModerator": "{moderatorCount, number} {moderatorCount, plural, one {moderator} other {moderators}} moderators found from {userCount, number} {userCount, plural, one {user} other {users}} found",
+  "components.Modal.closeModal": "Close",
+  "components.SearchModeratorSuggestField.addNewModerator": "Add new moderator to the forum : {studentCount, number} {studentCount, plural, one {student} other {students}} found",
+  "components.SearchModeratorSuggestField.promote.cta": "Promote moderator",
+  "components.SearchModeratorSuggestField.revoke.cta": "Revoke moderator",
+  "components.SearchModeratorSuggestField.searchFieldPlaceholder": "Search for students"
+}

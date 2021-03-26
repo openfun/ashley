@@ -1,7 +1,15 @@
 module.exports = {
   plugins: [
-    '@babel/proposal-class-properties',
-    '@babel/plugin-syntax-dynamic-import',
+    [
+      'react-intl',
+      {
+        ast: true,
+        extractFromFormatMessageCall: true,
+        idInterpolationPattern: '[sha512:contenthash:base64:6]',
+      },
+    ],
+    ['@babel/proposal-class-properties'],
+    ['@babel/plugin-syntax-dynamic-import'],
   ],
   presets: [
     [
