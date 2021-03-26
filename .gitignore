@@ -27,7 +27,10 @@ share/python-wheels/
 *.egg
 MANIFEST
 
-# Translations	# Translations
+# Exported strings & generated translation templates
+src/frontend/i18n/frontend.json
+# Translations
+src/frontend/js/translations/*.json
 *.pot
 
 # Environments

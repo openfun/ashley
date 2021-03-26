@@ -17,9 +17,12 @@
     ],
     "module": "esnext",
     "moduleResolution": "node",
+    "noImplicitAny": true,
+    "noImplicitThis": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
+    "strictNullChecks": true,
     "sourceMap": true,
     "target": "es6",
     "types": ["jest"]

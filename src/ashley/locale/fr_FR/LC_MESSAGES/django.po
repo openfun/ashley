@@ -1129,4 +1129,3 @@ msgstr "Renommer"
 #, python-format
 msgid "Welcome %(username)s, your username is now registered."
 msgstr "Bienvenue %(username)s, votre nom d'utilisateur a bien été pris en compte."
-
