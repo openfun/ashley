@@ -24,7 +24,6 @@ def get_current_lti_session_first_forum(request):
     """
     if request.user.is_authenticated and request.session.get(SESSION_LTI_CONTEXT_ID):
         context = get_current_lti_session(request)
-        forum = Forum.objects.filter(lti_contexts=context).first()
-        return forum
+        return Forum.objects.filter(lti_contexts=context).first()
 
     return None
