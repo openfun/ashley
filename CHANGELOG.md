@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
  
+ - add react components to manage moderators for current LTIContext
  - add frontend internationalisation and react components autoload
  - add django rest framework to promote/revoke moderators for current LTIContext
  - add new role moderator and permission to manage moderators

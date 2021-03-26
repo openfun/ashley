@@ -13,7 +13,7 @@ import 'core-js/modules/es.promise';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { IntlProvider } from 'react-intl';
-import Root from './components/Root';
+import { Root } from './components/Root';
 import { handle } from './utils/errors/handle';
 
 // Wait for the DOM to load before we scour it for an element that requires React to be rendered

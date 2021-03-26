@@ -5,7 +5,7 @@ import { Root } from '.';
 
 jest.mock('../DashboardModerators', () => ({
   __esModule: true,
-  default: ({ exampleProp }: { exampleProp: string }) =>
+  DashboardModerators: ({ exampleProp }: { exampleProp: string }) =>
     `This text should be render in the DashboardContainer ${exampleProp}`,
 }));
 

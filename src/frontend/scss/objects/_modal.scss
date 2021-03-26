@@ -1,0 +1,33 @@
+#modal-exclude__react {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.modal {
+  &-header {
+    background-color: #3877bc;
+  }
+  &-title {
+    color: white;
+  }
+  &-close {
+    padding: 0.5rem 1rem;
+    color: $gray-100;
+    background: transparent;
+    border: none;
+  }
+  &-overlay {
+    z-index: 10;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+  }
+  &-cancel {
+    background-color: lightgrey;
+  }
+}

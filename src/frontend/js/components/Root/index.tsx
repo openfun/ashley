@@ -26,7 +26,7 @@ interface RootProps {
   ashleyReactSpots: Element[];
 }
 
-const Root = ({ ashleyReactSpots }: RootProps) => {
+export const Root = ({ ashleyReactSpots }: RootProps) => {
   const portals = ashleyReactSpots.map((element: Element) => {
     // Generate a component name. It should be a key of the componentLibrary object / ComponentLibrary interface
     const componentName = startCase(
@@ -45,11 +45,6 @@ const Root = ({ ashleyReactSpots }: RootProps) => {
       const dataProps = element.getAttribute('data-props');
       if (dataProps) {
         props = { ...props, ...JSON.parse(dataProps) };
-      }
-
-      // Add context to props if they do not already include it
-      if (!props.context) {
-        props.context = (window as any).__ashley_frontend_context__.context;
       }
 
       return ReactDOM.createPortal(<Component {...props} />, element);

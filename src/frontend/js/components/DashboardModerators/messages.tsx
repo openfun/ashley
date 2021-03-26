@@ -6,11 +6,12 @@ export const messagesDashboardModerators = defineMessages({
       'Add new moderator to the forum : {studentCount, number} {studentCount, plural, one {student} other {students}} found',
     description:
       "Present the block where the input to search students is, sum up information on number of students left that aren' moderators. Appears just above search input",
-    id: 'components.DashboardModerators.SearchModeratorSuggestField.addNewModerator',
+    id:
+      'components.DashboardModerators.SearchModeratorSuggestField.addNewModerator',
   },
   amountModerator: {
     defaultMessage:
-      '{moderatorCount, number} {moderatorCount, plural, one {moderator} other {moderators}} moderators found from {userCount, number} {userCount, plural, one {user} other {users}} found',
+      '{moderatorCount, number} {moderatorCount, plural, one {moderator} other {moderators}} found from {userCount, number} {userCount, plural, one {user} other {users}} found',
     description:
       'Present the block where the list of moderator is, sum up information on number of moderator compare to amount of total users that could be moderators. Appears just above results',
     id: 'components.DashboardModerators.ListModerators.amountModerator',
@@ -42,7 +43,8 @@ export const messagesDashboardModerators = defineMessages({
   promoteModerator: {
     defaultMessage: 'Promote moderator',
     description: 'CTA for students to promote moderators',
-    id: 'components.DashboardModerators.SearchModeratorSuggestField.promote.cta',
+    id:
+      'components.DashboardModerators.SearchModeratorSuggestField.promote.cta',
   },
   revokeModerator: {
     defaultMessage: 'Revoke moderator',
@@ -53,6 +55,7 @@ export const messagesDashboardModerators = defineMessages({
     defaultMessage: 'Search for students',
     description:
       'Placeholder text displayed in the search field when it is empty.',
-    id: 'components.DashboardModerators.SearchModeratorSuggestField.searchFieldPlaceholder',
+    id:
+      'components.DashboardModerators.SearchModeratorSuggestField.searchFieldPlaceholder',
   },
 });
