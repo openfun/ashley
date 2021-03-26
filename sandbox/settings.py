@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
 import json
 import os
 import tempfile
@@ -151,6 +150,7 @@ class Base(Configuration):
                     "django.template.context_processors.media",
                     "django.template.context_processors.request",
                     "django.template.context_processors.tz",
+                    "ashley.context_processors.site_metas",
                     "machina.core.context_processors.metadata",
                 ],
                 "loaders": [
@@ -208,6 +208,7 @@ class Base(Configuration):
         "machina.apps.forum_member",
         "machina.apps.forum_moderation",
         "machina.apps.forum_tracking",
+        "rest_framework",
     ]
 
     # Languages
@@ -260,6 +261,15 @@ class Base(Configuration):
 
     # Sentry
     SENTRY_DSN = values.Value(None, environ_name="SENTRY_DSN")
+
+    REST_FRAMEWORK = {
+        "ALLOWED_VERSIONS": ("1.0",),
+        "DEFAULT_AUTHENTICATION_CLASSES": (
+            "rest_framework.authentication.SessionAuthentication",
+        ),
+        "DEFAULT_VERSION": "1.0",
+        "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.URLPathVersioning",
+    }
 
     @classmethod
     def post_setup(cls):
