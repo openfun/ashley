@@ -173,6 +173,7 @@ build-front: \
 .PHONY: build-front
 
 build-ts: ## build TypeScript application
+	@$(YARN) compile-translations
 	@$(YARN) build
 .PHONY: build-ts
 
@@ -227,9 +228,22 @@ crowdin-upload: ## Upload source translations to crowdin
 	@$(COMPOSE_RUN_CROWDIN) upload sources
 .PHONY: crowdin-upload
 
-i18n-compile: ## compile the gettext files
+i18n-extract-front:
+	@$(YARN) extract-translations
+.PHONY: i18n-extract-front
+
+i18n-compile-front:
+	@$(YARN) compile-translations
+.PHONY: i18n-compile-front
+
+i18n-compile-back : ## compile the gettext files
 	@$(COMPOSE_RUN) -w /app/src/ashley ashley python /app/sandbox/manage.py compilemessages
-.PHONY: compilemessages
+.PHONY: i18n-compile-back
+
+i18n-compile: \
+  i18n-compile-back \
+  i18n-compile-front
+.PHONY: i18n-compile
 
 i18n-download-and-compile: ## download all translated messages and compile them to be used by all applications
 i18n-download-and-compile: \
@@ -237,15 +251,24 @@ i18n-download-and-compile: \
   i18n-compile
 .PHONY: i18n-download-and-compile
 
-i18n-generate: ## create the .pot files used for i18n
+i18n-generate-front: build-ts
+	@$(YARN) extract-translations
+.PHONY: i18n-generate-front
+
+i18n-generate-back: ## create the .pot files used for i18n
 	@$(COMPOSE_RUN) -w /app/src/ashley ashley python /app/sandbox/manage.py makemessages -a --keep-pot
 	mv src/ashley/locale/django.pot src/ashley/locale/ashley.pot
 	@$(COMPOSE_RUN) ashley bash -c 'msgfilter -i  $$(pip show -f django-machina 2>/dev/null | grep "Location:" | awk "{print \$$2}")"/machina/locale/en/LC_MESSAGES/django.po" -o /app/src/ashley/locale/machina.pot true'
 	@$(COMPOSE_RUN) ashley msgcat --use-first /app/src/ashley/locale/machina.pot /app/src/ashley/locale/ashley.pot -o /app/src/ashley/locale/django.pot
 	rm -f src/ashley/locale/ashley.pot
 	rm -f src/ashley/locale/machina.pot
+.PHONY: i18n-generate-back
 
-.PHONY: messages
+i18n-generate: ## generate source translations files for all applications
+i18n-generate: \
+  i18n-generate-back \
+  i18n-generate-front 
+.PHONY: i18n-generate
 
 i18n-generate-and-upload: ## generate source translations for all applications and upload them to crowdin
 i18n-generate-and-upload: \
