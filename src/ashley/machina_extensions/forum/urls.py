@@ -19,7 +19,7 @@ class ForumURLPatternsFactory(BaseForumURLPatternsFactory):
         """Returns the URL patterns managed by the considered factory / application."""
 
         return super().get_urlpatterns() + [
-            path("admin/rename/<int:pk>/", self.rename_view.as_view(), name="rename")
+            path("admin/rename/<int:pk>/", self.rename_view.as_view(), name="rename"),
         ]
 
 

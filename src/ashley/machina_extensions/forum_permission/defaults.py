@@ -22,4 +22,9 @@ class PermissionConfig(BasePermissionConfig):
             "label": _("Can rename a forum"),
             "scope": "forum",
         },
+        {
+            "codename": "can_manage_moderator",
+            "label": _("Can manage a user's moderator status"),
+            "scope": "forum",
+        },
     ]
