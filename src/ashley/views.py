@@ -1,5 +1,4 @@
 """Views of the ashley django application."""
-
 import logging
 from typing import List
 
@@ -10,7 +9,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedire
 from django.urls import reverse
 from django.utils import translation
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import UpdateView
+from django.views.generic import TemplateView, UpdateView
 from lti_toolbox.lti import LTI
 from lti_toolbox.views import BaseLTIAuthView
 from machina.apps.forum_permission.shortcuts import assign_perm
@@ -19,6 +18,8 @@ from machina.apps.forum_permission.viewmixins import (
 )
 from machina.core.db.models import get_model
 from machina.core.loading import get_class
+
+from ashley.permissions import ManageModeratorPermission
 
 from . import SESSION_LTI_CONTEXT_ID
 from .defaults import DEFAULT_FORUM_BASE_PERMISSIONS, DEFAULT_FORUM_ROLES_PERMISSIONS
@@ -145,3 +146,10 @@ class ChangeUsernameView(PermissionRequiredMixin, UpdateView):
     def perform_permissions_check(self, user, obj, perms):
         """ The user can update his username only if it is not yet defined """
         return user.is_authenticated and not getattr(obj, "public_username", "")
+
+
+class ManageModeratorsView(ManageModeratorPermission, TemplateView):
+    """View to manage revoke and promote moderators."""
+
+    context_object_name = "users"
+    template_name = "ashley/manage_moderator.html"

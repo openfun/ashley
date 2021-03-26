@@ -25,6 +25,12 @@ class PermissionHandler(BasePermissionHandler):
         """ Given a forum, checks whether the user can rename it. """
         return self._perform_basic_permission_check(forum, user, "can_rename_forum")
 
+    def can_manage_moderator(self, forum, user):
+        """
+        Given a forum, checks whether the user can promote or revoke a user to moderator.
+        """
+        return self._perform_basic_permission_check(forum, user, "can_manage_moderator")
+
     def forum_list_filter(self, qs, user):
         """
         Filters the given queryset in order to return a list of forums that
