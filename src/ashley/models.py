@@ -138,7 +138,9 @@ class AbstractLTIContext(Model):
 
     def sync_user_groups(self, user, roles: List[str]) -> None:
         """
-        Synchronize the group membership of a user for this LTI Context
+        Synchronize the group membership of a user for this LTI Context.
+        User from LTI can sign as instructor or student. An extra group can be added
+        in Ashley to promote user to moderator. This is an internal group.
         """
         # Control user is part of this lti_context
         if user.lti_consumer_id != self.lti_consumer_id:
@@ -154,7 +156,10 @@ class AbstractLTIContext(Model):
 
         # Remove groups if necessary
         for group in current_groups:
-            if group not in target_groups:
+            # Moderator group is an internal group, it musn't be removed
+            if group not in target_groups and group.name != self.get_group_role_name(
+                "moderator"
+            ):
                 logger.debug("Removing user %s from group %s", user, group)
                 user.groups.remove(group)
 

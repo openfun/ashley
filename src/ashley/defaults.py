@@ -9,6 +9,8 @@ from draftjs_exporter.dom import DOM
 from ashley.editor.decorators import emoji, link, mention
 
 _FORUM_ROLE_INSTRUCTOR = "instructor"
+_FORUM_ROLE_STUDENT = "student"
+_FORUM_ROLE_MODERATOR = "moderator"
 
 _FORUM_BASE_PERMISSIONS = [
     "can_see_forum",
@@ -20,7 +22,7 @@ _FORUM_BASE_PERMISSIONS = [
     "can_vote_in_polls",
 ]
 
-_FORUM_ADMIN_PERMISSIONS = _FORUM_BASE_PERMISSIONS + [
+_FORUM_MODERATOR_PERMISSIONS = _FORUM_BASE_PERMISSIONS + [
     "can_post_announcements",
     "can_post_stickies",
     "can_delete_own_posts",
@@ -31,6 +33,10 @@ _FORUM_ADMIN_PERMISSIONS = _FORUM_BASE_PERMISSIONS + [
     "can_approve_posts",
     "can_reply_to_locked_topics",
     "can_rename_forum",
+]
+
+_FORUM_ADMIN_PERMISSIONS = _FORUM_MODERATOR_PERMISSIONS + [
+    "can_manage_moderator",
 ]
 
 DEFAULT_FORUM_BASE_PERMISSIONS = lazy(
@@ -47,6 +53,7 @@ DEFAULT_FORUM_ROLES_PERMISSIONS = lazy(
         {
             "administrator": _FORUM_ADMIN_PERMISSIONS,
             _FORUM_ROLE_INSTRUCTOR: _FORUM_ADMIN_PERMISSIONS,
+            _FORUM_ROLE_MODERATOR: _FORUM_MODERATOR_PERMISSIONS,
         },
     ),
     dict,

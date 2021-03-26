@@ -6,6 +6,7 @@ from django.core.exceptions import PermissionDenied
 from django.test import TestCase
 from machina.core.db.models import get_model
 
+from ashley.defaults import _FORUM_ROLE_MODERATOR
 from ashley.factories import LTIConsumerFactory, LTIContextFactory, UserFactory
 
 GroupForumPermission = get_model(  # pylint: disable=C0103
@@ -134,6 +135,68 @@ class LTIContextTestCase(TestCase):
         # Check the PermissionDenied gets called as the user in not part of this LTIContext
         with self.assertRaises(PermissionDenied):
             context2.sync_user_groups(user2, [])
+
+    def test_sync_user_with_internal_moderators_groups(self):
+        """
+        Test that internal group moderator doesn't get removed using sync_user_groups
+        """
+        lti_consumer = LTIConsumerFactory()
+        context = LTIContextFactory(lti_consumer=lti_consumer)
+        # Initialize a user with no group
+        user = UserFactory(lti_consumer=lti_consumer)
+        self.assertEqual(0, user.groups.count())
+
+        # Sync user groups in context with role "student"
+        context.sync_user_groups(user, ["student"])
+        self.assertCountEqual(
+            [context.base_group_name, f"{context.base_group_name}:role:student"],
+            list(user.groups.values_list("name", flat=True)),
+        )
+        # Add the user to moderator group
+        group_moderator_name = context.get_group_role_name(_FORUM_ROLE_MODERATOR)
+        group_moderator = Group.objects.create(name=group_moderator_name)
+        user.groups.add(group_moderator)
+        user.save()
+        # confirm group has been added
+        self.assertCountEqual(
+            [
+                context.base_group_name,
+                f"{context.base_group_name}:role:student",
+                f"{context.base_group_name}:role:moderator",
+            ],
+            list(user.groups.values_list("name", flat=True)),
+        )
+
+        # Sync user groups in context with funnyrole group
+        context.sync_user_groups(user, ["funnyrole"])
+        self.assertCountEqual(
+            ["funnyrole", "moderator"],
+            context.get_user_roles(user),
+        )
+        # User should still have the moderator group
+        self.assertCountEqual(
+            [
+                context.base_group_name,
+                f"{context.base_group_name}:role:funnyrole",
+                f"{context.base_group_name}:role:moderator",
+            ],
+            list(user.groups.values_list("name", flat=True)),
+        )
+
+        # creates a new context
+        context2 = LTIContextFactory(lti_consumer=lti_consumer)
+        context2.sync_user_groups(user, ["instructor"])
+        # moderator group should not exist in this context
+        self.assertCountEqual(
+            [
+                context.base_group_name,
+                f"{context.base_group_name}:role:funnyrole",
+                f"{context.base_group_name}:role:moderator",
+                context2.base_group_name,
+                f"{context2.base_group_name}:role:instructor",
+            ],
+            list(user.groups.values_list("name", flat=True)),
+        )
 
     def test_get_group_role_name(self):
         """get_group_role_name should return the name of the role with the specific pattern"""
