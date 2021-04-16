@@ -359,7 +359,7 @@ jobs:
           name: List builds
           command: |
             echo "== Javascript =="
-            ls ../ashley/static/ashley/js/*.js
+            ls ../ashley/static/ashley/js/build/*.js
             echo "== CSS =="
             ls ../ashley/static/ashley/css/*.css
             echo "== Webfonts =="
@@ -367,7 +367,7 @@ jobs:
       - persist_to_workspace:
           root: ~/fun
           paths:
-            - src/ashley/static/ashley/js/*.js
+            - src/ashley/static/ashley/js/**/*.js
             - src/ashley/static/ashley/css/*.css
             - src/ashley/static/ashley/font/*
   lint-front:

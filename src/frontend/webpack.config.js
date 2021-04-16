@@ -11,8 +11,10 @@ module.exports = {
   // is on AWS.
   output: {
     filename: 'ashley.js',
-    path: __dirname + '/../ashley/static/ashley/js',
+    path: __dirname + '/../ashley/static/ashley/js/build',
     chunkFilename: '[id].[hash].index.js',
+    // Clean output directory before generate new files
+    clean: true,
   },
 
   // Enable sourcemaps for debugging webpack's output.
