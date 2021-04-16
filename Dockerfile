@@ -44,8 +44,8 @@ COPY ./src/ashley /builder/src/ashley/
 
 # Copy distributed application's statics
 COPY --from=front-builder \
-    /builder/src/ashley/static/ashley/js/*.js \
-    /builder/src/ashley/static/ashley/js/
+    /builder/src/ashley/static/ashley/js \
+    /builder/src/ashley/static/ashley/js
 COPY --from=front-builder \
     /builder/src/ashley/static/ashley/css/main.css \
     /builder/src/ashley/static/ashley/css/main.css

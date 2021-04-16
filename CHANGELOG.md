@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Clean built frontend files before each build
+
 ## [1.0.0-beta.5] - 2020-03-01
 
 ### Changed

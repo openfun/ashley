@@ -29,3 +29,8 @@ db.sqlite3
 
 # Font-end
 **/node_modules
+
+# Assets
+src/ashley/static/ashley/js
+src/ashley/static/ashley/css
+src/ashley/static/ashley/font
