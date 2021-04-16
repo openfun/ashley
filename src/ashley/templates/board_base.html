@@ -7,6 +7,9 @@
 {% endblock css %}
 
 {% block body %}
+  {# Wrap all body content in an ID'd element to easily remove it from view (using aria-hidden) #}
+  {# when a modal is open. This is important for accessibility. #}
+  <div id="modal-exclude__react">
     {% block header %}
     {% endblock header %}
     <div class="my-0 px-2 container-fluid" id="main_container">
@@ -44,9 +47,13 @@
         {% block content %}
         {% endblock content %}
     </div>
+</div>
 {% endblock body %}
 
 {% block js %}
     {{ block.super }}
+    <script>
+            window.__ashley_frontend_context__ = JSON.parse('{{ FRONTEND_CONTEXT|safe }}');
+    </script>
     <script src="{% static 'ashley/js/build/ashley.js' %}" type="text/javascript" charset="utf-8"></script>
 {% endblock js %}
