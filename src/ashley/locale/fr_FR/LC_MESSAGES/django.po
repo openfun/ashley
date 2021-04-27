@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashleyforum\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-21 17:59+0000\n"
-"PO-Revision-Date: 2020-12-21 18:04\n"
+"POT-Creation-Date: 2021-04-19 12:27+0000\n"
+"PO-Revision-Date: 2021-04-27 14:53\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -1072,11 +1072,11 @@ msgstr "Il n'y a aucune discussion non lue."
 msgid "Forum index"
 msgstr "Accueil du forum"
 
-#: editor/widgets.py:15
+#: editor/widgets.py:14
 msgid "Please enter your message here..."
 msgstr "Veuillez entrer votre message ici ..."
 
-#: editor/widgets.py:16
+#: editor/widgets.py:15
 msgid "Fill-in or paste your URL here and press enter"
 msgstr "Saisissez ou collez votre URL ici et appuyez sur Entrée"
 
@@ -1084,19 +1084,23 @@ msgstr "Saisissez ou collez votre URL ici et appuyez sur Entrée"
 msgid "Can rename a forum"
 msgstr "Peut renommer un forum"
 
-#: models.py:35
+#: machina_extensions/forum_permission/defaults.py:27
+msgid "Can manage a user's moderator status"
+msgstr "Permet de gérer le statut de modérateur d'un utilisateur"
+
+#: models.py:36
 msgid "LTI remote user identifier"
 msgstr "Identifiant utilisateur LTI distant"
 
-#: models.py:36
+#: models.py:37
 msgid "Unique identifier for the user on the tool consumer"
 msgstr "Identifiant utilisateur unique sur le Consumer"
 
-#: models.py:42
+#: models.py:43
 msgid "Public username"
 msgstr "Nom d'utilisateur public"
 
-#: models.py:43
+#: models.py:44
 msgid "This username will be displayed with the user's posts"
 msgstr "Ce nom d'utilisateur sera associé aux messages de l'utilisateur"
 
@@ -1109,13 +1113,26 @@ msgstr "Veuillez définir votre nom d'utilisateur"
 msgid "This display name will be associated with all your messages and cannot be changed once defined."
 msgstr "Votre nom d'utilisateur sera associé à tous vos messages et ne pourra pas être modifié une fois défini."
 
-#: templates/board_base.html:35
+#: templates/ashley/manage_moderator.html:4
+#: templates/ashley/manage_moderator.html:9
+msgid "Manage forum's moderators"
+msgstr "Gérer les modérateurs du forum"
+
+#: templates/board_base.html:38
 msgid "Welcome to the discussion forum! First of all, please set a display name that will be associated with your messages."
 msgstr "Bienvenue sur le forum ! Avant toute chose, veuillez définir un nom d'utilisateur qui sera associé à vos messages."
 
-#: templates/board_base.html:35
+#: templates/board_base.html:38
 msgid "Set my display name"
 msgstr "Définir mon nom d'utilisateur"
+
+#: templates/forum/forum_detail.html:22
+msgid "Rename forum"
+msgstr "Renommer le forum"
+
+#: templates/forum/forum_detail.html:23
+msgid "Manage moderators"
+msgstr "Gérer les modérateurs"
 
 #: templates/forum/forum_rename.html:4 templates/forum/forum_rename.html:11
 msgid "Rename the forum"
@@ -1125,7 +1142,19 @@ msgstr "Renommer le forum"
 msgid "Rename"
 msgstr "Renommer"
 
-#: views.py:127
+#: templates/forum_conversation/post_create.html:51
+#: templates/forum_conversation/topic_detail.html:57
+#: templates/forum_conversation/topic_list.html:38
+#, python-format
+msgid "on %(creation_date)s"
+msgstr "le %(creation_date)s"
+
+#: templates/partials/user_icon.html:5 templates/partials/user_icon.html:6
+msgid "Instructor"
+msgstr "Enseignant(e)"
+
+#: views.py:139
 #, python-format
 msgid "Welcome %(username)s, your username is now registered."
 msgstr "Bienvenue %(username)s, votre nom d'utilisateur a bien été pris en compte."
+

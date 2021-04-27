@@ -1,0 +1,42 @@
+{
+  "components.DashboardModerators.ButtonChangeRoleCta.modalConfirmation": {
+    "description": "Body for the modal to promote or revoke the defined user to moderator, to ask the user to confirm this action.",
+    "message": "Etes-vous certains que vous souhaitez poursuivre cette action ?"
+  },
+  "components.DashboardModerators.ButtonChangeRoleCta.modalPromoteTitle": {
+    "description": "Title for the modal to promote the defined user to moderator of the forum.",
+    "message": "Promouvoir {userName} en modérateur"
+  },
+  "components.DashboardModerators.ButtonChangeRoleCta.modalRevokeTitle": {
+    "description": "Title for the modal to revoke the defined user to moderator of the forum.",
+    "message": "Révoquer {userName} comme modérateur"
+  },
+  "components.DashboardModerators.ListModerators.amountModerator": {
+    "description": "Present the block where the list of moderator is, sum up information on number of moderator compare to amount of total users that could be moderators. Appears just above results",
+    "message": "{moderatorCount, number} {moderatorCount, plural, one {modérateur} other {modérateurs}} sur {userCount, number} {userCount, plural, one {utilisateur} other {utilisateurs}}"
+  },
+  "components.DashboardModerators.Modal.closeModal": {
+    "description": "Text for the button to close the modal to promote or revoke a user to moderator",
+    "message": "Fermer"
+  },
+  "components.DashboardModerators.Moderator.accessProfilModeratorTitle": {
+    "description": "Title for the link to access a user's profil.",
+    "message": "Accéder au profil de {userName}"
+  },
+  "components.DashboardModerators.SearchModeratorSuggestField.addNewModerator": {
+    "description": "Present the block where the input to search students is, sum up information on number of students left that aren' moderators. Appears just above search input",
+    "message": "Ajoutez un nouveau modérateur au forum : {studentCount, number} {studentCount, plural, one {élève} other {élèves}}"
+  },
+  "components.DashboardModerators.SearchModeratorSuggestField.promote.cta": {
+    "description": "CTA for students to promote moderators",
+    "message": "Promouvoir modérateur"
+  },
+  "components.DashboardModerators.SearchModeratorSuggestField.revoke.cta": {
+    "description": "CTA for moderators to be revoked",
+    "message": "Révoquer les droits de modération"
+  },
+  "components.DashboardModerators.SearchModeratorSuggestField.searchFieldPlaceholder": {
+    "description": "Placeholder text displayed in the search field when it is empty.",
+    "message": "Rechercher des étudiants"
+  }
+}
