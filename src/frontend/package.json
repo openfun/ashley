@@ -65,7 +65,10 @@
   "dependencies": {
     "@draft-js-plugins/anchor": "4.1.2",
     "@draft-js-plugins/buttons": "4.1.0",
+    "@draft-js-plugins/drag-n-drop": "4.2.0",
     "@draft-js-plugins/editor": "4.1.0",
+    "@draft-js-plugins/focus": "4.1.1",
+    "@draft-js-plugins/image": "4.1.1",
     "@draft-js-plugins/mention": "4.4.0",
     "@draft-js-plugins/static-toolbar": "4.1.0",
     "@formatjs/cli": "3.1.6",

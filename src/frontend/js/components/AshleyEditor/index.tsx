@@ -16,6 +16,7 @@ import createToolbarPlugin, {
   Separator,
 } from '@draft-js-plugins/static-toolbar';
 import createEmojiPlugin, { EmojiPluginConfig } from 'draft-js-emoji-plugin';
+import createImagePlugin from '@draft-js-plugins/image';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import {
@@ -31,6 +32,7 @@ import {
   CodeBlockButton,
 } from '@draft-js-plugins/buttons';
 import createCodeEditorPlugin from '../../draftjs-plugins/code-editor';
+import ImageAdd from './ImageAdd';
 
 interface MyEditorProps {
   autofocus?: boolean;
@@ -56,7 +58,7 @@ export const AshleyEditor = (props: MyEditorProps) => {
 
   // Instantiate plugins in a state to avoid instantiation on every render
   const [
-    { emojiPlugin, linkPlugin, toolbarPlugin, codeEditorPlugin },
+    { emojiPlugin, linkPlugin, toolbarPlugin, codeEditorPlugin, imagePlugin },
   ] = useState({
     emojiPlugin: createEmojiPlugin(props.emojiConfig),
     linkPlugin: createLinkPlugin({
@@ -70,6 +72,7 @@ export const AshleyEditor = (props: MyEditorProps) => {
     }),
     toolbarPlugin: createToolbarPlugin(),
     codeEditorPlugin: createCodeEditorPlugin(),
+    imagePlugin: createImagePlugin(),
   });
 
   useEffect(() => {
@@ -126,7 +129,13 @@ export const AshleyEditor = (props: MyEditorProps) => {
   };
 
   const PluginRenderers = [<emojiPlugin.EmojiSuggestions key="emoji" />];
-  const plugins = [toolbarPlugin, emojiPlugin, linkPlugin, codeEditorPlugin];
+  const plugins = [
+    toolbarPlugin,
+    emojiPlugin,
+    linkPlugin,
+    codeEditorPlugin,
+    imagePlugin,
+  ];
 
   if (props.mentions) {
     const [{ mentionPlugin }] = useState({
@@ -170,6 +179,11 @@ export const AshleyEditor = (props: MyEditorProps) => {
               <BoldButton {...externalProps} />
               <ItalicButton {...externalProps} />
               <UnderlineButton {...externalProps} />
+              <ImageAdd
+                editorState={editorState}
+                onChange={editorChange}
+                modifier={imagePlugin.addImage}
+              />
               <linkPlugin.LinkButton {...externalProps} />
               <Separator {...externalProps} />
               <HeadlineOneButton {...externalProps} />
