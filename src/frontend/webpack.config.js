@@ -21,6 +21,7 @@ module.exports = () => {
       // `chunkFilename` must have a unique and different name on each build. This will prevent overwriting
       // of existing chunks if backend static storage is on AWS.
       chunkFilename: '[id].[fullhash].index.js',
+      clean: true,
     },
 
     // Enable sourcemaps for debugging webpack's output.
