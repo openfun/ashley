@@ -2,10 +2,13 @@
 
 from django.db import models  # pylint: disable=all
 from django.utils.translation import gettext_lazy as _
-from machina.apps.forum_conversation.abstract_models import AbstractTopic
+from machina.apps.forum_conversation.abstract_models import (
+    AbstractTopic as MachinaAbstractTopic,
+)
+from machina.core.db.models import model_factory
 
 
-class Topic(AbstractTopic):
+class AbstractTopic(MachinaAbstractTopic):
     # The number of posts included in this topic (only those that are approved).
     # Add Index for sorting
     posts_count = models.PositiveIntegerField(
@@ -26,8 +29,10 @@ class Topic(AbstractTopic):
         db_index=True,
     )
 
-    class Meta(AbstractTopic.Meta):
+    class Meta(MachinaAbstractTopic.Meta):
         abstract = True
 
+
+Topic = model_factory(AbstractTopic)
 
 from machina.apps.forum_conversation.models import *  # noqa
