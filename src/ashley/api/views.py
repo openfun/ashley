@@ -9,17 +9,19 @@ from machina.apps.forum_permission.viewmixins import (
 from machina.core.db.models import get_model
 from machina.core.loading import get_class
 from rest_framework import mixins, status, viewsets
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from ashley.context_mixins import get_current_lti_session
 from ashley.defaults import _FORUM_ROLE_INSTRUCTOR, _FORUM_ROLE_MODERATOR
 from ashley.permissions import ManageModeratorPermission
 
-from .serializers import UserSerializer
+from .serializers import UploadImageSerializer, UserSerializer
 
 User = get_user_model()
 LTIContext = get_model("ashley", "LTIContext")
 Forum = get_model("forum", "Forum")
+UploadImage = get_model("ashley", "UploadImage")
 PermissionRequiredMixin: BasePermissionRequiredMixin = get_class(
     "forum_permission.viewmixins", "PermissionRequiredMixin"
 )
@@ -90,3 +92,16 @@ class UserApiView(
             raise PermissionDenied()
 
         return Response({"success": True}, status=status.HTTP_200_OK)
+
+
+# pylint: disable=too-many-ancestors
+class ImageUploadApiView(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    """Viewset for the API of the Image object."""
+
+    queryset = UploadImage.objects.all()
+    serializer_class = UploadImageSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        """Preset poster field with current user"""
+        serializer.save(poster=self.request.user)

@@ -1,8 +1,10 @@
 """Validators for the ashley application."""
-
 from html.parser import HTMLParser
 
+from django.conf import settings
 from django.core import validators
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 from machina.models.fields import render_func
 
 
@@ -39,3 +41,14 @@ class HTMLFilter(HTMLParser):
     def handle_data(self, data):
         """Concatenate the plain text found in each element."""
         self.text += data
+
+
+def validate_upload_image_file_size(file):
+    """Controls the size of the uploaded file is not over the limit authorized"""
+    if file.size > settings.MAX_UPLOAD_FILE_MB * 1024 * 1024:
+        raise ValidationError(
+            _(
+                f"The maximum file size that can be uploaded is {settings.MAX_UPLOAD_FILE_MB} MB"
+            )
+        )
+    return file

@@ -22,6 +22,7 @@ services:
     environment:
       PYLINTHOME: /app/.pylint.d
     env_file:
+      - env.d/development/aws
       - env.d/development/common
       - env.d/development/postgresql
     ports:

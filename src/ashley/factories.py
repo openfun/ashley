@@ -1,5 +1,6 @@
 """Factories for the ``ashley`` application."""
 import json
+import uuid
 
 import factory
 from django.contrib.auth import get_user_model
@@ -16,6 +17,7 @@ LTIContext = get_model("ashley", "LTIContext")  # pylint: disable=C0103
 Post = get_model("forum_conversation", "Post")  # pylint: disable=C0103
 Topic = get_model("forum_conversation", "Topic")  # pylint: disable=C0103
 User = get_user_model()
+UploadImage = get_model("ashley", "UploadImage")  # pylint: disable=C0103
 
 
 class UserFactory(DjangoModelFactory):
@@ -99,3 +101,14 @@ class PostFactory(DjangoModelFactory):
             "entityMap": {},
         }
         return json.dumps(data)
+
+
+class UploadImageFactory(DjangoModelFactory):
+    """Factory to create an UploadImage"""
+
+    class Meta:
+        model = UploadImage
+
+    forum = factory.SubFactory(ForumFactory)
+    poster = factory.SubFactory(UserFactory)
+    file = f"{uuid.uuid4()}.png"

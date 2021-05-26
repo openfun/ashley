@@ -43,6 +43,7 @@ env.bak/
 venv.bak/
 env.d/development/crowdin
 env.d/terraform
+env.d/development/aws 
 
 # Logs
 *.log

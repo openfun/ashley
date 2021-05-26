@@ -1,10 +1,12 @@
 """Serializer for ashley api."""
 from django.contrib.auth import get_user_model
+from machina.core.db.models import get_model
 from rest_framework import serializers
 
 from ashley.context_mixins import get_current_lti_session
 
 User = get_user_model()
+UploadImage = get_model("ashley", "UploadImage")
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -24,3 +26,17 @@ class UserSerializer(serializers.ModelSerializer):
             return lti_context.get_user_roles(obj)
 
         return None
+
+
+class UploadImageSerializer(serializers.ModelSerializer):
+    """Serializer for Image Upload model."""
+
+    class Meta:
+        model = UploadImage
+        fields = (
+            "id",
+            "file",
+            "forum",
+            "poster",
+        )
+        extra_kwargs = {"poster": {"required": False}}

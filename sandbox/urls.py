@@ -4,6 +4,7 @@ ashley URLs
 from dev_tools import urls as dev_urls
 from dev_tools.apps import DevToolsAppConfig
 from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
@@ -14,4 +15,6 @@ urlpatterns = [
     path("", include(ashley_urls)),
 ]
 if DevToolsAppConfig.name in settings.INSTALLED_APPS:
-    urlpatterns += [path("dev/", include(dev_urls))]
+    urlpatterns += [path("dev/", include(dev_urls))] + static(
+        settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    )

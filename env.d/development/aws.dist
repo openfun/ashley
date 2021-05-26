@@ -1,0 +1,5 @@
+# AWS Admin role for development purposes
+DJANGO_AWS_ACCESS_KEY_ID=yourAwsAccesKey
+DJANGO_AWS_S3_REGION_NAME=eu-west-1
+DJANGO_AWS_SECRET_ACCESS_KEY=YourAwsSecretAccessKeyId
+DJANGO_AWS_STORAGE_BUCKET_NAME=YourAwsStorageBucketName
