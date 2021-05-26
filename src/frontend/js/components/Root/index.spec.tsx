@@ -8,6 +8,10 @@ jest.mock('../DashboardModerators', () => ({
   DashboardModerators: ({ exampleProp }: { exampleProp: string }) =>
     `This text should be render in the DashboardContainer ${exampleProp}`,
 }));
+// warning purposes
+jest.mock('../../data/frontEndData', () => ({
+  appFrontendContext: {},
+}));
 
 describe('<Root />', () => {
   beforeEach(() => {

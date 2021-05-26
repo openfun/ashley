@@ -1,6 +1,7 @@
-import { createEvent, queryByRole } from '@testing-library/dom';
+import { createEvent } from '@testing-library/dom';
 import { render, fireEvent, screen } from '@testing-library/react';
 import React from 'react';
+import { IntlProvider } from 'react-intl';
 import { AshleyEditor } from '.';
 import { BlockMapFactory } from '../../utils/test/factories';
 /***
@@ -11,9 +12,17 @@ import { BlockMapFactory } from '../../utils/test/factories';
  ***/
 
 describe('AshleyEditor', () => {
+  // add input target, it's value is linked with editor content and needed for all the tests
+  const target = document.createElement('input');
+  target.setAttribute('id', 'target');
+  document.body.append(target);
+
   it('renders the editor and expected elements are present', () => {
-    const target = document.createElement('input');
-    const { container } = render(<AshleyEditor target={target} />);
+    const { container } = render(
+      <IntlProvider locale="en">
+        <AshleyEditor target="target" {...props} />
+      </IntlProvider>,
+    );
 
     // check that module draftjs is loaded
     screen.getByRole('combobox');
@@ -49,11 +58,10 @@ describe('AshleyEditor', () => {
   });
 
   it('loads AshleyEditor component with existing json content containing a code-block and an unstyled block', () => {
-    const target = document.createElement('input');
     target.value = BlockMapFactory([
       {
         key: 'brt6g',
-        text: 'ce texte est ajouté dans code-block.\n',
+        text: 'ce texte est ajouté dans code-block.',
         type: 'code-block',
       },
       {
@@ -68,7 +76,12 @@ describe('AshleyEditor', () => {
         type: 'unstyled',
       },
     ]);
-    const { container } = render(<AshleyEditor target={target} />);
+
+    const { container } = render(
+      <IntlProvider locale="en">
+        <AshleyEditor target="target" {...props} />
+      </IntlProvider>,
+    );
     // check that the content is now present in the editor
     screen.getByText(/ce texte est ajouté dans code-block./i);
     screen.getByText(/ce texte est en gras./i);
@@ -83,8 +96,12 @@ describe('AshleyEditor', () => {
   });
 
   it('updates the input loaded in AshleyEditor when we change the content of the editor', () => {
-    const target = document.createElement('input');
-    const { container } = render(<AshleyEditor target={target} />);
+    const { container } = render(
+      <IntlProvider locale="en">
+        <AshleyEditor target="target" {...props} />
+      </IntlProvider>,
+    );
+
     // select the draft-js editor
     const editorNode = container.querySelector('.public-DraftEditor-content')!;
     // paste text
@@ -98,7 +115,6 @@ describe('AshleyEditor', () => {
 
     // check that the text is now present
     screen.getByText(/je suis dans l'éditeur !/i);
-
     // control it has been added to the input.value
     expect(target.value).toContain("Je suis dans l'éditeur !");
   });
@@ -108,7 +124,6 @@ describe('AshleyEditor', () => {
    * we test that the rewrite of handlePastedText is properly handled
    */
   it('pastes in a code-block and stays in the same draft-js code-block', () => {
-    const target = document.createElement('input');
     target.value = BlockMapFactory([
       {
         key: 'brt6g',
@@ -116,7 +131,13 @@ describe('AshleyEditor', () => {
         type: 'code-block',
       },
     ]);
-    const { container } = render(<AshleyEditor target={target} />);
+
+    const { container } = render(
+      <IntlProvider locale="en">
+        <AshleyEditor target="target" {...props} />
+      </IntlProvider>,
+    );
+
     // target the code block
     const editorNode = container.querySelector(
       'pre.public-DraftStyleDefault-pre [data-text="true"]',
@@ -143,9 +164,13 @@ describe('AshleyEditor', () => {
   });
 
   it('renders the editor with a list of users to mention', () => {
-    const target = document.createElement('input');
     // load the editor with no list of users to mention
-    render(<AshleyEditor target={target} />);
+    render(
+      <IntlProvider locale="en">
+        <AshleyEditor target="target" {...props} />
+      </IntlProvider>,
+    );
+
     // check that list box containing the list of active users is not present
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
 
@@ -154,8 +179,11 @@ describe('AshleyEditor', () => {
       { name: 'Paul', link: 'profil/user/10' },
       { name: 'Joséphine', link: 'profil/user/2' },
     ];
+
     const { container } = render(
-      <AshleyEditor target={target} mentions={mentionUsers} />,
+      <IntlProvider locale="en">
+        <AshleyEditor target="target" mentions={mentionUsers} {...props} />
+      </IntlProvider>,
     );
 
     // check that list box exists

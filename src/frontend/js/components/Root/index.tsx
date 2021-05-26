@@ -3,16 +3,19 @@ import { get, includes, startCase } from 'lodash-es';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { DashboardModerators } from '../DashboardModerators';
+import { AshleyEditor } from '../AshleyEditor';
 
 // List the top-level components that can be directly called from the Django templates in an interface
 // for type-safety when we call them. This will let us use the props for any top-level component in a
 // way TypeScript understand and accepts
 interface ComponentLibrary {
   DashboardModerators: typeof DashboardModerators;
+  AshleyEditor: typeof AshleyEditor;
 }
 // Actually create the component map that we'll use below to access our component classes
 const componentLibrary: ComponentLibrary = {
   DashboardModerators,
+  AshleyEditor,
 };
 // Type guard: ensures a given string (candidate) is indeed a proper key of the componentLibrary with a corresponding
 // component. This is a runtime check but it allows TS to check the component prop types at compile time
