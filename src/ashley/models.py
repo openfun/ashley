@@ -1,15 +1,23 @@
 """Declare the models related to Ashley ."""
 import logging
+import pathlib
+import uuid
 from typing import List
 
+from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser as DjangoAbstractUser
 from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.db.models import Model
 from django.utils.translation import gettext_lazy as _
 from lti_toolbox.models import LTIConsumer
-from machina.core.db.models import model_factory
+from machina.core.db.models import get_model, model_factory
+from machina.models.abstract_models import DatedModel
+
+from .validators import validate_upload_image_file_size
 
 logger = logging.getLogger(__name__)
 
@@ -197,3 +205,43 @@ class AbstractLTIContext(Model):
 
 # Default implementation of the AbstractLTIContext model
 LTIContext = model_factory(AbstractLTIContext)
+
+
+def image_directory_path(instance, filename):
+    """File will be uploaded to specific path"""
+    new_filename = f"{uuid.uuid4()}{pathlib.Path(filename).suffix}"
+    return f"image_uploads/{instance.forum.id}/{instance.poster.id}/{new_filename}"
+
+
+class AbstractUploadImage(DatedModel):
+    """Abstract model for images."""
+
+    file = models.ImageField(
+        upload_to=image_directory_path,
+        max_length=100,
+        blank=True,
+        validators=[
+            FileExtensionValidator(settings.IMAGE_TYPE_ALLOWED),
+            validate_upload_image_file_size,
+        ],
+    )
+    forum = models.ForeignKey(
+        get_model("forum", "Forum"),
+        on_delete=models.CASCADE,
+        verbose_name=_("Forum"),
+    )
+    poster = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.CASCADE,
+        verbose_name=_("Poster"),
+    )
+
+    class Meta:
+        """Options for the `AbstractImage` model."""
+
+        abstract = True
+        app_label = "ashley"
+
+
+# Default implementation of the AbstractImage model
+UploadImage = model_factory(AbstractUploadImage)

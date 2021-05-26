@@ -23,7 +23,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - allow sorting discussion topics
  - add a `LTI ID` field in the sandbox settings to be able to have multiple
    forums for a same LTIContext
- - add frontend internationalization and autoload for AshleyEditor
+ - autoload for AshleyEditor component and translation to frontend
+ - add API endpoint and Amazon S3 to upload image
 
 ### Fixed
  - fix sorting on sticky and announcements topics

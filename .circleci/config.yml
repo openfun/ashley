@@ -154,6 +154,7 @@ jobs:
           DB_PORT: 5432
           ELASTICSEARCH_HOST: localhost
           ELASTICSEARCH_PORT: 9200
+          DJANGO_AWS_S3_REGION_NAME: eu-west-1
       # services
       - image: circleci/postgres:12-ram
         environment:

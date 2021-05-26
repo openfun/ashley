@@ -14,6 +14,8 @@ def site_metas(request):
                 {
                     "context": {
                         "csrftoken": get_token(request),
+                        "max_upload": settings.MAX_UPLOAD_FILE_MB,
+                        "image_type": settings.IMAGE_TYPE_ALLOWED,
                     }
                 }
             ),

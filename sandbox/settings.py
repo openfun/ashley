@@ -126,8 +126,17 @@ class Base(Configuration):
     STATIC_ROOT = os.path.join(DATA_DIR, "static")
     MEDIA_URL = "/media/"
     MEDIA_ROOT = os.path.join(DATA_DIR, "media")
-
     STATICFILES_DIRS = (MACHINA_MAIN_STATIC_DIR,)
+
+    # AWS
+    AWS_ACCESS_KEY_ID = values.SecretValue()
+    AWS_S3_CUSTOM_DOMAIN = values.Value()
+    AWS_S3_REGION_NAME = values.Value()
+    AWS_S3_URL_PROTOCOL = values.Value("https")
+    AWS_SECRET_ACCESS_KEY = values.SecretValue()
+    AWS_STORAGE_BUCKET_NAME = values.Value()
+    AWS_QUERYSTRING_AUTH = False
+    DEFAULT_FILE_STORAGE = values.Value("storages.backends.s3boto3.S3Boto3Storage")
 
     # Internationalization
     TIME_ZONE = "UTC"
@@ -256,6 +265,9 @@ class Base(Configuration):
     MACHINA_PROFILE_AVATARS_ENABLED = False
     MACHINA_USER_DISPLAY_NAME_METHOD = "get_public_username_with_default"
 
+    MAX_UPLOAD_FILE_MB = 3
+    IMAGE_TYPE_ALLOWED = ["gif", "jpeg", "jpg", "png", "svg"]
+
     # Sentry
     SENTRY_DSN = values.Value(None, environ_name="SENTRY_DSN")
 
@@ -332,6 +344,8 @@ class Development(Base):
 
     CSRF_COOKIE_SAMESITE = "Lax"
     CSRF_COOKIE_SECURE = False
+
+    DEFAULT_FILE_STORAGE = values.Value("django.core.files.storage.FileSystemStorage")
 
 
 class Test(Base):

@@ -1,4 +1,4 @@
-"""Tests for the Thumbnail API."""
+"""Tests API to manage moderators."""
 import json
 
 from django.contrib.auth import get_user_model
