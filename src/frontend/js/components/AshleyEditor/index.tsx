@@ -17,7 +17,6 @@ import createToolbarPlugin, {
 } from '@draft-js-plugins/static-toolbar';
 import createEmojiPlugin, { EmojiPluginConfig } from 'draft-js-emoji-plugin';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import ReactDOM from 'react-dom';
 import {
   BoldButton,
   HeadlineOneButton,
@@ -31,29 +30,29 @@ import {
   CodeBlockButton,
 } from '@draft-js-plugins/buttons';
 import createCodeEditorPlugin from '../../draftjs-plugins/code-editor';
+import { useIntl } from 'react-intl';
+import { messagesEditor } from './messages';
 
 interface MyEditorProps {
   autofocus?: boolean;
-  placeholder?: string;
-  target: HTMLInputElement;
+  target: string;
   emojiConfig?: EmojiPluginConfig;
-  linkPlaceholder?: string;
   mentions?: MentionData[];
 }
 
 export const AshleyEditor = (props: MyEditorProps) => {
   const [editorState, setEditorState] = useState(() => {
-    if (props.target.value) {
-      const jsonContent = JSON.parse(props.target.value);
+    const target = document.getElementById(props.target) as HTMLInputElement;
+    if (target != null && target.value) {
+      const jsonContent = JSON.parse(target.value);
       if (jsonContent) {
         return EditorState.createWithContent(convertFromRaw(jsonContent));
       }
     }
     return EditorState.createEmpty();
   });
-
   const editorRef = useRef(null as PluginEditor | null);
-
+  const intl = useIntl();
   // Instantiate plugins in a state to avoid instantiation on every render
   const [
     { emojiPlugin, linkPlugin, toolbarPlugin, codeEditorPlugin },
@@ -61,7 +60,7 @@ export const AshleyEditor = (props: MyEditorProps) => {
     emojiPlugin: createEmojiPlugin(props.emojiConfig),
     linkPlugin: createLinkPlugin({
       linkTarget: '_blank',
-      placeholder: props.linkPlaceholder,
+      placeholder: intl.formatMessage(messagesEditor.linkPlaceholderEditor),
       theme: {
         input: 'ashley-editor-link-input',
         inputInvalid: 'ashley-editor-link-input-invalid',
@@ -104,7 +103,9 @@ export const AshleyEditor = (props: MyEditorProps) => {
   };
 
   const editorChange = (stateEditor: EditorState) => {
-    props.target.value = JSON.stringify(
+    (document.getElementById(
+      props.target,
+    ) as HTMLInputElement).value = JSON.stringify(
       convertToRaw(stateEditor.getCurrentContent()),
     );
     setEditorState(stateEditor);
@@ -157,7 +158,7 @@ export const AshleyEditor = (props: MyEditorProps) => {
           editorState={editorState}
           onChange={editorChange}
           plugins={plugins}
-          placeholder={props.placeholder}
+          placeholder={intl.formatMessage(messagesEditor.placeholderEditor)}
           handleKeyCommand={keyBinding}
           handlePastedText={handlePastedText}
         />
@@ -187,7 +188,3 @@ export const AshleyEditor = (props: MyEditorProps) => {
     </div>
   );
 };
-
-export function init(props: MyEditorProps, container: HTMLElement) {
-  ReactDOM.render(<AshleyEditor {...props} />, container);
-}
