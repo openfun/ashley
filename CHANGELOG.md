@@ -15,6 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
  - Clean built frontend files before each build
+ - Upgrade node to version 14, the current LTS
 
 ### Added
  
