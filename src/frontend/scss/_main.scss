@@ -14,7 +14,9 @@
 // Import Draft-js related stylesheet
 @import 'draft-js/dist/Draft';
 @import 'draft-js-emoji-plugin/lib/plugin';
+@import '@draft-js-plugins/alignment/lib/plugin';
 @import '@draft-js-plugins/anchor/lib/plugin';
+@import '@draft-js-plugins/focus/lib/plugin';
 @import '@draft-js-plugins/mention/lib/plugin';
 @import '@draft-js-plugins/static-toolbar/lib/plugin';
 

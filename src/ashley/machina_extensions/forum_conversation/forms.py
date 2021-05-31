@@ -5,46 +5,41 @@
     This module defines forms provided by the ``forum_conversation`` application.
 
 """
-import logging
-
-from django.contrib.auth import get_user_model
 from machina.apps.forum_conversation.forms import PostForm as MachinaPostForm
-from machina.core.loading import get_class
-
-get_forum_member_display_name = get_class(
-    "forum_member.shortcuts", "get_forum_member_display_name"
-)
-User = get_user_model()
-logger = logging.getLogger(__name__)
+from machina.apps.forum_conversation.forms import TopicForm as MachinaTopicForm
 
 
 class PostForm(MachinaPostForm):
     """ Overload Machina PostForm to send extra variables to the widget editor """
 
     def __init__(self, *args, **kwargs):
-
         super().__init__(*args, **kwargs)
-
-        # collect active users for this topic
-        active_post_users = (
-            User.objects.filter(
-                is_active=True, posts__topic=self.topic, posts__approved=True
-            )
-            .exclude(pk=self.user.pk)
-            .distinct()
-        )
-
-        list_active_users = [
+        # collect extra informations used by the editor
+        self.fields["content"].widget.attrs.update(
             {
-                "name": get_forum_member_display_name(user),
-                "user": user.pk,
+                "mentions": self.topic.get_active_users(self.user),
+                "forum": self.forum.id,
             }
-            for user in active_post_users
-        ]
-        self.fields["content"].widget.attrs["mention_users"] = sorted(
-            list_active_users, key=lambda i: i["name"]
         )
 
-        logger.debug(
-            "List active users %s", self.fields["content"].widget.attrs["mention_users"]
-        )
+        # remove unused machina placeholder, placeholder is created in our component AshleyEditor
+        self.fields["content"].widget.attrs.pop("placeholder")
+
+
+class TopicForm(MachinaTopicForm):
+    """Overload Machina TopicForm to send extra variables to the widget editor for the
+    Topic creation. TopicForm is loaded only for the initial post of the topic."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.topic is not None and self.topic.posts_count > 1:
+            # will be useful only if this first post is edited after answers
+            self.fields["content"].widget.attrs[
+                "mentions"
+            ] = self.topic.get_active_users(self.user)
+
+        # send extra informations used by the editor
+        self.fields["content"].widget.attrs.update({"forum": self.forum.id})
+
+        # remove unused machina placeholder, placeholder is created in our component AshleyEditor
+        self.fields["content"].widget.attrs.pop("placeholder")

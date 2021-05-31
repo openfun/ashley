@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashleyforum\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-19 12:27+0000\n"
-"PO-Revision-Date: 2021-04-27 14:53\n"
+"POT-Creation-Date: 2021-06-02 09:21+0000\n"
+"PO-Revision-Date: 2021-06-08 12:39\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -1072,14 +1072,6 @@ msgstr "Il n'y a aucune discussion non lue."
 msgid "Forum index"
 msgstr "Accueil du forum"
 
-#: editor/widgets.py:14
-msgid "Please enter your message here..."
-msgstr "Veuillez entrer votre message ici ..."
-
-#: editor/widgets.py:15
-msgid "Fill-in or paste your URL here and press enter"
-msgstr "Saisissez ou collez votre URL ici et appuyez sur Entrée"
-
 #: machina_extensions/forum_permission/defaults.py:22
 msgid "Can rename a forum"
 msgstr "Peut renommer un forum"
@@ -1088,19 +1080,19 @@ msgstr "Peut renommer un forum"
 msgid "Can manage a user's moderator status"
 msgstr "Permet de gérer le statut de modérateur d'un utilisateur"
 
-#: models.py:36
+#: models.py:44
 msgid "LTI remote user identifier"
 msgstr "Identifiant utilisateur LTI distant"
 
-#: models.py:37
+#: models.py:45
 msgid "Unique identifier for the user on the tool consumer"
 msgstr "Identifiant utilisateur unique sur le Consumer"
 
-#: models.py:43
+#: models.py:51
 msgid "Public username"
 msgstr "Nom d'utilisateur public"
 
-#: models.py:44
+#: models.py:52
 msgid "This username will be displayed with the user's posts"
 msgstr "Ce nom d'utilisateur sera associé aux messages de l'utilisateur"
 
@@ -1142,9 +1134,13 @@ msgstr "Renommer le forum"
 msgid "Rename"
 msgstr "Renommer"
 
+#: templates/forum_conversation/partials/topic_list_header_sort.html:4
+msgid "Toggle sorting"
+msgstr "Inverser le tri"
+
 #: templates/forum_conversation/post_create.html:51
 #: templates/forum_conversation/topic_detail.html:57
-#: templates/forum_conversation/topic_list.html:38
+#: templates/forum_conversation/topic_list.html:53
 #, python-format
 msgid "on %(creation_date)s"
 msgstr "le %(creation_date)s"

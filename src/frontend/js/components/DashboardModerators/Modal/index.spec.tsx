@@ -7,6 +7,7 @@ import { Modal } from '.';
 
 jest.mock('../../../data/frontEndData', () => ({
   appFrontendContext: { csrftoken: 'foo' },
+  image_type: ['.gif', '.jpeg', '.jpg', '.png', '.svg'],
 }));
 const mocksetModalIsOpen = jest.fn();
 const myProps = {

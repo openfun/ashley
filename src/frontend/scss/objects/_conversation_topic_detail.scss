@@ -42,6 +42,12 @@
         @include blockquote;
       }
 
+      p {
+        margin-bottom: inherit;
+      }
+      p:empty {
+        height: 1em;
+      }
       .post-signature {
         margin-top: 20px;
         margin-bottom: 20px;

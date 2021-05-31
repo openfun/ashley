@@ -1,5 +1,6 @@
 import { createEvent } from '@testing-library/dom';
 import { render, fireEvent, screen } from '@testing-library/react';
+import user from '@testing-library/user-event';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { AshleyEditor } from '.';
@@ -10,8 +11,22 @@ import { BlockMapFactory } from '../../utils/test/factories';
     ref https://spectrum.chat/testing-library/help/has-anyone-successfully-used-rtl-to-test[…]nts-on-a-draftjs-text-box~f1928053-9e53-407a-9be5-70babeb4b692
         https://github.com/facebook/draft-js/issues/743
  ***/
+jest.mock('../../data/frontEndData', () => ({
+  appFrontendContext: {
+    csrftoken: 'foo',
+    max_upload: 1,
+    image_type: ['.gif', '.jpeg', '.jpg', '.png', '.svg'],
+  },
+}));
 
 describe('AshleyEditor', () => {
+  const props = {
+    forum: 1,
+  };
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   // add input target, it's value is linked with editor content and needed for all the tests
   const target = document.createElement('input');
   target.setAttribute('id', 'target');
@@ -55,6 +70,9 @@ describe('AshleyEditor', () => {
       'path[d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"]',
     );
     expect(codeButton).toBeInTheDocument();
+
+    // check if button to addImage has been added to the toolbar
+    screen.getByTestId('addImage');
   });
 
   it('loads AshleyEditor component with existing json content containing a code-block and an unstyled block', () => {
@@ -192,5 +210,47 @@ describe('AshleyEditor', () => {
     expect(screen.getAllByRole('option')).toHaveLength(2);
     screen.getByRole('option', { name: /joséphine/i });
     screen.getByRole('option', { name: /paul/i });
+  });
+
+  it('renders the editor with a pop up to add Image', () => {
+    render(
+      <IntlProvider locale="en">
+        <AshleyEditor target="target" {...props} />
+      </IntlProvider>,
+    );
+    const addToolbarButton = screen.getByTestId('addImage');
+    expect(addToolbarButton.classList[0]).not.toContain(
+      'add-image-pressed-button',
+    );
+    fireEvent.click(addToolbarButton);
+
+    // pop up is now open
+    expect(addToolbarButton.classList[0]).toContain('add-image-pressed-button');
+    screen.getByText('Add image');
+    screen.getByLabelText('Add image');
+
+    const file = new File(['image'], 'image.png', { type: 'image/png' });
+    Object.defineProperty(file, 'size', { value: 1024 * 1024 * 10 });
+
+    const input = screen.getByLabelText('Add image') as HTMLInputElement;
+    user.upload(input, file);
+    expect(input.files![0]).toStrictEqual(file);
+
+    screen.getByText(
+      'An error occured uploading the image, the size of the file is over 1MB.',
+    );
+    // pop up is still open
+    expect(addToolbarButton.classList[0]).toContain('add-image-pressed-button');
+
+    // click on another button, make sure it closes the modal
+    fireEvent.click(
+      screen.getByRole('button', {
+        name: /h1/i,
+      }),
+    );
+    // pop up is now closed
+    expect(addToolbarButton.classList[0]).not.toContain(
+      'add-image-pressed-button',
+    );
   });
 });
