@@ -1,4 +1,28 @@
 {
+  "components.AshleyEditor.ImageAdd.addImageFileUploadTitle": {
+    "description": "Title for the modal to upload an image.",
+    "message": "Charger une image"
+  },
+  "components.AshleyEditor.ImageAdd.addImageFromComputer": {
+    "description": "Title for the button to upload an image.",
+    "message": "Ajouter une image"
+  },
+  "components.AshleyEditor.ImageAdd.addImageFromComputerError": {
+    "description": "Error message on uploading image",
+    "message": "Une erreur est survenue lors du téléchargement de l'image, veuillez réessayer ou contacter le support"
+  },
+  "components.AshleyEditor.ImageAdd.addImageFromComputerErrorMaxUpload": {
+    "description": "Error message on uploading image, max size reached",
+    "message": "Une erreur est survenue lors du téléchargement de l'image, la taille du fichier est supérieure à {maxSize}Mo."
+  },
+  "components.AshleyEditor.linkPlaceholderEditor": {
+    "description": "Placeholder when adding a link in the editor",
+    "message": "Saisissez ou collez votre URL ici et appuyez sur Entrée"
+  },
+  "components.AshleyEditor.placeholderEditor": {
+    "description": "Placeholder for new posts when editor is empty",
+    "message": "Veuillez entrer votre message ici ..."
+  },
   "components.DashboardModerators.ButtonChangeRoleCta.modalConfirmation": {
     "description": "Body for the modal to promote or revoke the defined user to moderator, to ask the user to confirm this action.",
     "message": "Etes-vous certains que vous souhaitez poursuivre cette action ?"

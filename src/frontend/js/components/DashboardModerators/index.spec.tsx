@@ -7,6 +7,7 @@ import { DashboardModerators } from '.';
 
 jest.mock('../../data/frontEndData', () => ({
   appFrontendContext: { csrftoken: 'foo' },
+  image_type: ['.gif', '.jpeg', '.jpg', '.png', '.svg'],
 }));
 
 describe('<DashboardModerators />', () => {

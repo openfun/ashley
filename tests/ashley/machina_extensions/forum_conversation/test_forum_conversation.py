@@ -11,7 +11,7 @@ from ashley.factories import (
     TopicFactory,
     UserFactory,
 )
-from ashley.machina_extensions.forum_conversation.forms import PostForm
+from ashley.machina_extensions.forum_conversation.forms import PostForm, TopicForm
 
 get_forum_member_display_name = get_class(
     "forum_member.shortcuts", "get_forum_member_display_name"
@@ -50,8 +50,8 @@ class ForumConversationTestPostCreateView(TestCase):
         topic = TopicFactory(forum=self.forum, poster=user1)
         # Load PostForm for user1
         form = PostForm(user=user1, forum=self.forum, topic=topic)
-        # No post created yet, mention_users should be empty
-        assert form.fields["content"].widget.attrs["mention_users"] == []
+        # No post created yet, mentions should be empty
+        assert form.fields["content"].widget.attrs["mentions"] == []
 
     def test_list_active_users_ignore_current_user(self):
         """
@@ -79,7 +79,7 @@ class ForumConversationTestPostCreateView(TestCase):
         # User2 loads the form
         form = PostForm(user=user2, forum=self.forum, topic=topic)
         # User1 must be listed in users
-        assert form.fields["content"].widget.attrs["mention_users"] == [
+        assert form.fields["content"].widget.attrs["mentions"] == [
             {
                 "name": "Benoit",
                 "user": user1.id,
@@ -88,7 +88,7 @@ class ForumConversationTestPostCreateView(TestCase):
         # User1 loads the form
         form = PostForm(user=user1, forum=self.forum, topic=topic)
         # Check current user is ignored in the list
-        assert form.fields["content"].widget.attrs["mention_users"] == []
+        assert form.fields["content"].widget.attrs["mentions"] == []
 
     def test_list_active_users_ordered_by_alphabetical_order(self):
         """
@@ -126,7 +126,7 @@ class ForumConversationTestPostCreateView(TestCase):
             topic=topic,
         )
         # user2 sees user1
-        assert form.fields["content"].widget.attrs["mention_users"] == [
+        assert form.fields["content"].widget.attrs["mentions"] == [
             {
                 "name": "Benoit",
                 "user": user1.id,
@@ -138,7 +138,7 @@ class ForumConversationTestPostCreateView(TestCase):
         # Load form from user 3
         form = PostForm(user=user3, forum=self.forum, topic=topic)
         # Alfred should be before Benoit
-        assert form.fields["content"].widget.attrs["mention_users"] == [
+        assert form.fields["content"].widget.attrs["mentions"] == [
             {
                 "name": "Alfred",
                 "user": user2.id,
@@ -152,7 +152,24 @@ class ForumConversationTestPostCreateView(TestCase):
         PostFactory(topic=topic, poster=user3)
         form = PostForm(user=user4, forum=self.forum, topic=topic)
         # Alfred should be before Aurélien and before Benoit
-        assert form.fields["content"].widget.attrs["mention_users"] == [
+        assert form.fields["content"].widget.attrs["mentions"] == [
+            {
+                "name": "Alfred",
+                "user": user2.id,
+            },
+            {
+                "name": "Aurélien",
+                "user": user3.id,
+            },
+            {
+                "name": "Benoit",
+                "user": user1.id,
+            },
+        ]
+        # Loads topic form loaded when editing first post
+        form = TopicForm(user=user4, forum=self.forum, topic=topic)
+        # we should have the list of users identical than when post form is loaded
+        assert form.fields["content"].widget.attrs["mentions"] == [
             {
                 "name": "Alfred",
                 "user": user2.id,
@@ -199,7 +216,17 @@ class ForumConversationTestPostCreateView(TestCase):
         # user2 loads the form
         form = PostForm(user=user2, forum=self.forum, topic=topic)
         # user2 only see one time user1
-        assert form.fields["content"].widget.attrs["mention_users"] == [
+        assert form.fields["content"].widget.attrs["mentions"] == [
+            {
+                "name": "Benoit",
+                "user": user1.id,
+            }
+        ]
+
+        # user2 loads topic form loaded when editing first post
+        form = TopicForm(user=user2, forum=self.forum, topic=topic)
+        # we should have the list of users identical than when post form is loaded
+        assert form.fields["content"].widget.attrs["mentions"] == [
             {
                 "name": "Benoit",
                 "user": user1.id,
@@ -209,7 +236,17 @@ class ForumConversationTestPostCreateView(TestCase):
         # user1 loads the form
         form = PostForm(user=user1, forum=self.forum, topic=topic)
         # user1 only see one time user1
-        assert form.fields["content"].widget.attrs["mention_users"] == [
+        assert form.fields["content"].widget.attrs["mentions"] == [
+            {
+                "name": "Alfred",
+                "user": user2.id,
+            },
+        ]
+
+        # user1 loads topic form loaded when editing first post
+        form = TopicForm(user=user1, forum=self.forum, topic=topic)
+        # we should have the list of users identical than when post form is loaded
+        assert form.fields["content"].widget.attrs["mentions"] == [
             {
                 "name": "Alfred",
                 "user": user2.id,
@@ -249,7 +286,7 @@ class ForumConversationTestPostCreateView(TestCase):
         # user4 loads the form
         form = PostForm(user=user4, forum=self.forum, topic=topic)
         # Two users should be listed
-        assert form.fields["content"].widget.attrs["mention_users"] == [
+        assert form.fields["content"].widget.attrs["mentions"] == [
             {
                 "name": "Alfred",
                 "user": user2.id,
@@ -270,7 +307,7 @@ class ForumConversationTestPostCreateView(TestCase):
             forum=self.forum,
             topic=topic2,
         )
-        assert form.fields["content"].widget.attrs["mention_users"] == [
+        assert form.fields["content"].widget.attrs["mentions"] == [
             {
                 "name": "Aurélien",
                 "user": user3.id,
@@ -282,7 +319,21 @@ class ForumConversationTestPostCreateView(TestCase):
             forum=self.forum,
             topic=topic,
         )
-        assert form.fields["content"].widget.attrs["mention_users"] == [
+        assert form.fields["content"].widget.attrs["mentions"] == [
+            {
+                "name": "Alfred",
+                "user": user2.id,
+            },
+            {
+                "name": "Benoit",
+                "user": user1.id,
+            },
+        ]
+
+        # user4 loads topic form loaded when editing first post
+        form = TopicForm(user=user4, forum=self.forum, topic=topic)
+        # we should have the list of users identical than when post form is loaded
+        assert form.fields["content"].widget.attrs["mentions"] == [
             {
                 "name": "Alfred",
                 "user": user2.id,
@@ -314,7 +365,7 @@ class ForumConversationTestPostCreateView(TestCase):
         post = PostFactory(topic=topic, poster=user1)
 
         form = PostForm(user=user2, forum=self.forum, topic=topic)
-        assert form.fields["content"].widget.attrs["mention_users"] == [
+        assert form.fields["content"].widget.attrs["mentions"] == [
             {
                 "name": "Benoit",
                 "user": user1.id,
@@ -330,7 +381,7 @@ class ForumConversationTestPostCreateView(TestCase):
             topic=topic,
         )
         # List of active users should be empty
-        assert form.fields["content"].widget.attrs["mention_users"] == []
+        assert form.fields["content"].widget.attrs["mentions"] == []
 
     def test_list_active_users_only_concerns_active_users(self):
         """
@@ -349,10 +400,14 @@ class ForumConversationTestPostCreateView(TestCase):
         self.context.sync_user_groups(user2, ["student"])
 
         topic = TopicFactory(forum=self.forum, poster=user1)
-        PostFactory(topic=topic, poster=user1)
+        # controls form topic, the one loaded when there's no post
+        form = TopicForm(user=user2, forum=self.forum, topic=topic)
+        assert form.fields["content"].widget.attrs.get("mentions", None) is None
 
+        # controls post topic
+        PostFactory(topic=topic, poster=user1)
         form = PostForm(user=user2, forum=self.forum, topic=topic)
-        assert form.fields["content"].widget.attrs["mention_users"] == [
+        assert form.fields["content"].widget.attrs["mentions"] == [
             {
                 "name": "Benoit",
                 "user": user1.id,
@@ -361,10 +416,18 @@ class ForumConversationTestPostCreateView(TestCase):
         # user1 becomes inactive
         user1.is_active = False
         user1.save()
+
+        # Add another post to load the list in topic form
+        PostFactory(topic=topic, poster=user1)
         # user3 loads the form for topic
         form = PostForm(user=user2, forum=self.forum, topic=topic)
         # We should only see user1 in the list of active users for this topic
-        assert form.fields["content"].widget.attrs["mention_users"] == []
+        assert form.fields["content"].widget.attrs["mentions"] == []
+
+        # user3 loads the form for first post, topic form is loaded
+        form = TopicForm(user=user2, forum=self.forum, topic=topic)
+        # mention param exist now but it's empty
+        assert form.fields["content"].widget.attrs["mentions"] == []
 
     def test_access_topic_reply_form(self):
         """
@@ -391,3 +454,24 @@ class ForumConversationTestPostCreateView(TestCase):
         response = self.client.get(url_topic_reply, follow=True)
         # Check
         assert response.status_code == 200
+
+    def test_params_form_user_current_topic(self):
+        """
+        The form send forum and poster information to the editor
+        """
+        user1 = UserFactory(lti_consumer=self.lti_consumer)
+        user2 = UserFactory(lti_consumer=self.lti_consumer)
+        self.context.sync_user_groups(user1, ["student"])
+        self.context.sync_user_groups(user1, ["student"])
+
+        # Set up topic and initial post
+        topic = TopicFactory(forum=self.forum, poster=user1)
+        PostFactory(topic=topic, poster=user1)
+        PostFactory(topic=topic, poster=user2)
+        # Load TopicForm
+        form = TopicForm(user=user1, forum=self.forum, topic=topic)
+        assert form.fields["content"].widget.attrs["forum"] == topic.forum.id
+
+        # PostForm has the parameters as well
+        form = PostForm(user=user2, forum=self.forum, topic=topic)
+        assert form.fields["content"].widget.attrs["forum"] == topic.forum.id

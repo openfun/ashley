@@ -6,7 +6,8 @@ import {
   Modifier,
 } from 'draft-js';
 import createLinkPlugin from '@draft-js-plugins/anchor';
-import Editor from '@draft-js-plugins/editor';
+
+import Editor, { composeDecorators } from '@draft-js-plugins/editor';
 import PluginEditor from '@draft-js-plugins/editor/lib';
 import createMentionPlugin, {
   defaultSuggestionsFilter,
@@ -16,6 +17,7 @@ import createToolbarPlugin, {
   Separator,
 } from '@draft-js-plugins/static-toolbar';
 import createEmojiPlugin, { EmojiPluginConfig } from 'draft-js-emoji-plugin';
+import createImagePlugin from '@draft-js-plugins/image';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   BoldButton,
@@ -30,6 +32,11 @@ import {
   CodeBlockButton,
 } from '@draft-js-plugins/buttons';
 import createCodeEditorPlugin from '../../draftjs-plugins/code-editor';
+import { ImageAdd } from './ImageAdd';
+import createAlignmentPlugin from '@draft-js-plugins/alignment';
+import createFocusPlugin from '@draft-js-plugins/focus';
+import createResizeablePlugin from '@draft-js-plugins/resizeable';
+import createBlockDndPlugin from '@draft-js-plugins/drag-n-drop';
 import { useIntl } from 'react-intl';
 import { messagesEditor } from './messages';
 
@@ -38,6 +45,7 @@ interface MyEditorProps {
   target: string;
   emojiConfig?: EmojiPluginConfig;
   mentions?: MentionData[];
+  forum: number;
 }
 
 export const AshleyEditor = (props: MyEditorProps) => {
@@ -55,7 +63,16 @@ export const AshleyEditor = (props: MyEditorProps) => {
   const intl = useIntl();
   // Instantiate plugins in a state to avoid instantiation on every render
   const [
-    { emojiPlugin, linkPlugin, toolbarPlugin, codeEditorPlugin },
+    {
+      emojiPlugin,
+      linkPlugin,
+      toolbarPlugin,
+      codeEditorPlugin,
+      blockDndPlugin,
+      alignmentPlugin,
+      focusPlugin,
+      resizeablePlugin,
+    },
   ] = useState({
     emojiPlugin: createEmojiPlugin(props.emojiConfig),
     linkPlugin: createLinkPlugin({
@@ -69,7 +86,29 @@ export const AshleyEditor = (props: MyEditorProps) => {
     }),
     toolbarPlugin: createToolbarPlugin(),
     codeEditorPlugin: createCodeEditorPlugin(),
+    blockDndPlugin: createBlockDndPlugin(),
+    alignmentPlugin: createAlignmentPlugin(),
+    focusPlugin: createFocusPlugin(),
+    resizeablePlugin: createResizeablePlugin({
+      vertical: 'relative',
+      horizontal: 'relative',
+    }),
   });
+
+  const [{ decorator }] = useState({
+    decorator: composeDecorators(
+      resizeablePlugin.decorator,
+      alignmentPlugin.decorator,
+      focusPlugin.decorator,
+      blockDndPlugin.decorator,
+    ),
+  });
+
+  const [{ imagePlugin }] = useState({
+    imagePlugin: createImagePlugin({ decorator }),
+  });
+
+  const { AlignmentTool } = alignmentPlugin;
 
   useEffect(() => {
     if (props.autofocus) {
@@ -103,9 +142,8 @@ export const AshleyEditor = (props: MyEditorProps) => {
   };
 
   const editorChange = (stateEditor: EditorState) => {
-    (document.getElementById(
-      props.target,
-    ) as HTMLInputElement).value = JSON.stringify(
+    const target = document.getElementById(props.target) as HTMLInputElement;
+    target.value = JSON.stringify(
       convertToRaw(stateEditor.getCurrentContent()),
     );
     setEditorState(stateEditor);
@@ -127,7 +165,17 @@ export const AshleyEditor = (props: MyEditorProps) => {
   };
 
   const PluginRenderers = [<emojiPlugin.EmojiSuggestions key="emoji" />];
-  const plugins = [toolbarPlugin, emojiPlugin, linkPlugin, codeEditorPlugin];
+  const plugins = [
+    toolbarPlugin,
+    emojiPlugin,
+    linkPlugin,
+    codeEditorPlugin,
+    blockDndPlugin,
+    focusPlugin,
+    alignmentPlugin,
+    resizeablePlugin,
+    imagePlugin,
+  ];
 
   if (props.mentions) {
     const [{ mentionPlugin }] = useState({
@@ -162,6 +210,7 @@ export const AshleyEditor = (props: MyEditorProps) => {
           handleKeyCommand={keyBinding}
           handlePastedText={handlePastedText}
         />
+        <AlignmentTool />
         {PluginRenderers.map((Plugin) => Plugin)}
       </div>
       <div className="ashley-editor-toolbar">
@@ -171,6 +220,13 @@ export const AshleyEditor = (props: MyEditorProps) => {
               <BoldButton {...externalProps} />
               <ItalicButton {...externalProps} />
               <UnderlineButton {...externalProps} />
+              <ImageAdd
+                editorState={editorState}
+                onChange={editorChange}
+                modifier={imagePlugin.addImage}
+                forum={props.forum}
+                {...externalProps}
+              />
               <linkPlugin.LinkButton {...externalProps} />
               <Separator {...externalProps} />
               <HeadlineOneButton {...externalProps} />

@@ -3,6 +3,7 @@ Template context processors
 """
 import json
 
+from django.conf import settings
 from django.middleware.csrf import get_token
 
 
