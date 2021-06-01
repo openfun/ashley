@@ -36,6 +36,7 @@ _FORUM_MODERATOR_PERMISSIONS = _FORUM_BASE_PERMISSIONS + [
 _FORUM_ADMIN_PERMISSIONS = _FORUM_MODERATOR_PERMISSIONS + [
     "can_rename_forum",
     "can_manage_moderator",
+    "can_archive_forum",
 ]
 
 DEFAULT_FORUM_BASE_PERMISSIONS = lazy(

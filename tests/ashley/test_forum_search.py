@@ -581,3 +581,34 @@ class ForumSearchTestCase(TestCase):
         self.assertContains(
             response, "Your search has returned <b>1</b> result", html=True
         )
+
+    def test_forum_search_archived_forum(self):
+        """Content of an archived forum should not be indexed"""
+        post = PostFactory(text="yah7Eo0A")
+        forum = post.topic.forum
+
+        user = UserFactory()
+        assign_perm("can_read_forum", user, forum)
+
+        # Index the post in Elasticsearch
+        call_command("rebuild_index", interactive=False)
+
+        self.client.force_login(user)
+        response = self.client.get("/forum/search/?q=yah7")
+        self.assertContains(
+            response, "Your search has returned <b>1</b> result", html=True
+        )
+        self.assertContains(response, post, html=True)
+
+        # Archive the forum
+        forum.archived = True
+        forum.save()
+
+        # Re-build the index
+        call_command("rebuild_index", interactive=False)
+
+        # The same search should return nothing
+        response = self.client.get("/forum/search/?q=yah7")
+        self.assertContains(
+            response, "Your search has returned <b>0</b> results", html=True
+        )

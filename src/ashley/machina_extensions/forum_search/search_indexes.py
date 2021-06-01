@@ -77,9 +77,16 @@ class PostIndex(indexes.SearchIndex, indexes.Indexable):
         return obj.topic.subject
 
     def index_queryset(self, using=None):
-        return Post.objects.all().exclude(approved=False)
+        return (
+            Post.objects.all()
+            .exclude(approved=False)
+            .exclude(topic__forum__archived=True)
+        )
 
     def read_queryset(self, using=None):
         return (
-            Post.objects.all().exclude(approved=False).select_related("topic", "poster")
+            Post.objects.all()
+            .exclude(approved=False)
+            .exclude(topic__forum__archived=True)
+            .select_related("topic", "poster")
         )
