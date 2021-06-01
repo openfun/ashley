@@ -18,6 +18,11 @@ class PermissionConfig(BasePermissionConfig):
     permissions = BasePermissionConfig.permissions + [
         # Forums
         {
+            "codename": "can_archive_forum",
+            "label": _("Can archive a forum"),
+            "scope": "forum",
+        },
+        {
             "codename": "can_rename_forum",
             "label": _("Can rename a forum"),
             "scope": "forum",

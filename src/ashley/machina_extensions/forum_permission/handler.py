@@ -22,6 +22,10 @@ class PermissionHandler(BasePermissionHandler):
         # we are scoped into, if any.
         self.current_lti_context_id: Optional[int] = None
 
+    def can_archive_forum(self, forum, user):
+        """ Given a forum, checks whether the user can archive it. """
+        return self._perform_basic_permission_check(forum, user, "can_archive_forum")
+
     def can_rename_forum(self, forum, user):
         """ Given a forum, checks whether the user can rename it. """
         return self._perform_basic_permission_check(forum, user, "can_rename_forum")
@@ -42,7 +46,9 @@ class PermissionHandler(BasePermissionHandler):
         """
         forums_to_show = super().forum_list_filter(qs, user)
         if self.current_lti_context_id:
-            return forums_to_show.filter(lti_contexts__id=self.current_lti_context_id)
+            return forums_to_show.filter(archived=False).filter(
+                lti_contexts__id=self.current_lti_context_id
+            )
         return forums_to_show
 
     def get_readable_forums(self, forums, user):

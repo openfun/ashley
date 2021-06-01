@@ -27,6 +27,8 @@ class AbstractForum(MachinaAbstractForum):
 
     lti_contexts = models.ManyToManyField(LTIContext)
 
+    archived = models.BooleanField(default=False)
+
     class Meta(MachinaAbstractForum.Meta):
         abstract = True
 

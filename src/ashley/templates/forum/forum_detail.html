@@ -11,21 +11,23 @@
 {% block content %}
 {% get_permission 'can_rename_forum' forum request.user as user_can_rename_forum %}
 {% get_permission 'can_manage_moderator' forum request.user as user_can_manage_moderator %}
+{% get_permission 'can_archive_forum' forum request.user as user_can_archive_forum %}
 <div class="row">
   <div class="col-12">
     <h1>
         {{ forum.name }}
-        {% if user_can_rename_forum or user_can_manage_moderator %}
+        {% if user_can_rename_forum or user_can_manage_moderator or user_can_archive_forum %}
         <div class="btn-group moderation-dropdown">
           <button id="id_dropdown_moderation_menu_button" class="btn btn-warning btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-edit">&nbsp;&nbsp;</i><span class="caret"></span></button>
           <div class="dropdown-menu" aria-labelledby="id_dropdown_moderation_menu_button" style="min-width:13rem;">
             {% if user_can_rename_forum %}<a href="{% url 'forum:rename' forum.pk %}" title="{% trans "Rename forum" %}" class="dropdown-item">{% trans "Rename forum" %}</a>{% endif %}
             {% if user_can_manage_moderator %}<a href="{% url 'moderators'%}" title="{% trans "Manage moderators" %}"  class="dropdown-item">{% trans "Manage moderators" %}</a>{% endif %}
+            {% if user_can_archive_forum %}<a href="{% url 'forum:archive' forum.pk %}" title="{% trans "Delete forum" %}" class="dropdown-item">{% trans "Delete forum" %}</a>{% endif %}
           </div>
         </div>
         {% endif %}
     </h1>
-    
+
   </div>
 </div>
 {% if sub_forums %}

@@ -5,6 +5,7 @@
     This module defines views provided by the ``forum`` application.
 
 """
+from django.http import Http404
 from django.urls import reverse
 from django.utils.http import urlencode
 from django.views.generic import UpdateView
@@ -16,6 +17,7 @@ from machina.core.db.models import get_model
 from machina.core.loading import get_class
 
 Forum = get_model("forum", "Forum")
+
 
 ORDER_VAR = "o"
 PermissionRequiredMixin: BasePermissionRequiredMixin = get_class(
@@ -50,6 +52,16 @@ class ForumView(BaseForumView):  # pylint: disable=too-many-ancestors
         self.params = dict(request.GET.items())
         response = super().get(request, **kwargs)
         return response
+
+    def get_forum(self):
+        """
+        Returns the forum to consider and checks that it has not been
+        archived.
+        """
+        forum = super().get_forum()
+        if forum.archived:
+            raise Http404()
+        return forum
 
     def get_ordering(self):
         """Gets order requested in url"""
@@ -130,6 +142,31 @@ class ForumView(BaseForumView):  # pylint: disable=too-many-ancestors
             return pfx + self.list_display[idx]
 
         return self.get_default_index_order().get("col")
+
+
+class ForumArchiveView(PermissionRequiredMixin, UpdateView):
+    """Displays the form to archive a forum."""
+
+    model = Forum
+    fields = ["archived"]
+    template_name = "forum/forum_archive.html"
+
+    def get_success_url(self):
+        """Returns the success URL to redirect the user to."""
+        return reverse("forum:index")
+
+    # pylint: disable=unused-argument
+    def perform_permissions_check(self, user, obj, perms):
+        """Performs the permissions check."""
+        return self.request.forum_permission_handler.can_archive_forum(obj, user)
+
+    def get_form_kwargs(self):
+        """
+        Ignores data posted by the user and forces the archiving of the forum.
+        """
+        kwargs = super().get_form_kwargs()
+        kwargs.update({"data": {"archived": True}})
+        return kwargs
 
 
 class ForumRenameView(PermissionRequiredMixin, UpdateView):

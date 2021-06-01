@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - allow to search users by any of its meaningful fields in Django admin
+- allow to archive a forum with the new `can_archive_forum` permission
 
 ## [1.0.0] - 2021-08-16
 

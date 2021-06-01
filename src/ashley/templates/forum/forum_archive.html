@@ -1,0 +1,42 @@
+{% extends "board_base.html" %}
+{% load i18n %}
+
+{% block sub_title %}{% trans "Rename the forum" %}{% endblock sub_title %}
+
+{% block content %}
+<div class="row member-profile-edit">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="m-0 h5 card-title">{% trans "Delete the forum" %}</h3>
+      </div>
+      <div class="card-body">
+          <div class="mb-3 warning-message">
+              <p>{% trans "Are you sure you want to delete this forum ?" %}</p>
+              <p class="ml-3 pb-3">
+                  <strong>{{ object.name }}</strong>
+              <p>
+          </div>
+        <form method="post" action="." class="form" enctype="multipart/form-data" novalidate>{% csrf_token %}
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-actions">
+                <input type="submit" class="btn btn-large btn-warning" value="{% trans "Delete" %}" />
+                  <a class="btn btn-large btn-secondary" href="{% url 'forum:forum' slug=object.slug pk=object.pk %}">{% trans "Cancel" %}</a>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block extra_css %}
+{{ form.media.css }}
+{% endblock extra_css %}
+
+{% block extra_js %}
+{{ form.media.js }}
+{% endblock extra_js %}
