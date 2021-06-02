@@ -2,6 +2,7 @@
 import json
 
 import factory
+from django.contrib.auth import get_user_model
 from django.utils.text import slugify
 from factory.django import DjangoModelFactory
 from faker import Faker
@@ -14,7 +15,7 @@ Forum = get_model("forum", "Forum")  # pylint: disable=C0103
 LTIContext = get_model("ashley", "LTIContext")  # pylint: disable=C0103
 Post = get_model("forum_conversation", "Post")  # pylint: disable=C0103
 Topic = get_model("forum_conversation", "Topic")  # pylint: disable=C0103
-User = get_model("ashley", "User")  # pylint: disable=C0103
+User = get_user_model()
 
 
 class UserFactory(DjangoModelFactory):
