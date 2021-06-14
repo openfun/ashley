@@ -14,7 +14,15 @@ from django.utils import timezone
 from machina.apps.forum_permission.shortcuts import assign_perm
 from machina.core.db.models import get_model
 
-from ashley.factories import ForumFactory, PostFactory, TopicFactory, UserFactory
+from ashley import SESSION_LTI_CONTEXT_ID
+from ashley.factories import (
+    ForumFactory,
+    LTIContextFactory,
+    PostFactory,
+    TopicFactory,
+    UserFactory,
+)
+from ashley.machina_extensions.forum_search.forms import SearchForm
 
 Forum = get_model("forum", "Forum")
 
@@ -445,3 +453,131 @@ class ForumSearchTestCase(TestCase):
 
     def tearDown(self):
         haystack.connections["default"].get_backend().clear()
+
+    def test_forum_search_several_forums_lti_context_search(self):
+        """
+        Creates forum in different lti_context, make sure user can't
+        search into it, even if he has access to this forum.
+        """
+        user = UserFactory()
+
+        lti_context = LTIContextFactory(lti_consumer=user.lti_consumer)
+        lti_context2 = LTIContextFactory(lti_consumer=user.lti_consumer)
+        forum = ForumFactory()
+        forum2 = ForumFactory()
+        forum3 = ForumFactory()
+        forum.lti_contexts.add(lti_context)
+        forum2.lti_contexts.add(lti_context)
+        forum3.lti_contexts.add(lti_context2)
+
+        post1 = PostFactory(
+            topic=TopicFactory(forum=forum),
+            subject="Forum same lti_context",
+            text="Hello world",
+        )
+
+        post2 = PostFactory(
+            topic=TopicFactory(forum=forum2),
+            subject="Forum2 same lti_context",
+            text="Good morning world",
+        )
+        post3 = PostFactory(
+            topic=TopicFactory(forum=forum3),
+            subject="Forum3 different lti_context",
+            text="Welcome world",
+        )
+        # Creates the session
+        self.client.force_login(user, "ashley.auth.backend.LTIBackend")
+        session = self.client.session
+        session[SESSION_LTI_CONTEXT_ID] = lti_context.id
+        session.save()
+
+        assign_perm("can_read_forum", user, forum)
+        assign_perm("can_read_forum", user, forum2)
+        assign_perm("can_read_forum", user, forum3)
+
+        # Index the post in Elasticsearch
+        call_command("rebuild_index", interactive=False)
+
+        response = self.client.get("/forum/search/?q=world")
+
+        self.assertContains(
+            response, "Your search has returned <b>2</b> results", html=True
+        )
+        self.assertContains(response, post1.subject)
+        self.assertContains(response, post2.subject)
+        self.assertNotContains(response, post3.subject)
+
+        # Change the session to connect user to lti_context2
+        self.client.force_login(user, "ashley.auth.backend.LTIBackend")
+        session = self.client.session
+        session[SESSION_LTI_CONTEXT_ID] = lti_context2.id
+        session.save()
+
+        response = self.client.get("/forum/search/?q=world")
+        # We should only have one result
+        self.assertContains(
+            response, "Your search has returned <b>1</b> result", html=True
+        )
+        self.assertNotContains(response, post1.subject)
+        self.assertNotContains(response, post2.subject)
+        self.assertContains(response, post3.subject)
+
+    def test_forum_search_with_unautorized_forum_from_other_lti_context(self):
+        """
+        Try to search in a forum that is not part of our LTIContext by submitting
+        in the search form a forum from another LTIContext.
+        """
+        user = UserFactory()
+
+        lti_context = LTIContextFactory(lti_consumer=user.lti_consumer)
+        lti_context2 = LTIContextFactory(lti_consumer=user.lti_consumer)
+        forum = ForumFactory()
+        forum2 = ForumFactory()
+        forum.lti_contexts.add(lti_context)
+        forum2.lti_contexts.add(lti_context2)
+
+        PostFactory(
+            topic=TopicFactory(forum=forum),
+            text="Good morning world",
+        )
+
+        PostFactory(
+            topic=TopicFactory(forum=forum2),
+            text="Hello world",
+        )
+        # Index posts in Elasticsearch
+        call_command("rebuild_index", interactive=False)
+
+        # Connects and gets acces to the forum
+        self.client.force_login(user, "ashley.auth.backend.LTIBackend")
+        assign_perm("can_read_forum", user, forum)
+        assign_perm("can_read_forum", user, forum2)
+        session = self.client.session
+        session[SESSION_LTI_CONTEXT_ID] = lti_context.id
+        session.save()
+
+        form = SearchForm(user=user, lti_context=lti_context)
+
+        # Checks that only the forum that is allowed is proposed as choice
+        self.assertEqual(
+            form.fields["search_forums"].choices,
+            [(forum.id, "{} {}".format("-" * forum.margin_level, forum.name))],
+        )
+        # Despite that, we force the request on the forum that is not allowed
+        response = self.client.get(f"/forum/search/?q=world&search_forums={forum2.id}")
+        self.assertEqual(response.status_code, 200)
+        # Controls that we get an error and the search is not executed
+        self.assertContains(
+            response,
+            f"Select a valid choice. {forum2.id} is not one of the available choices.",
+            html=True,
+        )
+
+        # Valid request, we search on the forum that is allowed, we get only one result
+        # as forum2 is ignored
+        response = self.client.get(f"/forum/search/?q=world&search_forums={forum.id}")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response, "Your search has returned <b>1</b> result", html=True
+        )

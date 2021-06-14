@@ -17,6 +17,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - Clean built frontend files before each build
  - Upgrade node to version 14, the current LTS
  - Fix import of the user model in the factory
+ - Filter search results to current LTIContext
 
 ### Added
  
