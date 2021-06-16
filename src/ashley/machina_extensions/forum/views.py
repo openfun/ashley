@@ -72,7 +72,8 @@ class ForumView(BaseForumView):  # pylint: disable=too-many-ancestors
     def get_queryset(self):
         """Returns the list of items for this view ordered by asked param."""
         query = super().get_queryset()
-        return query.order_by(self.get_ordering_column())
+        # Type of topic is kept as first order argument to keep sticky option
+        return query.order_by("-type", self.get_ordering_column())
 
     def get_context_data(self, **kwargs):
         """Returns the context data to provide to the template."""

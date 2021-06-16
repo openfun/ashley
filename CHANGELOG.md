@@ -25,6 +25,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - add django rest framework to promote/revoke moderators for current LTIContext
  - add new role moderator and permission to manage moderators
 
+### Fixed
+ - fix sorting on sticky and announcements topics
+
 ## [1.0.0-beta.5] - 2020-03-01
 
 ### Changed
