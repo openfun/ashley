@@ -15,6 +15,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - track topic views with XAPI events
 - automatically assign a public_username to instructors and administrators
 when none is defined in the LTI authentication
+- allow  administrators and instructors to move topics to forums in the same 
+LTIContext
 
 ## [1.0.0] - 2021-08-16
 

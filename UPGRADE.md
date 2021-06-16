@@ -15,8 +15,9 @@ They will be documented in this file:
 
 ### Unreleased
 
-A new permission has been added in this release : `can_archive_forum`.
-By default, this permission will only be added to new users with administrator or
+Two new permissions have been added in this release : `can_archive_forum`, 
+`can_move_topics`.
+By default, these permissions will only be added to new users with administrator or
 instructor roles. If you want to update the group permissions on users already
 existing in the database, to reflect what is defined in the setting
 `ASHLEY_DEFAULT_FORUM_ROLES_PERMISSIONS`, you can execute the following

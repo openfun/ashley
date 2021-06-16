@@ -204,6 +204,7 @@ class Base(Configuration):
         "ashley",
         "ashley.machina_extensions.forum",
         "ashley.machina_extensions.forum_conversation",
+        "ashley.machina_extensions.forum_moderation",
         "ashley.machina_extensions.forum_permission",
         "ashley.machina_extensions.forum_search",
         # Django LTI Toolbox
@@ -216,7 +217,6 @@ class Base(Configuration):
         "machina.apps.forum_conversation.forum_polls",
         "machina.apps.forum_feeds",
         "machina.apps.forum_member",
-        "machina.apps.forum_moderation",
         "machina.apps.forum_tracking",
         "rest_framework",
     ]

@@ -2,7 +2,7 @@
     Forum views
     ===========
 
-    This module defines views provided by the ``forum`` application.
+    This module overrides views provided by the ``forum`` application.
 
 """
 from django.http import Http404
