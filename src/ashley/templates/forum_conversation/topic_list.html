@@ -9,23 +9,39 @@
     <div class="card topiclist">
       <div class="p-0 card-header">
         <div class="row m-0 px-3 py-2">
-              <div class="pl-0 col-md-6 col-sm-9 col-12 topic-name-col sortable {{ header.0.class_attrib }}">
+              <div class="pl-0 col-md-6 col-sm-9 col-12 topic-name-col {% if topics != announces %}sortable {{ header.0.class_attrib }}{% endif %}">
                 <h3 class="m-0 card-title h5 text-dark">
+                    {% if topics == announces %}
+                      {% trans topic_list_title %}
+                    {% else %}
                       <a href="{{ header.0.url_order }}">{% trans topic_list_title %}</a>
                       {% include "forum_conversation/partials/topic_list_header_sort.html" with col=header.0%}
+                    {% endif %}
                 </h3>
               </div>
-              <div class="col-md-2 d-none d-md-block text-center text-nowrap topic-count-col sortable {{ header.1.class_attrib }}">
-                    <a href="{{ header.1.url_order }}">{% trans "Replies" %}</a>
-                    {% include "forum_conversation/partials/topic_list_header_sort.html" with col=header.1%}
+              <div class="col-md-2 d-none d-md-block text-center text-nowrap topic-count-col {% if topics != announces %}sortable {{ header.1.class_attrib }}{% endif %}">
+                    {% if topics == announces %}
+                      {% trans "Replies" %}
+                    {% else %}
+                      <a href="{{ header.1.url_order }}">{% trans "Replies" %}</a>
+                      {% include "forum_conversation/partials/topic_list_header_sort.html" with col=header.1%}
+                    {% endif %}
               </div>
-              <div class="col-md-2 d-none d-md-block text-center text-nowrap topic-count-col sortable {{ header.2.class_attrib }}">
+              <div class="col-md-2 d-none d-md-block text-center text-nowrap topic-count-col {% if topics != announces %}sortable {{ header.2.class_attrib }}{% endif %}">
+                    {% if topics == announces %}
+                      {% trans "Views" %}
+                    {% else %}
                         <a href="{{ header.2.url_order }}">{% trans "Views" %}</a>
                         {% include "forum_conversation/partials/topic_list_header_sort.html" with col=header.2%}
+                    {% endif %}
               </div>
-              <div class="pr-0 col-md-2 col-sm-3 d-none d-sm-block text-nowrap topic-last-post-col sortable {{ header.3.class_attrib }}">
+              <div class="pr-0 col-md-2 col-sm-3 d-none d-sm-block text-nowrap topic-last-post-col {% if topics != announces %}sortable {{ header.3.class_attrib }}{% endif %}">
+                    {% if topics == announces %}
+                      {% trans "Last post" %}
+                    {% else %}
                         <a href="{{ header.3.url_order }}">{% trans "Last post" %}</a>
                         {% include "forum_conversation/partials/topic_list_header_sort.html" with col=header.3%}
+                    {% endif %}
               </div>
         </div>
       </div>
