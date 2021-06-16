@@ -23,14 +23,15 @@ _FORUM_BASE_PERMISSIONS = [
 ]
 
 _FORUM_MODERATOR_PERMISSIONS = _FORUM_BASE_PERMISSIONS + [
+    "can_approve_posts",
+    "can_create_polls",
+    "can_delete_own_posts",
+    "can_delete_posts",
+    "can_edit_posts",
+    "can_lock_topics",
+    "can_move_topics",
     "can_post_announcements",
     "can_post_stickies",
-    "can_delete_own_posts",
-    "can_create_polls",
-    "can_lock_topics",
-    "can_edit_posts",
-    "can_delete_posts",
-    "can_approve_posts",
     "can_reply_to_locked_topics",
 ]
 
