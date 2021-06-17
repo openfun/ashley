@@ -1,5 +1,7 @@
 """Forms definition for the dev_tools application."""
 
+import uuid
+
 from django import forms
 from django.utils.translation import gettext_lazy as _
 from lti_toolbox.models import LTIPassport
@@ -32,6 +34,11 @@ class LTIConsumerForm(forms.Form):
     )
     course_title = forms.CharField(
         label="Course Title", max_length=100, initial="Mathematics 101"
+    )
+
+    forum_lti_id = forms.UUIDField(
+        label="LTI ID",
+        initial=uuid.uuid5(uuid.NAMESPACE_DNS, "default"),
     )
 
     role = forms.ChoiceField(
