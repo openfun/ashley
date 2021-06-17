@@ -1,0 +1,17 @@
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.0"
+    }
+  }
+
+  backend "s3" {
+    encrypt = true
+    bucket = "{state_bucket_name}"
+    dynamodb_table = "ashley_terraform_state_locks"
+  }
+
+  required_version = ">= 0.15"
+}

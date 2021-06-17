@@ -42,6 +42,7 @@ ENV/
 env.bak/
 venv.bak/
 env.d/development/crowdin
+env.d/terraform
 
 # Logs
 *.log
@@ -65,3 +66,8 @@ node_modules
 # SASS
 .sass-cache
 
+# Terraform
+.terraform
+*.tfstate
+*.tfstate.backup
+/terraform/state.tf
