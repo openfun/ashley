@@ -61,7 +61,8 @@ default: help
 
 bootstrap: ## Prepare Docker images for the project
 bootstrap: \
-  env.d/development/crowdin \
+	env.d/development/crowdin \
+	env.d/terraform \
 	build \
 	build-front \
 	migrate
@@ -275,6 +276,11 @@ i18n-generate-and-upload: \
   i18n-generate \
   crowdin-upload
 .PHONY: i18n-generate-and-upload
+
+# -- Terraform
+
+env.d/terraform:
+	cp env.d/terraform.dist env.d/terraform
 
 # -- Misc
 help:

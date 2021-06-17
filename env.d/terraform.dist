@@ -1,0 +1,8 @@
+# AWS admin credentials
+AWS_ACCESS_KEY_ID=yourAwsAccesKeyId
+AWS_SECRET_ACCESS_KEY=YourAwsSecretAccessKey
+AWS_DEFAULT_REGION=eu-west-1
+
+# In this map, you should set the domain name of your ashley application,
+# per environment (key = terraform workspace, value = domain name)
+TF_VAR_app_domain={ production = "ashley.education" }
