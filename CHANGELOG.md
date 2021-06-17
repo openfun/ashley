@@ -25,6 +25,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - add frontend internationalisation and react components autoload
  - add django rest framework to promote/revoke moderators for current LTIContext
  - add new role moderator and permission to manage moderators
+ - add a `LTI ID` field in the sandbox settings to be able to have multiple
+   forums for a same LTIContext
 
 ### Fixed
  - fix sorting on sticky and announcements topics

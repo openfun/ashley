@@ -28,11 +28,7 @@ def dev_consumer(request: HttpRequest) -> HttpResponse:
             launch_url = request.build_absolute_uri(
                 reverse(
                     "forum.lti.view",
-                    kwargs={
-                        "uuid": uuid.uuid5(
-                            uuid.NAMESPACE_DNS, form.cleaned_data["course_id"]
-                        )
-                    },
+                    kwargs={"uuid": form.cleaned_data["forum_lti_id"]},
                 )
             )
             lti_params = _generate_signed_parameters(form, launch_url, passport)
