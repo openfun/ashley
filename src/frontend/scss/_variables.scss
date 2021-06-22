@@ -9,5 +9,6 @@ $red: #fe3925;
 // Relative path the the fontawesome webfonts (from the compiled CSS file)
 $fa-font-path: '../font';
 
-$unread-color: lighten($red, 20%);
 $read-color: lighten($blue, 15%);
+$table-head-color: #495057;
+$unread-color: lighten($red, 20%);
