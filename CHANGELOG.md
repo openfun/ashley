@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.0-beta.6] - 2021-06-28
+
 ### Changed
 
  - Clean built frontend files before each build
@@ -29,7 +31,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
  - fix sorting on sticky and announcements topics
 
-## [1.0.0-beta.5] - 2020-03-01
+## [1.0.0-beta.5] - 2021-03-01
 
 ### Changed
 
@@ -155,7 +157,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - Update sandbox settings to be able to run Ashley in an `iframe` on multiple
    external websites
 
-[Unreleased]: https://github.com/openfun/ashley/compare/v1.0.0-beta.5...master
+[Unreleased]: https://github.com/openfun/ashley/compare/v1.0.0-beta.6...master
+[1.0.0-beta.6]: https://github.com/openfun/ashley/compare/v1.0.0-beta.5...v1.0.0-beta.6
 [1.0.0-beta.5]: https://github.com/openfun/ashley/compare/v1.0.0-beta.4...v1.0.0-beta.5
 [1.0.0-beta.4]: https://github.com/openfun/ashley/compare/v1.0.0-beta.3...v1.0.0-beta.4
 [1.0.0-beta.3]: https://github.com/openfun/ashley/compare/v1.0.0-beta.2...v1.0.0-beta.3
