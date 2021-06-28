@@ -26,7 +26,7 @@ resource "aws_cloudfront_distribution" "ashley_cloudfront_distribution" {
   }
   # Origin for the media S3 bucket
   origin {
-    domain_name = aws_s3_bucket.ashley_media.bucket_domain_name
+    domain_name = aws_s3_bucket.ashley_media.bucket_regional_domain_name
     origin_id   = local.s3_media_origin_id
 
     s3_origin_config {
