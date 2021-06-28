@@ -130,6 +130,7 @@ class Base(Configuration):
 
     # AWS
     AWS_ACCESS_KEY_ID = values.SecretValue()
+    AWS_LOCATION = values.Value("media/")
     AWS_S3_CUSTOM_DOMAIN = values.Value()
     AWS_S3_REGION_NAME = values.Value()
     AWS_S3_URL_PROTOCOL = values.Value("https")
