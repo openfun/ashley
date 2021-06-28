@@ -266,8 +266,8 @@ class Base(Configuration):
     MACHINA_PROFILE_AVATARS_ENABLED = False
     MACHINA_USER_DISPLAY_NAME_METHOD = "get_public_username_with_default"
 
-    MAX_UPLOAD_FILE_MB = 3
-    IMAGE_TYPE_ALLOWED = ["gif", "jpeg", "jpg", "png", "svg"]
+    MAX_UPLOAD_FILE_MB = values.PositiveIntegerValue(5)
+    IMAGE_TYPE_ALLOWED = values.ListValue(["gif", "jpeg", "jpg", "png", "svg"])
 
     # Sentry
     SENTRY_DSN = values.Value(None, environ_name="SENTRY_DSN")
