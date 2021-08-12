@@ -4,6 +4,7 @@ implement filter or access logic related to forums.
 """
 from typing import Optional
 
+from django.db import models
 from machina.apps.forum_permission.handler import (
     PermissionHandler as BasePermissionHandler,
 )
@@ -37,9 +38,35 @@ class PermissionHandler(BasePermissionHandler):
         can be seen and read by the specified user (at least).
 
         We override django machina's method to filter forums based on the
-        current LTI context of the User, if any.
+        current LTI context of the User, if any.
         """
         forums_to_show = super().forum_list_filter(qs, user)
         if self.current_lti_context_id:
             return forums_to_show.filter(lti_contexts__id=self.current_lti_context_id)
         return forums_to_show
+
+    def get_readable_forums(self, forums, user):
+        """
+        Given a QuerySet (or list) of forums, it returns the subset of
+        forums that can be read by the considered user, with the same type.
+
+        We override django machina's method to filter forums based on the
+        current LTI context of the User, if any.
+        """
+        readable_forums = super().get_readable_forums(forums, user)
+        if self.current_lti_context_id:
+            if isinstance(forums, (models.Manager, models.QuerySet)):
+                return readable_forums.filter(
+                    lti_contexts__id=self.current_lti_context_id
+                )
+            return list(
+                filter(
+                    lambda f: any(
+                        x
+                        for x in f.lti_contexts.all()
+                        if x.id == self.current_lti_context_id
+                    ),
+                    readable_forums,
+                )
+            )
+        return readable_forums
