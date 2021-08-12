@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- limit the scope of the unread topics view to the current LTIContext
+
 ## [1.0.0-beta.6] - 2021-06-28
 
 ### Changed
