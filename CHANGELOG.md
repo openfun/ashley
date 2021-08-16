@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.0] - 2021-08-16
+
 ### Fixed
 
 - limit the scope of the unread topics view to the current LTIContext
@@ -161,7 +163,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
  - Update sandbox settings to be able to run Ashley in an `iframe` on multiple
    external websites
 
-[Unreleased]: https://github.com/openfun/ashley/compare/v1.0.0-beta.6...master
+[Unreleased]: https://github.com/openfun/ashley/compare/v1.0.0...master
+[1.0.0]: https://github.com/openfun/ashley/compare/v1.0.0-beta.6...v1.0.0
 [1.0.0-beta.6]: https://github.com/openfun/ashley/compare/v1.0.0-beta.5...v1.0.0-beta.6
 [1.0.0-beta.5]: https://github.com/openfun/ashley/compare/v1.0.0-beta.4...v1.0.0-beta.5
 [1.0.0-beta.4]: https://github.com/openfun/ashley/compare/v1.0.0-beta.3...v1.0.0-beta.4
