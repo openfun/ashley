@@ -317,14 +317,23 @@ class Development(Base):
             "verbose": {
                 "format": "[%(levelname)s] [%(asctime)s] [%(module)s] "
                 "%(process)d %(thread)d %(message)s"
-            }
+            },
+            "gelf": {
+                "()": "logging_gelf.formatters.GELFFormatter",
+                "null_character": True,
+            },
         },
         "handlers": {
             "console": {
                 "level": "DEBUG",
                 "class": "logging.StreamHandler",
                 "formatter": "verbose",
-            }
+            },
+            "gelf": {
+                "class": "logging.StreamHandler",
+                "stream": "ext://sys.stdout",
+                "formatter": "gelf",
+            },
         },
         "loggers": {
             "oauthlib": {"handlers": ["console"], "level": "DEBUG", "propagate": True},
@@ -335,6 +344,9 @@ class Development(Base):
                 "propagate": True,
             },
             "django": {"handlers": ["console"], "level": "INFO", "propagate": True},
+            # This formatter is here as an example to what is possible to do
+            # with xapi loggers.
+            "xapi": {"handlers": ["gelf"], "level": "INFO", "propagate": True},
         },
     }
 
