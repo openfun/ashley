@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- allow to search users by any of its meaningful fields in Django admin
+
 ## [1.0.0] - 2021-08-16
 
 ### Fixed
