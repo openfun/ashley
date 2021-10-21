@@ -271,7 +271,7 @@ class LTIBackendTestCase(TestCase):
 
         # A new ashley user should have been created
         self.assertEqual(user_count + 1, get_user_model().objects.count())
-        self.assertEqual("", user1.public_username)
+        self.assertEqual("Educational team", user1.public_username)
         self.assertEqual("", user1.email)
         self.assertEqual(consumer, user1.lti_consumer)
         self.assertNotEqual("student@consumer", user1.username)
@@ -319,7 +319,7 @@ class LTIBackendTestCase(TestCase):
         )
         # A new ashley user should have been created for user 3
         self.assertEqual(user_count + 2, get_user_model().objects.count())
-        self.assertEqual("", user3.public_username)
+        self.assertEqual("Educational team", user3.public_username)
         self.assertEqual("", user3.email)
         self.assertEqual(consumer, user3.lti_consumer)
         self.assertNotEqual("student@consumer", user3.username)
@@ -379,3 +379,106 @@ class LTIBackendTestCase(TestCase):
         )
 
         self.assertEqual("moodle-user", new_user.public_username)
+
+    def test_automatic_default_public_username_role_instructor(self):
+        """
+        Ensure that we can authenticate with success if the public username is
+        not found in the LTI request. If roles contain instructor, check that the user
+        has a default public username set.
+        """
+
+        consumer = LTIConsumerFactory(slug="consumer")
+        passport = LTIPassportFactory(title="consumer1_passport1", consumer=consumer)
+
+        user_count = get_user_model().objects.count()
+
+        new_user = self._authenticate(
+            {
+                "user_id": "3fd0ff83-a62d-4a12-9716-4d48821ae24f",
+                "lti_message_type": "basic-lti-launch-request",
+                "lti_version": "LTI-1p0",
+                "resource_link_id": "aaa",
+                "context_id": "course-v1:fooschool+authbackend+0001",
+                "lis_person_contact_email_primary": "user_without_username@example.com",
+                "roles": "Instructor",
+            },
+            passport,
+        )
+
+        self.assertEqual(consumer, new_user.lti_consumer)
+        self.assertEqual("user_without_username@example.com", new_user.email)
+        self.assertEqual(
+            "3fd0ff83-a62d-4a12-9716-4d48821ae24f@consumer", new_user.username
+        )
+        self.assertEqual(user_count + 1, get_user_model().objects.count())
+        self.assertEqual("Educational team", new_user.public_username)
+
+    def test_automatic_default_public_username_role_administrator(self):
+        """
+        Ensure that we can authenticate with success if the public username is
+        not found in the LTI request and check if the user has role administrator
+        that a default public username is set.
+        """
+
+        consumer = LTIConsumerFactory(slug="consumer")
+        passport = LTIPassportFactory(title="consumer1_passport1", consumer=consumer)
+
+        user_count = get_user_model().objects.count()
+
+        new_user = self._authenticate(
+            {
+                "user_id": "3fd0ff83-a62d-4a12-9716-4d48821ae24f",
+                "lti_message_type": "basic-lti-launch-request",
+                "lti_version": "LTI-1p0",
+                "resource_link_id": "aaa",
+                "context_id": "course-v1:fooschool+authbackend+0001",
+                "lis_person_contact_email_primary": "user_without_username@example.com",
+                "roles": "Administrator",
+            },
+            passport,
+        )
+
+        self.assertEqual(consumer, new_user.lti_consumer)
+        self.assertEqual("user_without_username@example.com", new_user.email)
+        self.assertEqual(
+            "3fd0ff83-a62d-4a12-9716-4d48821ae24f@consumer", new_user.username
+        )
+        self.assertEqual(user_count + 1, get_user_model().objects.count())
+        self.assertEqual("Administrator", new_user.public_username)
+
+    def test_automatic_default_public_username_role_administrator_instructor(self):
+        """
+        Ensure that we set 'Educational team' as a default public username if the user doesn't
+        have a public username set and if he has the role instructor. If he has both the
+        instructor and administrator roles, the instructor role has precedence over the
+        adminstrator role.
+        """
+
+        consumer = LTIConsumerFactory(slug="consumer")
+        passport = LTIPassportFactory(title="consumer1_passport1", consumer=consumer)
+
+        user_count = get_user_model().objects.count()
+
+        new_user = self._authenticate(
+            {
+                "user_id": "3fd0ff83-a62d-4a12-9716-4d48821ae24f",
+                "lti_message_type": "basic-lti-launch-request",
+                "lti_version": "LTI-1p0",
+                "resource_link_id": "aaa",
+                "context_id": "course-v1:fooschool+authbackend+0001",
+                "lis_person_contact_email_primary": "user_without_username@example.com",
+                "roles": (
+                    "Administrator,Instructor,urn:lti:sysrole:ims/lis/Administrator,"
+                    "urn:lti:instrole:ims/lis/Administrator"
+                ),
+            },
+            passport,
+        )
+
+        self.assertEqual(consumer, new_user.lti_consumer)
+        self.assertEqual("user_without_username@example.com", new_user.email)
+        self.assertEqual(
+            "3fd0ff83-a62d-4a12-9716-4d48821ae24f@consumer", new_user.username
+        )
+        self.assertEqual(user_count + 1, get_user_model().objects.count())
+        self.assertEqual("Educational team", new_user.public_username)

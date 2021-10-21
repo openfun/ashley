@@ -5,8 +5,11 @@ from typing import List
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
+from django.utils.translation import gettext_lazy as _
 from lti_toolbox.backend import LTIBackend as ToolboxLTIBackend
 from lti_toolbox.lti import LTI
+
+from ashley.defaults import _FORUM_ROLE_ADMINISTRATOR, _FORUM_ROLE_INSTRUCTOR
 
 logger = logging.getLogger(__name__)
 
@@ -115,8 +118,20 @@ class LTIBackend(ToolboxLTIBackend):
                 # Moodle
                 "ext_user_username",
             ],
-            default_value="",
+            default_value=self._get_public_username_default(lti_request),
         )
+
+    @staticmethod
+    def _get_public_username_default(lti_request: LTI):
+        """
+        Return a default username for an LTI request depending of the user's role.
+        """
+        if _FORUM_ROLE_INSTRUCTOR in lti_request.roles:
+            return _("Educational team")
+        if _FORUM_ROLE_ADMINISTRATOR in lti_request.roles:
+            return _("Administrator")
+
+        return ""
 
     @staticmethod
     def _get_lti_param_with_fallback(

@@ -8,6 +8,7 @@ from draftjs_exporter.dom import DOM
 
 from ashley.editor.decorators import emoji, image, link, mention
 
+_FORUM_ROLE_ADMINISTRATOR = "administrator"
 _FORUM_ROLE_INSTRUCTOR = "instructor"
 _FORUM_ROLE_MODERATOR = "moderator"
 
