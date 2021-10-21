@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashleyforum\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-13 14:13+0000\n"
-"PO-Revision-Date: 2021-07-13 14:21\n"
+"POT-Creation-Date: 2021-10-21 13:57+0000\n"
+"PO-Revision-Date: 2021-10-21 14:03\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -1071,6 +1071,14 @@ msgstr "Il n'y a aucune discussion non lue."
 
 msgid "Forum index"
 msgstr "Accueil du forum"
+
+#: auth/backend.py:131
+msgid "Educational team"
+msgstr "Equipe pédagogique"
+
+#: auth/backend.py:133
+msgid "Administrator"
+msgstr "Administrateur"
 
 #: machina_extensions/forum_permission/defaults.py:22
 msgid "Can archive a forum"

@@ -13,6 +13,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - allow to search users by any of its meaningful fields in Django admin
 - allow to archive a forum with the new `can_archive_forum` permission
 - track topic views with XAPI events
+- automatically assign a public_username to instructors and administrators
+when none is defined in the LTI authentication
 
 ## [1.0.0] - 2021-08-16
 
