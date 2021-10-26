@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.1.0] - 2021-10-28
+
 ### Added
 
 - track forum views, topic and post updates and creations with xAPI events
@@ -175,7 +177,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Update sandbox settings to be able to run Ashley in an `iframe` on multiple
   external websites
 
-[unreleased]: https://github.com/openfun/ashley/compare/v1.0.0...master
+[unreleased]: https://github.com/openfun/ashley/compare/v1.1.0...master
+[1.1.0]: https://github.com/openfun/ashley/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/openfun/ashley/compare/v1.0.0-beta.6...v1.0.0
 [1.0.0-beta.6]: https://github.com/openfun/ashley/compare/v1.0.0-beta.5...v1.0.0-beta.6
 [1.0.0-beta.5]: https://github.com/openfun/ashley/compare/v1.0.0-beta.4...v1.0.0-beta.5
