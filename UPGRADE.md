@@ -15,6 +15,8 @@ They will be documented in this file:
 
 ### Unreleased
 
+### Ashley 1.1.0
+
 Two new permissions have been added in this release : `can_archive_forum`, 
 `can_move_topics`.
 By default, these permissions will only be added to new users with administrator or
