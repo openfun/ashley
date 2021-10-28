@@ -78,9 +78,8 @@ jobs:
       - checkout
       # Generate a version.json file describing app release
       - <<: *generate-version-file
-      # Activate docker-in-docker (with layers caching enabled)
+      # Activate docker-in-docker
       - setup_remote_docker:
-          docker_layer_caching: true
           version: 19.03.13
       # Each image is tagged with the current git commit sha1 to avoid collisions in parallel builds.
       - run:
@@ -249,12 +248,11 @@ jobs:
       - checkout
       # Generate a version.json file describing app release
       - <<: *generate-version-file
-      # Activate docker-in-docker (with layers caching enabled)
+      # Activate docker-in-docker
       - setup_remote_docker:
-          docker_layer_caching: true
           version: 19.03.13
       - run:
-          name: Build production image (using cached layers)
+          name: Build production image
           command: docker build -t ashley:${CIRCLE_SHA1} --target production .
       - run:
           name: Check built images availability
