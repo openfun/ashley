@@ -182,3 +182,94 @@ class ForumModerationTestViewForm(TestCase):
             f"Select a valid choice. {forum3Lti2.id} is not one of the available choices.",
             html=True,
         )
+
+    def test_forum_moderation_list_forums_with_deleted_form(self):
+        """
+        Create three forums in the same LTIContext and archive one. Load the form to choose
+        to which forum the user wants to move the topic. Control that the forum deleted is
+        not part of the choice.
+        """
+        user = UserFactory()
+
+        lti_context = LTIContextFactory(lti_consumer=user.lti_consumer)
+        forum1 = ForumFactory(name="Forum1")
+        forum2 = ForumFactory(name="Forum2")
+        forum3 = ForumFactory(name="Forum3")
+
+        lti_context.sync_user_groups(user, ["instructor"])
+
+        # Assign permission to the group for this forum
+        self._init_forum(forum1, lti_context)
+        self._init_forum(forum2, lti_context)
+        self._init_forum(forum3, lti_context)
+        # Create a post for a topic part of lti_context
+        topicForum1 = TopicFactory(forum=forum1)
+        PostFactory(
+            topic=topicForum1,
+        )
+        topicForum2 = TopicFactory(forum=forum2)
+        PostFactory(
+            topic=topicForum2,
+        )
+        topicForum3 = TopicFactory(forum=forum3)
+        PostFactory(
+            topic=topicForum3,
+        )
+
+        # Create the session and logged in lti_context
+        self.client.force_login(user, "ashley.auth.backend.LTIBackend")
+        session = self.client.session
+        session[SESSION_LTI_CONTEXT_ID] = lti_context.id
+        session.save()
+
+        form = TopicMoveForm(user=user, lti_context=lti_context, topic=topicForum1)
+
+        # Check that only the forum that is allowed is proposed as choice
+        self.assertEqual(
+            form.fields["forum"].choices,
+            [
+                (forum1.id, {"label": " Forum1", "disabled": True}),
+                (
+                    forum2.id,
+                    "{} {}".format("-" * forum2.margin_level, forum2.name),
+                ),
+                (
+                    forum3.id,
+                    "{} {}".format("-" * forum3.margin_level, forum3.name),
+                ),
+            ],
+        )
+
+        # Archive the forum2
+        forum2.archived = True
+        forum2.save()
+
+        form = TopicMoveForm(user=user, lti_context=lti_context, topic=topicForum1)
+
+        # Check that forum2 is not proposed as choice anymore as it has been archived
+        self.assertEqual(
+            form.fields["forum"].choices,
+            [
+                (forum1.id, {"label": " Forum1", "disabled": True}),
+                (
+                    forum3.id,
+                    "{} {}".format("-" * forum3.margin_level, forum3.name),
+                ),
+            ],
+        )
+
+        # We try to move topic from forum1 to forum2 even if forum2 has been archived
+        response = self.client.post(
+            f"/forum/moderation/topic/{topicForum1.slug}-{topicForum1.id}/move/",
+            data={"forum": {forum2.id}},
+            follow=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        
+        # Control that we get an error and the move is not executed
+        self.assertContains(
+            response,
+            f"Select a valid choice. {forum2.id} is not one of the available choices.",
+            html=True,
+        )
