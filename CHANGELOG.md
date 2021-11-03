@@ -8,6 +8,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+
+## [1.1.1] - 2021-11-03
+
 ### Fixed
 
 - exclude archived forums from the list of forums to move topics to
@@ -182,7 +185,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Update sandbox settings to be able to run Ashley in an `iframe` on multiple
   external websites
 
-[unreleased]: https://github.com/openfun/ashley/compare/v1.1.0...master
+[unreleased]: https://github.com/openfun/ashley/compare/v1.1.1...master
+[1.1.1]: https://github.com/openfun/ashley/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/openfun/ashley/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/openfun/ashley/compare/v1.0.0-beta.6...v1.0.0
 [1.0.0-beta.6]: https://github.com/openfun/ashley/compare/v1.0.0-beta.5...v1.0.0-beta.6
