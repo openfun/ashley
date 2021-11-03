@@ -27,7 +27,7 @@ class SearchForm(MachinaSearchForm):
         super().__init__(*args, **kwargs)
         user = kwargs.pop("user", None)
         self.allowed_forums = PermissionHandler().get_readable_forums(
-            Forum.objects.filter(lti_contexts=lti_contexts), user
+            Forum.objects.filter(archived=False, lti_contexts=lti_contexts), user
         )
         # self.allowed_forums is used in search method of MachinaSearchForm
         if self.allowed_forums:
