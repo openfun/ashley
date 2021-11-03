@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - exclude archived forums from the list of forums to move topics to
+- exclude archived forums from the list of forums of advanced search
 
 ## [1.1.0] - 2021-10-28
 

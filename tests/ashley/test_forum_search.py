@@ -612,3 +612,76 @@ class ForumSearchTestCase(TestCase):
         self.assertContains(
             response, "Your search has returned <b>0</b> results", html=True
         )
+
+    def test_forum_search_archived_form_search(self):
+        """
+        Create different forums in the same lti_context, make sure user can't
+        select archived forums in the advanced search.
+        """
+        user = UserFactory()
+
+        lti_context = LTIContextFactory(lti_consumer=user.lti_consumer)
+        forum = ForumFactory()
+        forum2 = ForumFactory()
+        forum3 = ForumFactory()
+        forum.lti_contexts.add(lti_context)
+        forum2.lti_contexts.add(lti_context)
+        forum3.lti_contexts.add(lti_context)
+
+        PostFactory(
+            topic=TopicFactory(forum=forum),
+        )
+
+        PostFactory(
+            topic=TopicFactory(forum=forum2),
+        )
+        PostFactory(
+            topic=TopicFactory(forum=forum3),
+        )
+        # Creates the session
+        self.client.force_login(user, "ashley.auth.backend.LTIBackend")
+        session = self.client.session
+        session[SESSION_LTI_CONTEXT_ID] = lti_context.id
+        session.save()
+
+        assign_perm("can_read_forum", user, forum)
+        assign_perm("can_read_forum", user, forum2)
+        assign_perm("can_read_forum", user, forum3)
+
+        # Load the advanced search form
+        form = SearchForm(user=user, lti_context=lti_context)
+
+        # Check that only forums that are allowed are proposed as choice
+        self.assertEqual(
+            form.fields["search_forums"].choices,
+            [
+                (forum.id, "{} {}".format("-" * forum.margin_level, forum.name)),
+                (forum2.id, "{} {}".format("-" * forum.margin_level, forum2.name)),
+                (forum3.id, "{} {}".format("-" * forum.margin_level, forum3.name)),
+            ],
+        )
+
+        # Archive the forum2
+        forum2.archived = True
+        forum2.save()
+
+        form = SearchForm(user=user, lti_context=lti_context)
+
+        # Check that forum2 is not proposed as choice anymore as it has been archived
+        self.assertEqual(
+            form.fields["search_forums"].choices,
+            [
+                (forum.id, "{} {}".format("-" * forum.margin_level, forum.name)),
+                (forum3.id, "{} {}".format("-" * forum.margin_level, forum3.name)),
+            ],
+        )
+
+        # Despite that, we force the request on the forum that is not allowed
+        response = self.client.get(f"/forum/search/?q=world&search_forums={forum2.id}")
+        self.assertEqual(response.status_code, 200)
+        # Control that we get an error and the search is not executed
+        self.assertContains(
+            response,
+            f"Select a valid choice. {forum2.id} is not one of the available choices.",
+            html=True,
+        )

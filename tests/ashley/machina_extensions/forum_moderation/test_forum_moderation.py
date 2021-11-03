@@ -266,7 +266,7 @@ class ForumModerationTestViewForm(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        
+
         # Control that we get an error and the move is not executed
         self.assertContains(
             response,
