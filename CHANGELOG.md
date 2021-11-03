@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- exclude archived forums from the list of forums to move topics to
+
 ## [1.1.0] - 2021-10-28
 
 ### Added

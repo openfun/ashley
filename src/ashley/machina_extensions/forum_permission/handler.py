@@ -86,7 +86,9 @@ class PermissionHandler(BasePermissionHandler):
         if not hasattr(self, "_all_forums"):
             if self.current_lti_context_id:
                 self._all_forums = list(
-                    Forum.objects.filter(lti_contexts__id=self.current_lti_context_id)
+                    Forum.objects.filter(
+                        archived=False, lti_contexts__id=self.current_lti_context_id
+                    )
                 )
             else:
                 super()._get_all_forums()
