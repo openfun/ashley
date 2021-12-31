@@ -8,6 +8,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- use the name of a previous forum with the same `lti_id`
 
 ## [1.1.1] - 2021-11-03
 
