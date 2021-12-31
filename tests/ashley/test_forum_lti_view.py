@@ -107,11 +107,13 @@ class ForumLTIViewTestCase(TestCase):
 
         self.assertEqual(403, response.status_code)
 
-    def test_post_with_lti_uuid_forum_exiting_in_another_context(self):
+    def test_post_with_lti_uuid_forum_existing_in_another_context(self):
         """
         Two forums can have an identical `lti_id` and be accessed from the same LTI
         launch URL but from two different LTI contexts. A new forum is created for
-        each LTI context.
+        each LTI context. The title for the forum created is set by default to the
+        class name of the last forum having the same `lti_id` (this enables quick
+        copy and paste)
         """
 
         passport = LTIPassportFactory(consumer=LTIConsumerFactory())
@@ -147,11 +149,14 @@ class ForumLTIViewTestCase(TestCase):
             lti_id=context1_id, lti_consumer_id=passport.consumer
         )
         forum1 = Forum.objects.get(lti_id=forum_uuid, lti_contexts__id=context1.id)
+        forum1.name = "An original title"
         self.assertEqual(LTIContext.objects.count(), initial_lticontext_count + 1)
         self.assertEqual(Forum.objects.count(), initial_forum_count + 1)
 
         # The response should be a redirection to the forum URL
         self.assertRedirects(response, f"/forum/forum/{forum1.slug}-{forum1.id}/")
+        forum1.save()
+        forum1.refresh_from_db()
 
         # We use the same lti_parameters except the context
         context2_id = "course-v1:testschool+login+0002"
@@ -182,6 +187,9 @@ class ForumLTIViewTestCase(TestCase):
             lti_id=context2_id, lti_consumer_id=passport.consumer
         )
         forum2 = Forum.objects.get(lti_id=forum_uuid, lti_contexts__id=context2.id)
+        # Forum name should be the same as the previous forum
+        self.assertEqual(forum2.name, forum1.name)
+
         self.assertRedirects(response, f"/forum/forum/{forum2.slug}-{forum2.id}/")
 
         # we resign the request for context1
@@ -197,6 +205,113 @@ class ForumLTIViewTestCase(TestCase):
         self.assertEqual(Forum.objects.count(), initial_forum_count + 2)
         # The response should be a redirection to the forum URL
         self.assertRedirects(response, f"/forum/forum/{forum1.slug}-{forum1.id}/")
+
+    def test_post_with_lti_uuid_multiple_forum_existing_in_another_context(self):
+        """
+        Forums can have an identical `lti_id` and be accessed from the same LTI
+        launch URL but from different LTI contexts. A new forum is created for
+        each LTI context. The title for the forum created is set by default to the
+        class name of the forum created last having the same `lti_id` (this enables
+        quick copy and paste). We check that the default name used is from the last
+        forum created.
+        """
+
+        passport = LTIPassportFactory(consumer=LTIConsumerFactory())
+        forum_uuid = "8bb319aa-f3cf-4509-952c-c4bd0fb42fd7"
+        context1_id = "course-v1:testschool+login+0001"
+
+        # Build the LTI launch request
+        lti_parameters = {
+            "user_id": "643f1625-f240-4a5a-b6eb-89b317807963",
+            "lti_message_type": "basic-lti-launch-request",
+            "lti_version": "LTI-1p0",
+            "resource_link_id": "aaa",
+            "context_id": context1_id,
+            "lis_person_contact_email_primary": "ashley@example.com",
+            "lis_person_sourcedid": "testuser",
+            "launch_presentation_locale": "en",
+            "roles": "Instructor",
+        }
+        url = f"http://testserver/lti/forum/{forum_uuid}"
+        self.client.post(
+            f"/lti/forum/{forum_uuid}",
+            data=urlencode(sign_parameters(passport, lti_parameters, url)),
+            content_type=CONTENT_TYPE,
+            follow=True,
+        )
+        # A new forum has been created
+        forum1 = Forum.objects.get(
+            lti_id=forum_uuid,
+            lti_contexts__id=LTIContext.objects.get(
+                lti_id=context1_id, lti_consumer_id=passport.consumer
+            ).id,
+        )
+        forum1.name = "An original title"
+        forum1.save()
+        forum1.refresh_from_db()
+
+        # We use the same lti_parameters except the context
+        context2_id = "course-v1:testschool+login+0002"
+        lti_parameters2 = {
+            "user_id": "643f1625-f240-4a5a-b6eb-89b317807963",
+            "lti_message_type": "basic-lti-launch-request",
+            "lti_version": "LTI-1p0",
+            "resource_link_id": "aaa",
+            "context_id": context2_id,
+            "lis_person_contact_email_primary": "ashley@example.com",
+            "lis_person_sourcedid": "testuser",
+            "launch_presentation_locale": "en",
+            "roles": "Instructor",
+        }
+        # We request the same LTI launch source url
+        self.client.post(
+            f"/lti/forum/{forum_uuid}",
+            data=urlencode(sign_parameters(passport, lti_parameters2, url)),
+            content_type=CONTENT_TYPE,
+            follow=True,
+        )
+        # A new forum has been created
+        forum2 = Forum.objects.get(
+            lti_id=forum_uuid,
+            lti_contexts__id=LTIContext.objects.get(
+                lti_id=context2_id, lti_consumer_id=passport.consumer
+            ).id,
+        )
+        # Forum name should be the same as the previous forum
+        self.assertEqual(forum2.name, forum1.name)
+        forum2.name = "A new original title"
+        forum2.save()
+        forum2.refresh_from_db()
+
+        # We use the same lti_parameters except the context
+        context3_id = "course-v3:testschool+login+0002"
+        lti_parameters3 = {
+            "user_id": "643f1625-f240-4a5a-b6eb-89b317807963",
+            "lti_message_type": "basic-lti-launch-request",
+            "lti_version": "LTI-1p0",
+            "resource_link_id": "aaa",
+            "context_id": context3_id,
+            "lis_person_contact_email_primary": "ashley@example.com",
+            "lis_person_sourcedid": "testuser",
+            "launch_presentation_locale": "en",
+            "roles": "Instructor",
+        }
+        # We request the same LTI launch source url
+        self.client.post(
+            f"/lti/forum/{forum_uuid}",
+            data=urlencode(sign_parameters(passport, lti_parameters3, url)),
+            content_type=CONTENT_TYPE,
+            follow=True,
+        )
+        # A new forum has been created
+        forum3 = Forum.objects.get(
+            lti_id=forum_uuid,
+            lti_contexts__id=LTIContext.objects.get(
+                lti_id=context3_id, lti_consumer_id=passport.consumer
+            ).id,
+        )
+        # Forum name should be the same as the previous forum, the last created
+        self.assertEqual(forum3.name, forum2.name)
 
     def test_get(self):
         """The GET method is not allowed to sign in"""

@@ -64,10 +64,22 @@ class ForumLTIView(BaseLTIAuthView):
                 lti_contexts__id=context.id,
             )
         except Forum.DoesNotExist:
+
+            # Check if this uuid exists for another context.id to reuse its name as a
+            # default value (enables copy and paste)
+            forum_same_uuid = (
+                Forum.objects.only("name")
+                .filter(lti_id=forum_uuid, type=Forum.FORUM_POST)
+                .order_by("-created")
+                .first()
+            )
+
             forum = Forum.objects.create(
                 lti_id=forum_uuid,
                 type=Forum.FORUM_POST,
-                name=lti_request.context_title,
+                name=forum_same_uuid.name
+                if forum_same_uuid
+                else lti_request.context_title,
             )
             logger.debug("Forum %s created", forum_uuid)
             self._init_forum(forum, context)
