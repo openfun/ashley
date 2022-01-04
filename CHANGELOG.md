@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - use the name of a previous forum with the same `lti_id`
+- allow sorting forums on the home page
 
 ## [1.1.1] - 2021-11-03
 

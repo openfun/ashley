@@ -1,11 +1,11 @@
 """Ashley template tags to display forum content"""
 from django import template
 from machina.core.db.models import get_model
+from machina.templatetags.forum_tags import forum_list
 
 from ashley.defaults import _FORUM_ROLE_INSTRUCTOR
 
 LTIContext = get_model("ashley", "LTIContext")
-Topic = get_model("forum_conversation", "Topic")
 
 register = template.Library()
 
@@ -25,3 +25,17 @@ def is_user_instructor(topic, user):
         _FORUM_ROLE_INSTRUCTOR in lti.get_user_roles(user)
         for lti in LTIContext.objects.filter(forum=topic.forum)
     )
+
+
+@register.inclusion_tag("forum/forum_list.html", takes_context=True)
+def forum_list_order(context, forum_visibility_contents):
+    """Renders the considered forum list with the column order added.
+
+    Usage::
+
+        {% forum_list_order my_forums %}
+
+    """
+    data_dict = forum_list(context, forum_visibility_contents)
+    data_dict["header"] = context.get("header")
+    return data_dict

@@ -1,7 +1,7 @@
 {% extends 'board_base.html' %}
 {% load i18n %}
 {% load mptt_tags %}
-{% load forum_tags %}
+{% load custom_tags %}
 
 {% block sub_title %}{% trans "Index" %}{% endblock sub_title %}
 
@@ -16,5 +16,5 @@
     {% endif %}
   </div>
 </div>
-{% forum_list forums %}
+{% forum_list_order forums %}
 {% endblock content %}

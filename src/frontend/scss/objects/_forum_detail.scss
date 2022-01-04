@@ -56,34 +56,35 @@
       line-height: 0.7em;
     }
   }
-  .sorted {
-    .sortoptions {
-      position: absolute;
-      top: 0.2em;
-      a {
-        position: relative;
-        width: 14px;
-        height: 14px;
-        display: inline-block;
-        background: url(../img/sorting-icons.svg) 0 0 no-repeat;
-        background-size: 14px auto;
-      }
+}
 
-      a.ascending {
-        background-position: 0 -28px;
-        :focus,
-        :hover {
-          background-position: 0 -42px;
-        }
-      }
+.sorted {
+  .sortoptions {
+    position: absolute;
+    top: 0.2em;
+    a {
+      position: relative;
+      width: 14px;
+      height: 14px;
+      display: inline-block;
+      background: url(../img/sorting-icons.svg) 0 0 no-repeat;
+      background-size: 14px auto;
+    }
 
-      a.descending {
-        top: 1px;
-        background-position: 0 -56px;
-        :focus,
-        :hover {
-          background-position: 0 -70px;
-        }
+    a.ascending {
+      background-position: 0 -28px;
+      :focus,
+      :hover {
+        background-position: 0 -42px;
+      }
+    }
+
+    a.descending {
+      top: 1px;
+      background-position: 0 -56px;
+      :focus,
+      :hover {
+        background-position: 0 -70px;
       }
     }
   }
