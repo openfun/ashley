@@ -15,7 +15,7 @@
                       {% trans topic_list_title %}
                     {% else %}
                       <a href="{{ header.0.url_order }}">{% trans topic_list_title %}</a>
-                      {% include "forum_conversation/partials/topic_list_header_sort.html" with col=header.0%}
+                      {% include "forum_conversation/partials/list_header_sort.html" with col=header.0 %}
                     {% endif %}
                 </h3>
               </div>
@@ -24,7 +24,7 @@
                       {% trans "Replies" %}
                     {% else %}
                       <a href="{{ header.1.url_order }}">{% trans "Replies" %}</a>
-                      {% include "forum_conversation/partials/topic_list_header_sort.html" with col=header.1%}
+                      {% include "forum_conversation/partials/list_header_sort.html" with col=header.1 %}
                     {% endif %}
               </div>
               <div class="col-md-2 d-none d-md-block text-center text-nowrap topic-count-col {% if topics != announces %}sortable {{ header.2.class_attrib }}{% endif %}">
@@ -32,7 +32,7 @@
                       {% trans "Views" %}
                     {% else %}
                         <a href="{{ header.2.url_order }}">{% trans "Views" %}</a>
-                        {% include "forum_conversation/partials/topic_list_header_sort.html" with col=header.2%}
+                        {% include "forum_conversation/partials/list_header_sort.html" with col=header.2 %}
                     {% endif %}
               </div>
               <div class="pr-0 col-md-2 col-sm-3 d-none d-sm-block text-nowrap topic-last-post-col {% if topics != announces %}sortable {{ header.3.class_attrib }}{% endif %}">
@@ -40,7 +40,7 @@
                       {% trans "Last post" %}
                     {% else %}
                         <a href="{{ header.3.url_order }}">{% trans "Last post" %}</a>
-                        {% include "forum_conversation/partials/topic_list_header_sort.html" with col=header.3%}
+                        {% include "forum_conversation/partials/list_header_sort.html" with col=header.3 %}
                     {% endif %}
               </div>
         </div>

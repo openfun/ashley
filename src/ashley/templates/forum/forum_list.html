@@ -32,12 +32,14 @@
     <div class="mt-3 card forumlist">
       <div class="p-0 card-header">
         <div class="row m-0 px-3 py-2">
-          <div class="pl-0 col-md-8 col-sm-9 col-12 forum-name-col">
-            <h3 class="m-0 card-title h5 text-dark">{% trans "Forums" %}</h3>
+          <div class="pl-0 col-md-8 col-sm-9 col-12 forum-name-col sortable {{ header.0.class_attrib }}">
+            <h3 class="m-0 card-title h5 text-dark"><a href="{{ header.0.url_order }}">{% trans "Forums" %}</a>
+              {% include "forum_conversation/partials/list_header_sort.html" with col=header.0 %}
+            </h3>
           </div>
-          <div class="col-md-1 d-none d-md-block text-center text-nowrap forum-count-col">{% trans "Topics" %}</div>
-          <div class="col-md-1 d-none d-md-block text-center text-nowrap forum-count-col">{% trans "Posts" %}</div>
-          <div class="pr-0 col-md-2 col-sm-3 d-none d-sm-block text-nowrap forum-last-post-col">{% trans "Last post" %}</div>
+          <div class="col-md-1 d-none d-md-block text-center text-nowrap forum-count-col sortable {{ header.1.class_attrib }}"><a href="{{ header.1.url_order }}">{% trans "Topics" %}</a>{% include "forum_conversation/partials/list_header_sort.html" with col=header.1 %}</div>
+          <div class="col-md-1 d-none d-md-block text-center text-nowrap forum-count-col sortable {{ header.2.class_attrib }}"><a href="{{ header.2.url_order }}">{% trans "Posts" %}</a>{% include "forum_conversation/partials/list_header_sort.html" with col=header.2 %}</div>
+          <div class="pr-0 col-md-2 col-sm-3 d-none d-sm-block text-nowrap forum-last-post-col sortable {{ header.3.class_attrib }}"><a href="{{ header.3.url_order }}">{% trans "Last post" %}</a>{% include "forum_conversation/partials/list_header_sort.html" with col=header.3 %}</div>
         </div>
       </div>
       <div class="p-0 card-body">
