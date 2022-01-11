@@ -20,6 +20,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - exclude archived forums from the list of forums to move topics to
 - exclude archived forums from the list of forums of advanced search
+- automatically assign a public_username to instructors and administrators
+  when none is defined for a user already existing
 
 ## [1.1.0] - 2021-10-28
 

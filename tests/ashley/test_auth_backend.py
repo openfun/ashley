@@ -1,5 +1,5 @@
 """Test suite for ashley authentication backend."""
-
+import random
 from urllib.parse import urlencode
 
 from django.contrib.auth import get_user_model
@@ -482,3 +482,93 @@ class LTIBackendTestCase(TestCase):
         )
         self.assertEqual(user_count + 1, get_user_model().objects.count())
         self.assertEqual("Educational team", new_user.public_username)
+
+    def test_openedx_studio_launch_request_existing_user_instructor_admin_empty_username(
+        self,
+    ):
+        """
+        Ensure that users that have a public_username empty will have their public_username
+        reset to a default value.
+        """
+
+        consumer = LTIConsumerFactory(slug="consumer")
+        passport = LTIPassportFactory(title="consumer1_passport1", consumer=consumer)
+        role = random.choice(["Instructor", "Administrator"])
+        public_username = (
+            "Educational team" if role == "Instructor" else "Administrator"
+        )
+        params = {
+            "context_id": "course-v1:TEST1+0001+2020_T1",
+            "context_label": "TEST1",
+            "context_title": "test course 1",
+            "custom_component_display_name": "Forum",
+            "launch_presentation_return_url": "",
+            "lis_result_sourcedid": "course-v1%3ATEST1%2B0001%2B2020_T1:-c7b2c44b1d",
+            "lti_message_type": "basic-lti-launch-request",
+            "lti_version": "LTI-1p0",
+            "resource_link_id": "-c7b2c44b1d",
+            "roles": role,
+            "user_id": "student",
+        }
+        # User 1 is using ashley from openedx studio in the course "TEST1"
+        user1 = self._authenticate(params, passport)
+
+        # A new ashley user should have been created
+        self.assertEqual(1, get_user_model().objects.count())
+        self.assertEqual(public_username, user1.public_username)
+
+        # We set public_username to an empty value for the test
+        user1.public_username = ""
+        user1.save()
+        self.assertEqual("", user1.public_username)
+        # Authenticate with the same params
+        user1 = self._authenticate(params, passport)
+
+        # No new user have been created
+        self.assertEqual(1, get_user_model().objects.count())
+        # Confirm that public_username is reset to the default value
+        self.assertEqual(public_username, user1.public_username)
+
+    def test_openedx_studio_launch_request_existing_user_all_roles_empty_username(self):
+        """
+        Check that users previously created that have a public_username defined don't get
+        their public_username reset with the next connection.
+        """
+
+        consumer = LTIConsumerFactory(slug="consumer")
+        passport = LTIPassportFactory(title="consumer1_passport1", consumer=consumer)
+
+        params = {
+            "context_id": "course-v1:TEST1+0001+2020_T1",
+            "context_label": "TEST1",
+            "context_title": "test course 1",
+            "custom_component_display_name": "Forum",
+            "launch_presentation_return_url": "",
+            "lis_result_sourcedid": "course-v1%3ATEST1%2B0001%2B2020_T1:-c7b2c44b1d",
+            "lti_message_type": "basic-lti-launch-request",
+            "lti_version": "LTI-1p0",
+            "resource_link_id": "-c7b2c44b1d",
+            "roles": random.choice(["Instructor", "Administrator", "Student"]),
+            "user_id": "student",
+        }
+        # User 1 is using ashley from openedx studio in the course "TEST1"
+        user1 = self._authenticate(params, passport)
+
+        # We set public_username to a define value for the test
+        user1.public_username = "Test"
+        user1.save()
+
+        # A new ashley user should have been created
+        self.assertEqual(1, get_user_model().objects.count())
+        self.assertEqual("Test", user1.public_username)
+
+        # Authenticate with the same params
+        user1 = self._authenticate(
+            params,
+            passport,
+        )
+
+        # No new user have been created
+        self.assertEqual(1, get_user_model().objects.count())
+        # Confirm that public_username is still define
+        self.assertEqual("Test", user1.public_username)
