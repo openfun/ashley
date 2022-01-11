@@ -66,6 +66,14 @@ class LTIBackend(ToolboxLTIBackend):
             user = user_model.objects.get(
                 lti_consumer=lti_consumer, lti_remote_user_id=remote_user_id
             )
+            # if public_username is empty we set it to a default value
+            if not user.public_username and any(
+                role in [_FORUM_ROLE_ADMINISTRATOR, _FORUM_ROLE_INSTRUCTOR]
+                for role in lti_request.roles
+            ):
+                user.public_username = self._get_public_username_default(lti_request)
+                user.save()
+
         except user_model.DoesNotExist:
             username = f"{remote_user_id}@{lti_consumer.slug:s}"
 
