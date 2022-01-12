@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - use the name of a previous forum with the same `lti_id`
 - allow sorting forums on the home page
+- add a ribbon icon when an administrator is the writer of a post or a topic
 
 ## [1.1.1] - 2021-11-03
 

@@ -6,4 +6,9 @@
     <span class="sr-only">{%trans 'Instructor'%}</span>
     </i>
 {% endif %}
+{% if topic|is_user_administrator:user %}
+    <i class="icon_writer fas fa-award" aria-hidden="true" title="{%trans 'Administrator'%}">
+    <span class="sr-only">{%trans 'Administrator'%}</span>
+    </i>
+{% endif %}
 {% endspaceless %}

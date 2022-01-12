@@ -45,6 +45,7 @@ class LTIConsumerForm(forms.Form):
         choices=(
             ("Student", _("Student")),
             ("Instructor", _("Instructor")),
+            ("Administrator", _("Administrator")),
         )
     )
 
