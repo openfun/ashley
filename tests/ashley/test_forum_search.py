@@ -24,6 +24,8 @@ from ashley.factories import (
 )
 from ashley.machina_extensions.forum_search.forms import SearchForm
 
+# pylint: disable = too-many-public-methods
+
 Forum = get_model("forum", "Forum")
 
 # Change index name so we don't mess up the site index for development
@@ -685,3 +687,46 @@ class ForumSearchTestCase(TestCase):
             f"Select a valid choice. {forum2.id} is not one of the available choices.",
             html=True,
         )
+
+    def test_forum_search_paginated_links(self):
+        """
+        Check pagination has well formed links
+        """
+        user = UserFactory()
+        post = PostFactory(text="a5g3g6k75")
+        PostFactory.create_batch(100, text="a5g3g6k75", topic=post.topic)
+
+        assign_perm("can_read_forum", user, post.topic.forum)
+
+        # Index 101 posts in Elasticsearch
+        call_command("rebuild_index", interactive=False)
+
+        self.client.force_login(user)
+        response = self.client.get("/forum/search/?q=a5g3")
+        self.assertContains(
+            response, "Your search has returned <b>101</b> results", html=True
+        )
+        self.assertContains(response, post, html=True)
+
+        # 20 results per page and 2 panels of pagination
+        # check all li tags are well closed
+        self.assertContains(response, '<li class="page-item">', 12)
+        self.assertContains(response, '<li class="page-item active">', 2)
+        self.assertContains(response, '<li class="page-item disabled">', 4)
+
+        # check all links are well formed
+        self.assertContains(
+            response,
+            '<li class="page-item active">'
+            '<a href="?q=a5g3&amp;page=1" class="page-link">1</a>'
+            "</li>",
+        )
+        for page in range(2, 6):
+            self.assertContains(response, f"?q=a5g3&amp;page={page}")
+            self.assertContains(
+                response,
+                f'<li class="page-item"><a href="?q=a5g3&amp;page={page}" '
+                f'class="page-link">{page}</a></li>',
+            )
+
+        self.assertNotContains(response, "?q=a5g3&amp;page=7")
