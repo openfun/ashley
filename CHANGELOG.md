@@ -8,11 +8,19 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.1.2] - 2022-01-18
+
 ### Added
 
 - use the name of a previous forum with the same `lti_id`
 - allow sorting forums on the home page
 - add a ribbon icon when an administrator is the writer of a post or a topic
+
+### Fixed
+
+- automatically assign a public_username to instructors and administrators
+  when none is defined for a user already existing
+- fix pagination for search results
 
 ## [1.1.1] - 2021-11-03
 
@@ -20,9 +28,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - exclude archived forums from the list of forums to move topics to
 - exclude archived forums from the list of forums of advanced search
-- automatically assign a public_username to instructors and administrators
-  when none is defined for a user already existing
-- fix pagination for search results
+
 
 ## [1.1.0] - 2021-10-28
 
@@ -193,7 +199,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Update sandbox settings to be able to run Ashley in an `iframe` on multiple
   external websites
 
-[unreleased]: https://github.com/openfun/ashley/compare/v1.1.1...master
+[unreleased]: https://github.com/openfun/ashley/compare/v1.1.2...master
+[1.1.2]: https://github.com/openfun/ashley/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/openfun/ashley/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/openfun/ashley/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/openfun/ashley/compare/v1.0.0-beta.6...v1.0.0
