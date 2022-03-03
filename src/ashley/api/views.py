@@ -9,6 +9,7 @@ from machina.apps.forum_permission.viewmixins import (
 from machina.core.db.models import get_model
 from machina.core.loading import get_class
 from rest_framework import mixins, status, viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -60,38 +61,51 @@ class UserApiView(
             )
         return query.order_by(self.ordering)
 
-    # pylint: disable=W0221
-    def update(self, request, pk=None):
-        """Update method is used to promote or revoke moderator role"""
-        user = User.objects.get(pk=pk)
+    @action(detail=True, methods=["patch"])
+    # pylint: disable=unused-argument
+    def remove_group_moderator(
+        self,
+        request,
+        pk=None,
+    ):
+        """Add or remove group moderator."""
+        user = self.get_object()
         lti_context = get_current_lti_session(self.request)
-        roles = self.request.data.get("roles", [])
+        # Asked to revoke moderator,
+        if _FORUM_ROLE_MODERATOR in lti_context.get_user_roles(user):
+            user.groups.remove(lti_context.get_role_group(_FORUM_ROLE_MODERATOR))
+            user.save()
+            return Response(self.get_serializer(user).data)
+        else:
+            raise PermissionDenied()
+            #return Response({"detail": "User is not moderator."}, status=400)
+
+    @action(detail=True, methods=["patch"])
+    # pylint: disable=unused-argument
+    def add_group_moderator(
+        self,
+        request,
+        pk=None,
+    ):
+        
+        """Add or remove group moderator."""
+        #return Response({"success": True}, status=status.HTTP_200_OK)
+        user = self.get_object()
+        
+        lti_context = get_current_lti_session(self.request)
+        
+        
         # Load current groups
         user_groups = lti_context.get_user_roles(user)
-        group_moderator = lti_context.get_role_group(_FORUM_ROLE_MODERATOR)
-
-        # Asked to revoke moderator,
-        if _FORUM_ROLE_MODERATOR not in roles and _FORUM_ROLE_MODERATOR in user_groups:
-            user.groups.remove(group_moderator)
-            user.save()
         # Asked to become moderator, check user is not yet moderator and make sure user
         # belongs to this context by checking he has groups from this context.
-        elif (
-            _FORUM_ROLE_MODERATOR in roles
-            and _FORUM_ROLE_MODERATOR not in user_groups
-            and len(user_groups) > 0
-        ):
-            user.groups.add(group_moderator)
+        if _FORUM_ROLE_MODERATOR not in user_groups and len(user_groups) > 0:
+            user.groups.add(lti_context.get_role_group(_FORUM_ROLE_MODERATOR))
             user.save()
+            return Response(self.get_serializer(user).data)
         else:
-            logger.debug(
-                "Update moderator forbidden - Role asked %s - user groups %s",
-                roles,
-                user_groups,
-            )
             raise PermissionDenied()
-
-        return Response({"success": True}, status=status.HTTP_200_OK)
+            #return Response({"detail": "Group moderator can't be added."}, status=400)
 
 
 # pylint: disable=too-many-ancestors

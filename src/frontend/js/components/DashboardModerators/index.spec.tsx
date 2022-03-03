@@ -13,17 +13,17 @@ jest.mock('../../data/frontEndData', () => ({
 describe('<DashboardModerators />', () => {
   beforeEach(() => {
     fetchMock.get('/api/v1.0/users/?role=moderator', [
-      { public_username: 'Samy', id: 9, roles: ['moderator'] },
+      { public_username: 'Samy', id: 9},
     ]);
     fetchMock.get('/api/v1.0/users/?role=!moderator', [
-      { public_username: 'Thérèse', id: 1, roles: ['student'] },
-      { public_username: 'thomas', id: 2, roles: ['student'] },
-      { public_username: 'Valérie', id: 3, roles: ['student'] },
-      { public_username: 'Zao', id: 4, roles: ['student'] },
-      { public_username: 'Thibaut', id: 5, roles: ['student'] },
-      { public_username: 'Noémie', id: 6, roles: ['student'] },
-      { public_username: 'Zackari', id: 7, roles: ['student'] },
-      { public_username: 'Zoé', id: 8, roles: ['student'] },
+      { public_username: 'Thérèse', id: 1},
+      { public_username: 'thomas', id: 2 },
+      { public_username: 'Valérie', id: 3 },
+      { public_username: 'Zao', id: 4 },
+      { public_username: 'Thibaut', id: 5},
+      { public_username: 'Noémie', id: 6},
+      { public_username: 'Zackari', id: 7 },
+      { public_username: 'Zoé', id: 8 },
     ]);
   });
 
@@ -120,7 +120,7 @@ describe('<DashboardModerators />', () => {
     });
     expect(fetchMock.called('/api/v1.0/users/6/')).toEqual(true);
     expect(fetchMock.lastOptions('/api/v1.0/users/6/')!.body).toEqual(
-      '{"public_username":"Noémie","id":6,"roles":["student","moderator"]}',
+      '{"public_username":"Noémie","id":6}',
     );
     // make sure current list gets updated
     expect(fetchMock.called('/api/v1.0/users/?role=!moderator')).toEqual(true);

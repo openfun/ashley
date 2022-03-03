@@ -8,8 +8,7 @@ import { ButtonChangeRoleCta } from '.';
 const props = {
   user: {
     public_username: 'Samuel',
-    id: 2,
-    roles: ['student'],
+    id: 2
   },
   action: Actions.PROMOTE,
   onChange: jest.fn(),
@@ -41,7 +40,7 @@ describe('<ButtonChangeRoleCta />', () => {
       expect(fetchMock.called('/api/v1.0/users/2/')).toEqual(true);
     });
     expect(fetchMock.lastOptions('/api/v1.0/users/2/')!.body).toEqual(
-      '{"public_username":"Samuel","id":2,"roles":["student","moderator"]}',
+      '{"public_username":"Samuel","id":2}',
     );
     expect(props.onChange).toHaveBeenCalled();
   });
@@ -62,7 +61,7 @@ describe('<ButtonChangeRoleCta />', () => {
       expect(fetchMock.called('/api/v1.0/users/2/')).toEqual(true);
     });
     expect(fetchMock.lastOptions('/api/v1.0/users/2/')!.body).toEqual(
-      '{"public_username":"Samuel","id":2,"roles":["student"]}',
+      '{"public_username":"Samuel","id":2}',
     );
     expect(props.onChange).toHaveBeenCalled();
   });

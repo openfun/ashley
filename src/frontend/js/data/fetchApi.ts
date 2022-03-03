@@ -1,6 +1,6 @@
 import { appFrontendContext } from './frontEndData';
 import { User } from '../types/User';
-import { filterApiRole } from '../types/Enums';
+import { Actions, filterApiRole } from '../types/Enums';
 import { handle } from '../utils/errors/handle';
 
 /**
@@ -31,17 +31,17 @@ export const fetchUsers = async (role: filterApiRole) => {
 
 /**
  * Request API to add group moderator for this student
+ * 
  */
-export const updateUser = async (user: User) => {
+export const updateUserGroup = async (user: User, action:Actions) => {
   let response: Response;
   try {
-    response = await fetch(`/api/v1.0/users/${user.id}/`, {
+    response = await fetch(`/api/v1.0/users/{user.id}/{action}/`, {
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFTOKEN': appFrontendContext.csrftoken,
       },
-      body: JSON.stringify(user),
-      method: 'PUT',
+      method: 'PATCH',
     });
   } catch (error) {
     return handle(new Error(`Failed to updateUser ${error}`));
