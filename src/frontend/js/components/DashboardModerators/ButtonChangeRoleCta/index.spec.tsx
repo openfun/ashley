@@ -9,7 +9,6 @@ const props = {
   user: {
     public_username: 'Samuel',
     id: 2,
-    roles: ['student'],
   },
   action: Actions.PROMOTE,
   onChange: jest.fn(),
@@ -26,7 +25,7 @@ describe('<ButtonChangeRoleCta />', () => {
   });
 
   it('renders a button with proper action text depending on props param and calls onChange prop', async () => {
-    fetchMock.mock('/api/v1.0/users/2/', {});
+    fetchMock.mock('/api/v1.0/users/2/add_group_moderator/', {});
     render(
       <IntlProvider locale="en">
         <ButtonChangeRoleCta {...props} />
@@ -38,16 +37,15 @@ describe('<ButtonChangeRoleCta />', () => {
 
     fireEvent.click(button);
     await waitFor(() => {
-      expect(fetchMock.called('/api/v1.0/users/2/')).toEqual(true);
+      expect(
+        fetchMock.called('/api/v1.0/users/2/add_group_moderator/'),
+      ).toEqual(true);
     });
-    expect(fetchMock.lastOptions('/api/v1.0/users/2/')!.body).toEqual(
-      '{"public_username":"Samuel","id":2,"roles":["student","moderator"]}',
-    );
     expect(props.onChange).toHaveBeenCalled();
   });
 
   it('renders a button with proper action text depending on props param and calls onChange prop', async () => {
-    fetchMock.mock('/api/v1.0/users/2/', {});
+    fetchMock.mock('/api/v1.0/users/2/remove_group_moderator/', {});
     render(
       <IntlProvider locale="en">
         <ButtonChangeRoleCta {...{ ...props, action: Actions.REVOKE }} />
@@ -59,11 +57,10 @@ describe('<ButtonChangeRoleCta />', () => {
 
     fireEvent.click(button);
     await waitFor(() => {
-      expect(fetchMock.called('/api/v1.0/users/2/')).toEqual(true);
+      expect(
+        fetchMock.called('/api/v1.0/users/2/remove_group_moderator/'),
+      ).toEqual(true);
     });
-    expect(fetchMock.lastOptions('/api/v1.0/users/2/')!.body).toEqual(
-      '{"public_username":"Samuel","id":2,"roles":["student"]}',
-    );
     expect(props.onChange).toHaveBeenCalled();
   });
 });

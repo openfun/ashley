@@ -12,6 +12,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Stop calculating the list of roles for the endpoint that list users
 
+### Added
+
+- Specific endpoints to add and remove group moderator
+
 ## [1.1.2] - 2022-01-18
 
 ### Added

@@ -71,9 +71,9 @@ describe('<Modal />', () => {
 
   it('calls props.onChange and revoke on click button', async () => {
     fetchMock.mock(
-      '/api/v1.0/users/8/',
+      '/api/v1.0/users/8/remove_group_moderator/',
       { status: 200, body: {} },
-      { method: 'PUT' },
+      { method: 'PATCH' },
     );
     render(
       <IntlProvider locale="en">
@@ -86,19 +86,18 @@ describe('<Modal />', () => {
     });
     fireEvent.click(revokeButton);
     await waitFor(() => {
-      expect(fetchMock.called('/api/v1.0/users/8/')).toEqual(true);
+      expect(
+        fetchMock.called('/api/v1.0/users/8/remove_group_moderator/'),
+      ).toEqual(true);
     });
-    expect(fetchMock.lastOptions('/api/v1.0/users/8/')!.body).toEqual(
-      '{"public_username":"Thérèse","id":8,"roles":["lambda_group","student"]}',
-    );
     expect(myProps.onChange).toHaveBeenCalled();
   });
 
   it('calls props.onChange and promote on click button', async () => {
     fetchMock.mock(
-      '/api/v1.0/users/8/',
+      '/api/v1.0/users/8/add_group_moderator/',
       { status: 200, body: {} },
-      { method: 'PUT' },
+      { method: 'PATCH' },
     );
     render(
       <IntlProvider locale="en">
@@ -106,7 +105,7 @@ describe('<Modal />', () => {
           {...{
             ...myProps,
             action: Actions.PROMOTE,
-            user: { ...myProps.user, roles: ['lambda_group', 'student'] },
+            user: { ...myProps.user },
           }}
         />
       </IntlProvider>,
@@ -117,11 +116,10 @@ describe('<Modal />', () => {
     });
     fireEvent.click(revokeButton);
     await waitFor(() => {
-      expect(fetchMock.called('/api/v1.0/users/8/')).toEqual(true);
+      expect(
+        fetchMock.called('/api/v1.0/users/8/add_group_moderator/'),
+      ).toEqual(true);
     });
-    expect(fetchMock.lastOptions('/api/v1.0/users/8/')!.body).toEqual(
-      '{"public_username":"Thérèse","id":8,"roles":["lambda_group","student","moderator"]}',
-    );
     expect(myProps.onChange).toHaveBeenCalled();
   });
 });

@@ -89,9 +89,9 @@ describe('<DashboardModerators />', () => {
   });
   it('renders the Modal from selecting a user and on validation list gets updated', async () => {
     fetchMock.mock(
-      '/api/v1.0/users/6/',
+      '/api/v1.0/users/6/add_group_moderator/',
       { status: 200, body: {} },
-      { method: 'PUT' },
+      { method: 'PATCH' },
     );
 
     render(
@@ -118,9 +118,8 @@ describe('<DashboardModerators />', () => {
     await waitFor(() => {
       fireEvent.click(promoteModerator);
     });
-    expect(fetchMock.called('/api/v1.0/users/6/')).toEqual(true);
-    expect(fetchMock.lastOptions('/api/v1.0/users/6/')!.body).toEqual(
-      '{"public_username":"Noémie","id":6,"roles":["student","moderator"]}',
+    expect(fetchMock.called('/api/v1.0/users/6/add_group_moderator/')).toEqual(
+      true,
     );
     // make sure current list gets updated
     expect(fetchMock.called('/api/v1.0/users/?role=!moderator')).toEqual(true);
