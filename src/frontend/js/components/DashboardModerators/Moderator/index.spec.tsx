@@ -9,7 +9,6 @@ const props = {
   user: {
     public_username: 'Samuel',
     id: 2,
-    roles: ['moderator'],
   },
   onClick: mockOnClick,
 };
@@ -34,7 +33,6 @@ describe('<Moderator />', () => {
     expect(mockOnClick).toHaveBeenCalledWith({
       public_username: 'Samuel',
       id: 2,
-      roles: ['moderator'],
     });
   });
 });

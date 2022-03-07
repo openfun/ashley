@@ -14,7 +14,6 @@ const myProps = {
   user: {
     public_username: 'Thérèse',
     id: 8,
-    roles: ['lambda_group', 'student', 'moderator'],
   },
   action: Actions.REVOKE,
   appElement: '#modal-exclude__react',

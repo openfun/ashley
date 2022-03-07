@@ -6,9 +6,9 @@ import { ListModerators } from '.';
 const mockSetUser = jest.fn();
 const myProps = {
   users: [
-    { public_username: 'Thérèse', id: 1, roles: ['moderator'] },
-    { public_username: 'Thomas', id: 2, roles: ['moderator'] },
-    { public_username: 'Sam', id: 3, roles: ['moderator'] },
+    { public_username: 'Thérèse', id: 1 },
+    { public_username: 'Thomas', id: 2 },
+    { public_username: 'Sam', id: 3 },
   ],
   totalUsers: 5,
   setUser: mockSetUser,
@@ -51,7 +51,6 @@ describe('<ListModerators />', () => {
     expect(mockSetUser).toHaveBeenCalledWith({
       public_username: 'Thomas',
       id: 2,
-      roles: ['moderator'],
     });
     expect(myProps.onChange).toHaveBeenCalled();
   });
@@ -72,7 +71,7 @@ describe('<ListModerators />', () => {
         <ListModerators
           {...{
             ...myProps,
-            users: [{ public_username: '', id: 3, roles: ['moderator'] }],
+            users: [{ public_username: '', id: 3 }],
           }}
         />
       </IntlProvider>,
