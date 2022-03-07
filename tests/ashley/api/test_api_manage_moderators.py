@@ -1,5 +1,6 @@
 """Tests API to manage moderators."""
 import json
+import random
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
@@ -211,13 +212,188 @@ class ManageModeratorApiTest(TestCase):
         # Permission + session added, it should be allowed
         self.assertEqual(response.status_code, 200)
 
-    def test_access_api_can_manage_moderators_update_student_promote(self):
+    def test_access_api_update_student_patch(self):
+        """Standard call should not be allowed to update a student."""
+        # Creates a forum
+        user = UserFactory()
+        lti_context = LTIContextFactory(lti_consumer=user.lti_consumer)
+        forum = ForumFactory()
+        forum.lti_contexts.add(lti_context)
+        assign_perm("can_read_forum", user, forum, True)
+
+        # Creates the session
+        self.client.force_login(user, "ashley.auth.backend.LTIBackend")
+        session = self.client.session
+        session[SESSION_LTI_CONTEXT_ID] = lti_context.id
+        session.save()
+        data = {
+            "public_username": "toto",
+        }
+        response = self.client.patch(
+            f"/api/v1.0/users/{user.id}/",
+            json.dumps(data),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(
+            response.json(),
+            {"detail": "You do not have permission to perform this action."},
+        )
+
+    def test_access_api_update_instructor_post(self):
+        """Post to update user is not allowed even for an instructor."""
+        # Creates a forum
+        user = UserFactory()
+        lti_context = LTIContextFactory(lti_consumer=user.lti_consumer)
+        forum = ForumFactory()
+        forum.lti_contexts.add(lti_context)
+        lti_context.sync_user_groups(user, ["instructor"])
+        assign_perm("can_manage_moderator", user, forum, True)
+        # Creates the session
+        self.client.force_login(user, "ashley.auth.backend.LTIBackend")
+        session = self.client.session
+        session[SESSION_LTI_CONTEXT_ID] = lti_context.id
+        session.save()
+        response = self.client.post(
+            f"/api/v1.0/users/{user.id}/",
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json(), {"detail": 'Method "POST" not allowed.'})
+
+    def test_access_api_update_instructor_patch(self):
+        """
+        Standard instructor call to patch user is allowed but doesn't change anything,
+        as serializer's attributes are read-only.
+        """
+        # Creates a forum
+        user = UserFactory(id=1, public_username="user")
+        lti_context = LTIContextFactory(lti_consumer=user.lti_consumer)
+        forum = ForumFactory()
+        forum.lti_contexts.add(lti_context)
+        lti_context.sync_user_groups(user, ["instructor"])
+        assign_perm("can_manage_moderator", user, forum, True)
+        # Creates the session
+        self.client.force_login(user, "ashley.auth.backend.LTIBackend")
+        session = self.client.session
+        session[SESSION_LTI_CONTEXT_ID] = lti_context.id
+        session.save()
+        data = {"id": 10, "public_username": "Sab"}
+        response = self.client.patch(
+            f"/api/v1.0/users/{user.id}/",
+            json.dumps(data),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"id": 1, "public_username": "user"})
+
+    def test_access_api_update_instructor_put(self):
+        """Standard instructor call to put user is allowed but doesn't change anything."""
+        # Creates a forum
+        user = UserFactory(id=1, public_username="user")
+        lti_context = LTIContextFactory(lti_consumer=user.lti_consumer)
+        forum = ForumFactory()
+        forum.lti_contexts.add(lti_context)
+        lti_context.sync_user_groups(user, ["instructor"])
+        assign_perm("can_manage_moderator", user, forum, True)
+        # Creates the session
+        self.client.force_login(user, "ashley.auth.backend.LTIBackend")
+        session = self.client.session
+        session[SESSION_LTI_CONTEXT_ID] = lti_context.id
+        session.save()
+        data = {"id": 10, "public_username": "Sab"}
+        response = self.client.put(
+            f"/api/v1.0/users/{user.id}/",
+            json.dumps(data),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"id": 1, "public_username": "user"})
+
+    def test_access_api_moderator_group_anonymous_patch(self):
+        """
+        Anonymous user is not allowed to add or remove a user's moderator group via
+        the action endpoint.
+        """
+        user = UserFactory(public_username="user")
+        action = random.choice(["add_group_moderator", "remove_group_moderator"])
+        response = self.client.patch(f"/api/v1.0/users/{user.id}/{action}/")
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(
+            response.json(), {"detail": "Authentication credentials were not provided."}
+        )
+
+    def test_access_api_moderator_group_student_patch(self):
+        """Student can't patch user to add or remove the group moderator."""
+        user = UserFactory(public_username="user")
+        # Creates a forum
+        lti_context = LTIContextFactory(lti_consumer=user.lti_consumer)
+        forum = ForumFactory()
+        forum.lti_contexts.add(lti_context)
+        assign_perm("can_read_forum", user, forum, True)
+
+        # Creates the session
+        self.client.force_login(user, "ashley.auth.backend.LTIBackend")
+        session = self.client.session
+        session[SESSION_LTI_CONTEXT_ID] = lti_context.id
+        session.save()
+
+        action = random.choice(["add_group_moderator", "remove_group_moderator"])
+        response = self.client.patch(f"/api/v1.0/users/{user.id}/{action}/")
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(
+            response.json(),
+            {"detail": "You do not have permission to perform this action."},
+        )
+
+    def test_access_api_moderator_group_instructor_post(self):
+        """Instructor can't update user with a POST to add or remove the group moderator."""
+        user = UserFactory(public_username="user")
+        # Creates a forum
+        lti_context = LTIContextFactory(lti_consumer=user.lti_consumer)
+        forum = ForumFactory()
+        forum.lti_contexts.add(lti_context)
+        assign_perm("can_manage_moderator", user, forum, True)
+
+        # Creates the session
+        self.client.force_login(user, "ashley.auth.backend.LTIBackend")
+        session = self.client.session
+        session[SESSION_LTI_CONTEXT_ID] = lti_context.id
+        session.save()
+
+        action = random.choice(["add_group_moderator", "remove_group_moderator"])
+        response = self.client.post(f"/api/v1.0/users/{user.id}/{action}/")
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json(), {"detail": 'Method "POST" not allowed.'})
+
+    def test_access_api_moderator_group_instructor_put(self):
+        """Instructor can't update user with a put to add or remove the group moderator."""
+        user = UserFactory(public_username="user")
+        # Creates a forum
+        lti_context = LTIContextFactory(lti_consumer=user.lti_consumer)
+        forum = ForumFactory()
+        forum.lti_contexts.add(lti_context)
+        assign_perm("can_manage_moderator", user, forum, True)
+
+        # Creates the session
+        self.client.force_login(user, "ashley.auth.backend.LTIBackend")
+        session = self.client.session
+        session[SESSION_LTI_CONTEXT_ID] = lti_context.id
+        session.save()
+
+        action = random.choice(["add_group_moderator", "remove_group_moderator"])
+        response = self.client.put(f"/api/v1.0/users/{user.id}/{action}/")
+        self.assertEqual(response.status_code, 405)
+        self.assertEqual(response.json(), {"detail": 'Method "PUT" not allowed.'})
+
+    def test_access_api_can_manage_moderators_update_student_promote_revoke(self):
         """
         Promote and revoke a user with right context, permission, group
         Test to validate that update request API is working when everything
         is set properly.
         """
-        update_user = UserFactory(public_username="Thérèse")
+        update_user = UserFactory(id=1, public_username="Thérèse")
         api_user = UserFactory(lti_consumer=update_user.lti_consumer)
 
         lti_context = LTIContextFactory(lti_consumer=update_user.lti_consumer)
@@ -244,15 +420,12 @@ class ManageModeratorApiTest(TestCase):
         session.save()
 
         # Promote user to moderator
-        data = {"roles": ["student", "moderator"]}
-        response = self.client.put(
-            f"/api/v1.0/users/{update_user.id}/",
-            json.dumps(data),
+        response = self.client.patch(
+            f"/api/v1.0/users/{update_user.id}/add_group_moderator/",
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 200)
-        content = json.loads(response.content)
-        self.assertEqual(content, {"success": True})
+        self.assertEqual(response.json(), {"id": 1, "public_username": "Thérèse"})
 
         # Check group moderator is part of group of the user
         self.assertCountEqual(
@@ -265,17 +438,12 @@ class ManageModeratorApiTest(TestCase):
         )
 
         # Then Revoke user to moderator
-        data = {
-            "roles": ["student"],
-        }
-        response = self.client.put(
-            f"/api/v1.0/users/{update_user.id}/",
-            json.dumps(data),
+        response = self.client.patch(
+            f"/api/v1.0/users/{update_user.id}/remove_group_moderator/",
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 200)
-        content = json.loads(response.content)
-        self.assertEqual(content, {"success": True})
+        self.assertEqual(response.json(), {"id": 1, "public_username": "Thérèse"})
 
         # Check group moderator is not part of users's group
         self.assertCountEqual(
@@ -286,32 +454,17 @@ class ManageModeratorApiTest(TestCase):
             list(update_user.groups.values_list("name", flat=True)),
         )
 
-    def test_access_api_basic_manage_moderator_update_student(self):
-        """Standard call should not be allowed to update a student."""
-        user = UserFactory()
-        data = {
-            "roles": ["moderator"],
-        }
-        response = self.client.post(
-            f"/api/v1.0/users/{user.id}/",
-            json.dumps(data),
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, 403)
-        content = json.loads(response.content)
-        self.assertEqual(
-            content, {"detail": "Authentication credentials were not provided."}
-        )
-
     def test_access_api_can_manage_moderators_update_student_no_group_context(self):
-        """Users that don't have a group from this context can't be promoted moderator"""
+        """
+        We can't access endpoints targeting a user that don't have any group for this
+        context. Only a user having a student group can add the moderator group.
+        """
         update_user = UserFactory()
         api_user = UserFactory(lti_consumer=update_user.lti_consumer)
 
         lti_context = LTIContextFactory(lti_consumer=update_user.lti_consumer)
         forum = ForumFactory()
         forum.lti_contexts.add(lti_context)
-
         # Assign the permission
         assign_perm("can_manage_moderator", api_user, forum, True)
         # Creates the session
@@ -320,28 +473,92 @@ class ManageModeratorApiTest(TestCase):
         session[SESSION_LTI_CONTEXT_ID] = lti_context.id
         session.save()
 
-        # Data to promote user to moderator
-        data = {
-            "roles": ["moderator"],
-        }
-        response = self.client.put(
-            f"/api/v1.0/users/{update_user.id}/",
-            json.dumps(data),
+        # Same for promoting/removing user to moderator
+        action = random.choice(["add_group_moderator", "remove_group_moderator"])
+        response = self.client.patch(
+            f"/api/v1.0/users/{update_user.id}/{action}/",
             content_type="application/json",
         )
-        self.assertEqual(response.status_code, 403)
-        content = json.loads(response.content)
-        self.assertEqual(
-            content, {"detail": "You do not have permission to perform this action."}
-        )
-        # Add group student and it should work
-        lti_context.sync_user_groups(update_user, ["student"])
-        response = self.client.put(
-            f"/api/v1.0/users/{update_user.id}/",
-            json.dumps(data),
+        # no such user exist in this group context
+        self.assertEqual(response.status_code, 404)
+
+        # Add group and endpoints are now accessible
+        lti_context.sync_user_groups(update_user, ["another_role"])
+        response = self.client.patch(
+            f"/api/v1.0/users/{update_user.id}/remove_group_moderator/",
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 200)
+
+        response = self.client.patch(
+            f"/api/v1.0/users/{update_user.id}/add_group_moderator/",
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        # Check list group of the user, moderator hasn't been added
+        # as user doesn't have specificaly the student's group
+        self.assertCountEqual(
+            [
+                lti_context.base_group_name,
+                f"{lti_context.base_group_name}:role:another_role",
+            ],
+            list(update_user.groups.values_list("name", flat=True)),
+        )
+
+        # Set group student
+        lti_context.sync_user_groups(update_user, ["student"])
+        response = self.client.patch(
+            f"/api/v1.0/users/{update_user.id}/add_group_moderator/",
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        # now it's added
+        self.assertCountEqual(
+            [
+                lti_context.base_group_name,
+                f"{lti_context.base_group_name}:role:student",
+                f"{lti_context.base_group_name}:role:moderator",
+            ],
+            list(update_user.groups.values_list("name", flat=True)),
+        )
+
+        response = self.client.patch(
+            f"/api/v1.0/users/{update_user.id}/remove_group_moderator/",
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_access_api_can_manage_moderators_instructor_other_forum(self):
+        """
+        If a user can manage another forum, he can't update moderators from a forum
+        where is doesn't have this permission.
+        """
+        update_user = UserFactory()
+        api_user = UserFactory(lti_consumer=update_user.lti_consumer)
+
+        lti_context = LTIContextFactory(lti_consumer=update_user.lti_consumer)
+        forum = ForumFactory()
+        forum.lti_contexts.add(lti_context)
+        update_user.refresh_from_db()
+        # Assign the permission
+        assign_perm("can_manage_moderator", api_user, ForumFactory(), True)
+        # Creates the session
+        self.client.force_login(api_user, "ashley.auth.backend.LTIBackend")
+        session = self.client.session
+        session[SESSION_LTI_CONTEXT_ID] = lti_context.id
+        session.save()
+
+        action = random.choice(["add_group_moderator", "remove_group_moderator"])
+        # Revoke user to moderator
+        response = self.client.patch(
+            f"/api/v1.0/users/{update_user.id}/{action}/",
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(
+            response.json(),
+            {"detail": "You do not have permission to perform this action."},
+        )
 
     def test_access_api_can_manage_moderators_update_student_no_group_moderator(self):
         """If moderator group doesn't exist user can be updated and group created
@@ -363,12 +580,8 @@ class ManageModeratorApiTest(TestCase):
         session.save()
 
         # Data to promote user to moderator
-        data = {
-            "roles": ["moderator"],
-        }
-        response = self.client.put(
-            f"/api/v1.0/users/{update_user.id}/",
-            json.dumps(data),
+        response = self.client.patch(
+            f"/api/v1.0/users/{update_user.id}/add_group_moderator/",
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 200)
@@ -387,12 +600,8 @@ class ManageModeratorApiTest(TestCase):
         # Assign the permission
         assign_perm("can_manage_moderator", api_user, forum, True)
         #
-        data = {
-            "roles": ["moderator"],
-        }
-        response = self.client.put(
-            f"/api/v1.0/users/{update_user.id}/",
-            json.dumps(data),
+        response = self.client.patch(
+            f"/api/v1.0/users/{update_user.id}/add_group_moderator/",
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 403)
@@ -405,9 +614,8 @@ class ManageModeratorApiTest(TestCase):
         session = self.client.session
         session[SESSION_LTI_CONTEXT_ID] = lti_context.id
         session.save()
-        response = self.client.put(
-            f"/api/v1.0/users/{update_user.id}/",
-            json.dumps(data),
+        response = self.client.patch(
+            f"/api/v1.0/users/{update_user.id}/add_group_moderator/",
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 200)
@@ -433,72 +641,25 @@ class ManageModeratorApiTest(TestCase):
 
         return api_user, lti_context
 
-    def test_access_api_can_manage_moderators_update_student_no_role(self):
-        """If roles is not present or is defined to unexpected value, promote moderator is
-        not allowed"""
+    def test_revoke_moderator_on_student(self):
+        """A user that is not moderator can't be revoked, nothing changes"""
         api_user, lti_context = self._login_authorized_user_to_manage_moderators()
+
         # Creates user to update
         update_user = UserFactory(lti_consumer=api_user.lti_consumer)
         lti_context.sync_user_groups(update_user, ["student"])
 
-        data = {
-            "id": update_user.id,
-        }
-        response = self.client.put(
-            f"/api/v1.0/users/{update_user.id}/",
-            json.dumps(data),
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, 403)
-        content = json.loads(response.content)
-        self.assertEqual(
-            content, {"detail": "You do not have permission to perform this action."}
-        )
-        # Change data, add role parameter to ’whatever’
-        data = {"roles": ["whatever"]}
-        response = self.client.put(
-            f"/api/v1.0/users/{update_user.id}/",
-            json.dumps(data),
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, 403)
-
-        # Change data, add roles parameter to ’instructor’, it's not allowed
-        data = {"roles": ["instructor"]}
-        response = self.client.put(
-            f"/api/v1.0/users/{update_user.id}/",
-            json.dumps(data),
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, 403)
-
-        # Change data, add roles parameter to ’moderator’ and it should work
-        data = {"roles": ["moderator"]}
-        response = self.client.put(
-            f"/api/v1.0/users/{update_user.id}/",
-            json.dumps(data),
+        response = self.client.patch(
+            f"/api/v1.0/users/{update_user.id}/remove_group_moderator/",
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 200)
-
-    def test_revoke_moderator_on_student(self):
-        """A user that is not moderator can't be revoked"""
-        api_user, lti_context = self._login_authorized_user_to_manage_moderators()
-
-        # Creates user to update
-        update_user = UserFactory(lti_consumer=api_user.lti_consumer)
-        lti_context.sync_user_groups(update_user, ["student"])
-
-        data = {"roles": ["student"]}
-        response = self.client.put(
-            f"/api/v1.0/users/{update_user.id}/",
-            json.dumps(data),
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, 403)
-        content = json.loads(response.content)
-        self.assertEqual(
-            content, {"detail": "You do not have permission to perform this action."}
+        self.assertCountEqual(
+            [
+                lti_context.base_group_name,
+                f"{lti_context.base_group_name}:role:student",
+            ],
+            list(update_user.groups.values_list("name", flat=True)),
         )
 
         # Assign moderator group to user
@@ -513,10 +674,8 @@ class ManageModeratorApiTest(TestCase):
         )
 
         # Revoke should now be ok
-        data = {"id": update_user.id, "roles": ["student"]}
-        response = self.client.put(
-            f"/api/v1.0/users/{update_user.id}/",
-            json.dumps(data),
+        response = self.client.patch(
+            f"/api/v1.0/users/{update_user.id}/remove_group_moderator/",
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 200)
@@ -531,7 +690,7 @@ class ManageModeratorApiTest(TestCase):
         )
 
     def test_promote_on_moderator_student(self):
-        """A user that is moderator can't be promoted"""
+        """A user that is a moderator stays moderator if promoted"""
         api_user, lti_context = self._login_authorized_user_to_manage_moderators()
 
         # Assign moderator group to user
@@ -546,22 +705,22 @@ class ManageModeratorApiTest(TestCase):
             list(update_user.groups.values_list("name", flat=True)),
         )
         # Promote shouldn't work
-        data = {"roles": ["moderator"]}
-        response = self.client.put(
-            f"/api/v1.0/users/{update_user.id}/",
-            json.dumps(data),
+        response = self.client.patch(
+            f"/api/v1.0/users/{update_user.id}/add_group_moderator/",
             content_type="application/json",
         )
-        self.assertEqual(response.status_code, 403)
-        content = json.loads(response.content)
-        self.assertEqual(
-            content, {"detail": "You do not have permission to perform this action."}
+        self.assertEqual(response.status_code, 200)
+        self.assertCountEqual(
+            [
+                lti_context.base_group_name,
+                f"{lti_context.base_group_name}:role:student",
+                f"{lti_context.base_group_name}:role:moderator",
+            ],
+            list(update_user.groups.values_list("name", flat=True)),
         )
         # Revoke should work
-        data = {"id": update_user.id, "roles": ["student"]}
-        response = self.client.put(
-            f"/api/v1.0/users/{update_user.id}/",
-            json.dumps(data),
+        response = self.client.patch(
+            f"/api/v1.0/users/{update_user.id}/remove_group_moderator/",
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 200)
@@ -573,10 +732,8 @@ class ManageModeratorApiTest(TestCase):
             list(update_user.groups.values_list("name", flat=True)),
         )
         # Now promote should work
-        data = {"id": update_user.id, "roles": ["moderator"]}
-        response = self.client.put(
-            f"/api/v1.0/users/{update_user.id}/",
-            json.dumps(data),
+        response = self.client.patch(
+            f"/api/v1.0/users/{update_user.id}/add_group_moderator/",
             content_type="application/json",
         )
         self.assertEqual(response.status_code, 200)
@@ -1038,10 +1195,10 @@ class ManageModeratorApiTest(TestCase):
             list(update_user.groups.values_list("name", flat=True)),
         )
 
-        data = {"roles": ["moderator"], "public_username": "Salomé"}
+        data = {"public_username": "Salomé"}
 
-        response = self.client.put(
-            f"/api/v1.0/users/{update_user.id}/",
+        response = self.client.patch(
+            f"/api/v1.0/users/{update_user.id}/add_group_moderator/",
             json.dumps(data),
             content_type="application/json",
         )
@@ -1056,61 +1213,4 @@ class ManageModeratorApiTest(TestCase):
                 f"{lti_context.base_group_name}:role:moderator",
             ],
             list(update_user.groups.values_list("name", flat=True)),
-        )
-
-    def test_api_can_manage_moderators_update_student_id_param_ignored(
-        self,
-    ):
-        """If id in body of request api is different from the id in the url is ignored.
-        Only the user targeted in the url is updated."""
-        api_user, lti_context = self._login_authorized_user_to_manage_moderators()
-        # Creates user to update
-        update_user = UserFactory(
-            public_username="Théo", lti_consumer=api_user.lti_consumer
-        )
-        useless_user = UserFactory(lti_consumer=api_user.lti_consumer)
-        lti_context.sync_user_groups(update_user, ["student"])
-        lti_context.sync_user_groups(useless_user, ["student"])
-
-        # Check group moderator is now part of user's groups
-        self.assertCountEqual(
-            [
-                lti_context.base_group_name,
-                f"{lti_context.base_group_name}:role:student",
-            ],
-            list(update_user.groups.values_list("name", flat=True)),
-        )
-        self.assertCountEqual(
-            [
-                lti_context.base_group_name,
-                f"{lti_context.base_group_name}:role:student",
-            ],
-            list(useless_user.groups.values_list("name", flat=True)),
-        )
-
-        # in the body we target the other user
-        data = {"id": useless_user.id, "roles": "moderator"}
-
-        response = self.client.put(
-            f"/api/v1.0/users/{update_user.id}/",
-            json.dumps(data),
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, 200)
-        # Check group moderator is now part of user's groups
-        self.assertCountEqual(
-            [
-                lti_context.base_group_name,
-                f"{lti_context.base_group_name}:role:student",
-                f"{lti_context.base_group_name}:role:moderator",
-            ],
-            list(update_user.groups.values_list("name", flat=True)),
-        )
-        # useless_user didn't get updated and still has no moderator group
-        self.assertCountEqual(
-            [
-                lti_context.base_group_name,
-                f"{lti_context.base_group_name}:role:student",
-            ],
-            list(useless_user.groups.values_list("name", flat=True)),
         )

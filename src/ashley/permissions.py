@@ -24,7 +24,7 @@ class ManageModeratorPermission(PermissionRequiredMixin):
 
     @classmethod
     def _get_forum(cls, request):
-        """LTIContext can have multiple forum, we target the first one"""
+        """LTIContext can have multiple forums, we target the first one"""
         try:
             if request.user.is_authenticated and request.session.get(
                 SESSION_LTI_CONTEXT_ID

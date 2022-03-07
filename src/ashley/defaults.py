@@ -11,6 +11,7 @@ from ashley.editor.decorators import emoji, image, link, mention
 _FORUM_ROLE_ADMINISTRATOR = "administrator"
 _FORUM_ROLE_INSTRUCTOR = "instructor"
 _FORUM_ROLE_MODERATOR = "moderator"
+_FORUM_ROLE_STUDENT = "student"
 
 _FORUM_BASE_PERMISSIONS = [
     "can_see_forum",

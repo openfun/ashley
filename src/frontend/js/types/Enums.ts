@@ -1,6 +1,6 @@
 export enum Actions {
-  REVOKE = 'revoke',
-  PROMOTE = 'promote',
+  REVOKE = 'remove_group_moderator',
+  PROMOTE = 'add_group_moderator',
 }
 
 export enum Role {
