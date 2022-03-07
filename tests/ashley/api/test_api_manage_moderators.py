@@ -609,58 +609,74 @@ class ManageModeratorApiTest(TestCase):
         lti_context.sync_user_groups(user3, ["student", "moderator"]),
         lti_context.sync_user_groups(user4, ["instructor"])
 
-        # Request with no filter returns the list of users but user5 that has no roles
-        # list ordered by public_username
-        response = self.client.get("/api/v1.0/users/", content_type="application/json")
-        self.assertEqual(response.status_code, 200)
-        content = json.loads(response.content)
-        self.assertEqual(
-            content,
-            [
-                {
-                    "id": user3.id,
-                    "public_username": "Abba",
-                    "roles": ["moderator", "student"],
-                },
-                {"id": user2.id, "public_username": "Aurélie", "roles": ["student"]},
-                {"id": user4.id, "public_username": "Silvio", "roles": ["instructor"]},
-                {"id": user1.id, "public_username": "Thomas", "roles": ["student"]},
-            ],
-        )
+        with self.assertNumQueries(9):
+            # Request with no filter returns the list of users but user5 that has no roles
+            # list ordered by public_username
+            response = self.client.get(
+                "/api/v1.0/users/", content_type="application/json"
+            )
+            self.assertEqual(response.status_code, 200)
+            content = json.loads(response.content)
+            self.assertEqual(
+                content,
+                [
+                    {
+                        "id": user3.id,
+                        "public_username": "Abba",
+                    },
+                    {"id": user2.id, "public_username": "Aurélie"},
+                    {"id": user4.id, "public_username": "Silvio"},
+                    {"id": user1.id, "public_username": "Thomas"},
+                ],
+            )
 
-        response = self.client.get(
-            "/api/v1.0/users/?role=student", content_type="application/json"
-        )
-        self.assertEqual(response.status_code, 200)
-        content = json.loads(response.content)
-        self.assertEqual(
-            content,
-            [
-                {
-                    "id": user3.id,
-                    "public_username": "Abba",
-                    "roles": ["moderator", "student"],
-                },
-                {"id": user2.id, "public_username": "Aurélie", "roles": ["student"]},
-                {"id": user1.id, "public_username": "Thomas", "roles": ["student"]},
-            ],
-        )
+        with self.assertNumQueries(9):
+            response = self.client.get(
+                "/api/v1.0/users/?role=student", content_type="application/json"
+            )
+            self.assertEqual(response.status_code, 200)
+            content = json.loads(response.content)
+            self.assertEqual(
+                content,
+                [
+                    {
+                        "id": user3.id,
+                        "public_username": "Abba",
+                    },
+                    {"id": user2.id, "public_username": "Aurélie"},
+                    {"id": user1.id, "public_username": "Thomas"},
+                ],
+            )
 
-        response = self.client.get(
-            "/api/v1.0/users/?role=moderator", content_type="application/json"
-        )
-        self.assertEqual(response.status_code, 200)
-        content = json.loads(response.content)
-        self.assertEqual(
-            content,
-            [
-                {
-                    "id": user3.id,
-                    "public_username": "Abba",
-                    "roles": ["moderator", "student"],
-                },
-            ],
-        )
+        with self.assertNumQueries(9):
+            response = self.client.get(
+                "/api/v1.0/users/?role=moderator", content_type="application/json"
+            )
+            self.assertEqual(response.status_code, 200)
+            content = json.loads(response.content)
+            self.assertEqual(
+                content,
+                [
+                    {
+                        "id": user3.id,
+                        "public_username": "Abba",
+                    },
+                ],
+            )
+
+        with self.assertNumQueries(9):
+            response = self.client.get(
+                "/api/v1.0/users/?role=!moderator", content_type="application/json"
+            )
+            self.assertEqual(response.status_code, 200)
+            content = json.loads(response.content)
+            self.assertEqual(
+                content,
+                [
+                    {"id": user2.id, "public_username": "Aurélie"},
+                    {"id": user1.id, "public_username": "Thomas"},
+                ],
+            )
 
         response = self.client.get(
             "/api/v1.0/users/?role=instructor", content_type="application/json"
@@ -670,7 +686,7 @@ class ManageModeratorApiTest(TestCase):
         self.assertEqual(
             content,
             [
-                {"id": user4.id, "public_username": "Silvio", "roles": ["instructor"]},
+                {"id": user4.id, "public_username": "Silvio"},
             ],
         )
 
@@ -696,7 +712,6 @@ class ManageModeratorApiTest(TestCase):
                 {
                     "id": user1.id,
                     "public_username": "Thomas",
-                    "roles": ["moderator", "student"],
                 },
             ],
         )
@@ -712,7 +727,6 @@ class ManageModeratorApiTest(TestCase):
                 {
                     "id": user1.id,
                     "public_username": "Thomas",
-                    "roles": ["moderator", "student"],
                 },
             ],
         )
@@ -738,7 +752,6 @@ class ManageModeratorApiTest(TestCase):
                 {
                     "id": user1.id,
                     "public_username": "Thomas",
-                    "roles": ["moderator", "student"],
                 },
             ],
         )
@@ -796,7 +809,6 @@ class ManageModeratorApiTest(TestCase):
                 {
                     "id": user1.id,
                     "public_username": "Thomas",
-                    "roles": ["instructor", "moderator"],
                 },
             ],
         )
@@ -821,7 +833,6 @@ class ManageModeratorApiTest(TestCase):
                 {
                     "id": user1.id,
                     "public_username": "Thomas",
-                    "roles": ["instructor", "moderator"],
                 },
             ],
         )
@@ -902,7 +913,7 @@ class ManageModeratorApiTest(TestCase):
         # from this context
         self.assertEqual(
             content,
-            [{"id": user1.id, "public_username": "Thomas", "roles": ["moderator"]}],
+            [{"id": user1.id, "public_username": "Thomas"}],
         )
 
         # request all users
@@ -913,7 +924,7 @@ class ManageModeratorApiTest(TestCase):
         # from this context
         self.assertEqual(
             content,
-            [{"id": user1.id, "public_username": "Thomas", "roles": ["moderator"]}],
+            [{"id": user1.id, "public_username": "Thomas"}],
         )
 
         # request all users that are not moderators
@@ -961,9 +972,8 @@ class ManageModeratorApiTest(TestCase):
                 {
                     "id": user2.id,
                     "public_username": "Aurélie",
-                    "roles": ["moderator", "student"],
                 },
-                {"id": user1.id, "public_username": "Thomas", "roles": ["student"]},
+                {"id": user1.id, "public_username": "Thomas"},
             ],
         )
         # only active moderator is listed
@@ -978,7 +988,6 @@ class ManageModeratorApiTest(TestCase):
                 {
                     "id": user2.id,
                     "public_username": "Aurélie",
-                    "roles": ["moderator", "student"],
                 }
             ],
         )
@@ -994,7 +1003,6 @@ class ManageModeratorApiTest(TestCase):
                 {
                     "id": user5.id,
                     "public_username": "Théo",
-                    "roles": ["instructor", "moderator"],
                 }
             ],
         )
@@ -1007,7 +1015,7 @@ class ManageModeratorApiTest(TestCase):
         content = json.loads(response.content)
         self.assertEqual(
             content,
-            [{"id": user1.id, "public_username": "Thomas", "roles": ["student"]}],
+            [{"id": user1.id, "public_username": "Thomas"}],
         )
 
     def test_api_can_manage_moderators_update_student_public_username_readonly(

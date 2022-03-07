@@ -6,14 +6,14 @@ import { SelectStudentsSuggestField } from '.';
 const mockSetUser = jest.fn();
 const myProps = {
   users: [
-    { public_username: 'Thérèse', id: 1, roles: ['student'] },
-    { public_username: 'thomas', id: 2, roles: ['student'] },
-    { public_username: 'Valérie', id: 3, roles: ['student'] },
-    { public_username: 'Zao', id: 4, roles: ['student'] },
-    { public_username: 'Thibaut', id: 5, roles: ['student'] },
-    { public_username: 'Noémie', id: 6, roles: ['student'] },
-    { public_username: 'Zackari', id: 7, roles: ['student'] },
-    { public_username: 'Zoé', id: 8, roles: ['student'] },
+    { public_username: 'Thérèse', id: 1 },
+    { public_username: 'thomas', id: 2 },
+    { public_username: 'Valérie', id: 3 },
+    { public_username: 'Zao', id: 4 },
+    { public_username: 'Thibaut', id: 5 },
+    { public_username: 'Noémie', id: 6 },
+    { public_username: 'Zackari', id: 7 },
+    { public_username: 'Zoé', id: 8 },
   ],
   setUser: mockSetUser,
   onChange: jest.fn(),
@@ -111,7 +111,6 @@ describe('<SelectStudentsSuggestField />', () => {
     expect(mockSetUser).toHaveBeenCalledWith({
       public_username: 'Noémie',
       id: 6,
-      roles: ['student'],
     });
   });
 });

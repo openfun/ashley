@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Stop calculating the list of roles for the endpoint that list users
+
 ## [1.1.2] - 2022-01-18
 
 ### Added
