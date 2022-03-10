@@ -127,3 +127,83 @@ class PermissionHandlerTestCase(TestCase):
         self.assertCountEqual(readable_forums, [forum_b1])
         readable_forums = permission_handler.get_readable_forums(forums_list, user)
         self.assertCountEqual(readable_forums, [forum_b1])
+
+    def test_get_readable_forums_no_archives(self):
+        """
+        The get_readable_forums() function should filter the results and not return
+        archived forums
+        """
+        user = UserFactory()
+        lti_context_a = LTIContextFactory(lti_consumer=user.lti_consumer)
+
+        # Create 2 forums for context A, with forum_a1 as an archived one
+        forum_a1 = ForumFactory(name="Forum A1", archived=True)
+        forum_a1.lti_contexts.add(lti_context_a)
+        forum_a2 = ForumFactory(name="Forum A2")
+        forum_a2.lti_contexts.add(lti_context_a)
+
+        # Grant read-only access for forums A1, A2 and B1 to our user
+        assign_perm("can_see_forum", user, forum_a1, True)
+        assign_perm("can_read_forum", user, forum_a1, True)
+        assign_perm("can_see_forum", user, forum_a2, True)
+        assign_perm("can_read_forum", user, forum_a2, True)
+
+        # Instantiate the permission Handler
+        permission_handler = PermissionHandler()
+
+        # When the permission handler has no lti context specified,
+        # the get_readable_forums should return all forums the user
+        # has access to
+        forums_qs = Forum.objects.all()
+        forums_list = list(Forum.objects.all())
+        permission_handler.current_lti_context_id = lti_context_a.id
+        readable_forums = permission_handler.get_readable_forums(forums_qs, user)
+        self.assertCountEqual(readable_forums, [forum_a2])
+
+        # Check the same with a list of forums instead of a QuerySet
+        readable_forums = permission_handler.get_readable_forums(forums_list, user)
+        self.assertCountEqual(readable_forums, [forum_a2])
+
+    def test_get_readable_forums_super_user(self):
+        """
+        Super user has access to all the forum filtered on LTIContext and
+        archived ones but don't need to have access in reading.
+        """
+        super_user = UserFactory(is_superuser=True)
+        basic_user = UserFactory()
+        lti_context_a = LTIContextFactory(lti_consumer=super_user.lti_consumer)
+        lti_context_b = LTIContextFactory(lti_consumer=super_user.lti_consumer)
+
+        # Create 2 forums for context A
+        forum_a1 = ForumFactory(name="Forum A1")
+        forum_a1.lti_contexts.add(lti_context_a)
+        forum_a2_archived = ForumFactory(name="Forum A2")
+        forum_a2_archived.lti_contexts.add(lti_context_a)
+        forum_a2_archived.archived = True
+        forum_a2_archived.save()
+        # Create 1 forum for context B
+        forum_b1 = ForumFactory(name="Forum B1")
+        forum_b1.lti_contexts.add(lti_context_b)
+
+        # Instantiate the permission Handler
+        permission_handler = PermissionHandler()
+
+        forums_qs = Forum.objects.all()
+        # With no lti_context super_user can see all forums
+        readable_forums = permission_handler.get_readable_forums(forums_qs, super_user)
+        self.assertCountEqual(readable_forums, [forum_a1, forum_b1])
+        # standard user can't see any
+        readable_forums = permission_handler.get_readable_forums(forums_qs, basic_user)
+        self.assertCountEqual(readable_forums, [])
+
+        # Inject a LTI context into the permission handler and ensure that
+        # the results are filtered according to it
+        permission_handler.current_lti_context_id = lti_context_a.id
+        readable_forums = permission_handler.get_readable_forums(forums_qs, super_user)
+        # even if super user has no can_read_forum permission is still can see all
+        # unarchived forums of his lti_context
+        self.assertCountEqual(readable_forums, [forum_a1])
+
+        # standard user can't see any
+        readable_forums = permission_handler.get_readable_forums(forums_qs, basic_user)
+        self.assertCountEqual(readable_forums, [])

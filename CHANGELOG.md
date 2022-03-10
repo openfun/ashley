@@ -16,6 +16,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Specific endpoints to add and remove group moderator
 
+### Fixed
+
+- search queries to check user's permissions restricted on LTIContext
+
 ## [1.1.2] - 2022-01-18
 
 ### Added
