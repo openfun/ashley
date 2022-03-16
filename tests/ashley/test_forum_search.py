@@ -158,7 +158,7 @@ class ForumSearchTestCase(TestCase):
         self.assertEqual(topic.subject, "5f3gh8ka1")
 
         # When we create the first post for this topic...
-        PostFactory(subject="497jk1sav", topic=topic)
+        post = PostFactory(subject="497jk1sav", topic=topic)
         # The topic subject should be overriden
         topic.refresh_from_db()
         self.assertEqual(topic.subject, "497jk1sav")
@@ -187,7 +187,8 @@ class ForumSearchTestCase(TestCase):
             response,
             (
                 f'<a href="/forum/forum/{forum.slug:s}-{forum.id:d}/topic/{topic.slug:s}-'
-                f'{topic.id:d}/" class="topic-name-link">{topic.subject:s}</a>'
+                f'{topic.id:d}/?post={ post.pk }#{ post.pk }" '
+                f'class="topic-name-link">{topic.subject:s}</a>'
             ),
             html=True,
         )
@@ -730,3 +731,81 @@ class ForumSearchTestCase(TestCase):
             )
 
         self.assertNotContains(response, "?q=a5g3&amp;page=7")
+
+    def test_forum_search_show_direct_post_with_right_pagination(
+        self,
+    ):
+        """
+        Check that the link of the results targets directly the post in
+        the topic. Using this link, the user is directly at the right
+        page of the topic the post is related to.
+        """
+        user = UserFactory()
+        post = PostFactory(text="azatofind")
+        PostFactory.create_batch(15, topic=post.topic)
+        # Create a specific post between two batchs
+        post_second_page = PostFactory(text="azatofind", topic=post.topic)
+        PostFactory.create_batch(15, topic=post.topic)
+        post_last_page = PostFactory(text="azatofind", topic=post.topic)
+        assign_perm("can_read_forum", user, post.topic.forum)
+
+        # Index posts in Elasticsearch
+        call_command("rebuild_index", interactive=False)
+
+        self.client.force_login(user)
+        response = self.client.get("/forum/search/?q=azatofind")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response, "Your search has returned <b>3</b> results", html=True
+        )
+        url_topic = (
+            f"/forum/forum/{post.topic.forum.slug}-"
+            f"{post.topic.forum.id}/topic/{post.topic.slug}-{post.topic.id}/"
+        )
+
+        direct_link_initial_post = f"{url_topic}?post={ post.pk }#{ post.pk }"
+        direct_link_post_second_page = (
+            f"{url_topic}?post={ post_second_page.pk }#{ post_second_page.pk }"
+        )
+        direct_link_post_last_page = (
+            f"{url_topic}?post={ post_last_page.pk }#{ post_last_page.pk }"
+        )
+
+        # links of three posts are present
+        self.assertContains(response, direct_link_initial_post)
+        self.assertContains(response, direct_link_post_second_page)
+        self.assertContains(response, direct_link_post_last_page)
+
+        # confirm the last page of the topic is page 3
+        response = self.client.get(url_topic)
+
+        self.assertContains(response, '<a href="?page=3" class="page-link">3</a>')
+        self.assertNotContains(response, '<a href="?page=4" class="page-link">4</a>')
+
+        response = self.client.get(direct_link_initial_post)
+        # first post is at page 1
+        self.assertContains(
+            response,
+            '<li class="page-item active">'
+            '<a href="?page=1" class="page-link">1</a>'
+            "</li>",
+        )
+
+        # second post is at page 2 directly
+        response = self.client.get(direct_link_post_second_page)
+        self.assertContains(
+            response,
+            '<li class="page-item active">'
+            '<a href="?page=2" class="page-link">2</a>'
+            "</li>",
+        )
+
+        # third post is at last page directly
+        response = self.client.get(direct_link_post_last_page)
+        # third post is at page 3
+        self.assertContains(
+            response,
+            '<li class="page-item active">'
+            '<a href="?page=3" class="page-link">3</a>'
+            "</li>",
+        )
