@@ -15,6 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Specific endpoints to add and remove group moderator
+- Search results directly target the page of the topic of the related post
 
 ### Fixed
 
