@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Add
+
+- Enables to lock an entire forum
+
 ### Changed
 
 - Stop calculating the list of roles for the endpoint that list users

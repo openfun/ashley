@@ -30,6 +30,16 @@
         {% endblock search %}
 
         <div class="row">
+            {% block course_locked %}
+                {% if course_locked %}
+                    <div class="col-12 pt-3">
+                        <div class="alert alert-warning fade show">
+                            {% trans "This course has locked forums, non admin users can only read the history." %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endblock course_locked %}    
+
             {% block username_warning %}
                 {% if request.user is not None and not request.user.public_username %}
                     <div class="col-12 pt-3">

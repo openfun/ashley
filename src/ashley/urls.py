@@ -18,6 +18,6 @@ urlpatterns = [
         name="forum.username.change",
     ),
     path("moderators/", ManageModeratorsView.as_view(), name="moderators"),
-    path(f"api/{format(API_PREFIX)}/", include(api_urls)),
+    path(f"api/{API_PREFIX:s}/", include(api_urls)),
     path("forum/", include(machina_urls)),
 ]

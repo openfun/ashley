@@ -12,7 +12,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView, UpdateView
 from lti_toolbox.lti import LTI
 from lti_toolbox.views import BaseLTIAuthView
-from machina.apps.forum_permission.shortcuts import assign_perm
+from machina.apps.forum_permission.shortcuts import assign_perm, remove_perm
 from machina.apps.forum_permission.viewmixins import (
     PermissionRequiredMixin as BasePermissionRequiredMixin,
 )
@@ -22,8 +22,14 @@ from machina.core.loading import get_class
 from ashley.permissions import ManageModeratorPermission
 
 from . import SESSION_LTI_CONTEXT_ID
-from .defaults import DEFAULT_FORUM_BASE_PERMISSIONS, DEFAULT_FORUM_ROLES_PERMISSIONS
+from .defaults import (
+    DEFAULT_FORUM_BASE_PERMISSIONS,
+    DEFAULT_FORUM_BASE_READ_PERMISSIONS,
+    DEFAULT_FORUM_BASE_WRITE_PERMISSIONS,
+    DEFAULT_FORUM_ROLES_PERMISSIONS,
+)
 
+GroupForumPermission = get_model("forum_permission", "GroupForumPermission")
 Forum = get_model("forum", "Forum")  # pylint: disable=C0103
 LTIContext = get_model("ashley", "LTIContext")  # pylint: disable=C0103
 PermissionRequiredMixin: BasePermissionRequiredMixin = get_class(
@@ -63,6 +69,17 @@ class ForumLTIView(BaseLTIAuthView):
                 type=Forum.FORUM_POST,
                 lti_contexts__id=context.id,
             )
+            # If course is locked, security to remove forum permission on default group
+            # only needed if the course has been marked outside web navigation
+            if context.is_marked_locked and any(
+                item in DEFAULT_FORUM_BASE_READ_PERMISSIONS
+                for item in GroupForumPermission.objects.filter(
+                    forum=forum, group=context.get_base_group(), has_perm=True
+                ).values_list("permission__codename", flat=True)
+            ):
+                for perm in DEFAULT_FORUM_BASE_WRITE_PERMISSIONS:
+                    remove_perm(perm, context.get_base_group(), forum)
+
         except Forum.DoesNotExist:
 
             # Check if this uuid exists for another context.id to reuse its name as a
@@ -109,11 +126,15 @@ class ForumLTIView(BaseLTIAuthView):
         initiated the creation of the forum.
         """
         forum.lti_contexts.add(context)
+        # only assign full permissions if the course is not marked as locked
         self._assign_permissions(
             forum,
             context.get_base_group(),
-            DEFAULT_FORUM_BASE_PERMISSIONS,
+            DEFAULT_FORUM_BASE_PERMISSIONS
+            if not context.is_marked_locked
+            else DEFAULT_FORUM_BASE_READ_PERMISSIONS,
         )
+
         # pylint: disable=no-member
         for role, perms in DEFAULT_FORUM_ROLES_PERMISSIONS.items():
             self._assign_permissions(forum, context.get_role_group(role), perms)

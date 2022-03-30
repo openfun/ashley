@@ -23,13 +23,18 @@ class PermissionConfig(BasePermissionConfig):
             "scope": "forum",
         },
         {
+            "codename": "can_manage_moderator",
+            "label": _("Can manage a user's moderator status"),
+            "scope": "forum",
+        },
+        {
             "codename": "can_rename_forum",
             "label": _("Can rename a forum"),
             "scope": "forum",
         },
         {
-            "codename": "can_manage_moderator",
-            "label": _("Can manage a user's moderator status"),
+            "codename": "can_lock_course",
+            "label": _("Can lock forums of the course"),
             "scope": "forum",
         },
     ]

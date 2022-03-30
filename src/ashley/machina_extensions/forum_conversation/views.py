@@ -8,10 +8,12 @@ from machina.apps.forum_conversation.views import PostCreateView as BasePostCrea
 from machina.apps.forum_conversation.views import PostUpdateView as BasePostUpdateView
 from machina.apps.forum_conversation.views import TopicCreateView as BaseTopicCreateView
 from machina.apps.forum_conversation.views import TopicUpdateView as BaseTopicUpdateView
+from machina.apps.forum_conversation.views import TopicView as BaseTopicView
 from machina.core.db.models import get_model
 
 from .signals import post_created, post_updated, topic_created, topic_updated
 
+LTIContext = get_model("ashley", "LTIContext")
 Topic = get_model("forum_conversation", "Topic")
 
 
@@ -92,3 +94,21 @@ class PostUpdateView(SendSignalMixin, BasePostUpdateView):
         self.send_signal(self.request, response, post=self.forum_post)
 
         return response
+
+
+# pylint: disable=too-many-ancestors
+class TopicView(BaseTopicView):
+    """Displays a forum topic."""
+
+    def get_context_data(self, **kwargs):
+        """Returns the context data to provide to the template."""
+        context = super().get_context_data(**kwargs)
+        # Add information about the current lti_context
+        try:
+            context["course_locked"] = LTIContext.objects.get(
+                id=self.request.forum_permission_handler.current_lti_context_id
+            ).is_marked_locked
+        except LTIContext.DoesNotExist:
+            context["course_locked"] = False
+
+        return context
