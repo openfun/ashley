@@ -61,6 +61,8 @@ class Command(BaseCommand):
 
     def sync_forum_permissions(self, forum):
         """Synchronize permissions for every LTI role group related to a forum."""
+
+        # Exclude lti_context that have locked the course
         for lti_context in forum.lti_contexts.iterator():
             # pylint: disable=no-member
             for role, permissions in DEFAULT_FORUM_ROLES_PERMISSIONS.items():

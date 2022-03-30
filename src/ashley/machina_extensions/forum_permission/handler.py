@@ -31,6 +31,10 @@ class PermissionHandler(BasePermissionHandler):
         """Given a forum, checks whether the user can archive it."""
         return self._perform_basic_permission_check(forum, user, "can_archive_forum")
 
+    def can_lock_course(self, forum, user):
+        """Given a forum, checks whether the user can lock it."""
+        return self._perform_basic_permission_check(forum, user, "can_lock_course")
+
     def can_rename_forum(self, forum, user):
         """Given a forum, checks whether the user can rename it."""
         return self._perform_basic_permission_check(forum, user, "can_rename_forum")

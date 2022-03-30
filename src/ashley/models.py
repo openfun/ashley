@@ -93,6 +93,10 @@ class AbstractLTIContext(Model):
         LTIConsumer, on_delete=models.PROTECT, null=False, db_index=True
     )
 
+    # Indicates if forums of this class have been locked, this field is used
+    # not to update permissions with the sync_group_permissions command
+    is_marked_locked = models.BooleanField(default=False, null=False)
+
     def get_base_group(self) -> Group:
         """
         Get the base (Django) Group for this LTI context.

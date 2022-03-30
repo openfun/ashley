@@ -6,18 +6,22 @@
 
 """
 from django.db.models import F
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
 from django.utils.http import urlencode
 from django.views.generic import UpdateView
 from machina.apps.forum.views import ForumView as BaseForumView
 from machina.apps.forum.views import IndexView as BaseIndexView
+from machina.apps.forum_permission.shortcuts import remove_perm
 from machina.apps.forum_permission.viewmixins import (
     PermissionRequiredMixin as BasePermissionRequiredMixin,
 )
 from machina.core.db.models import get_model
 from machina.core.loading import get_class
 
+from ashley.defaults import DEFAULT_FORUM_BASE_WRITE_PERMISSIONS
+
+LTIContext = get_model("ashley", "LTIContext")
 Forum = get_model("forum", "Forum")
 ForumVisibilityContentTree = get_class("forum.visibility", "ForumVisibilityContentTree")
 
@@ -169,6 +173,19 @@ class IndexView(
             ),
         )
 
+    def get_context_data(self, **kwargs):
+        """Returns the context data to provide to the template."""
+        context = super().get_context_data(**kwargs)
+        # Add information about the current lti_context
+        try:
+            context["course_locked"] = LTIContext.objects.get(
+                id=self.request.forum_permission_handler.current_lti_context_id
+            ).is_marked_locked
+        except LTIContext.DoesNotExist:
+            context["course_locked"] = False
+
+        return context
+
 
 class ForumView(
     OrderByColumnMixin, BaseForumView
@@ -194,6 +211,18 @@ class ForumView(
         # Type of topic is kept as first order argument to keep sticky option
         return query.order_by("-type", self.get_ordering_column())
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        # Add information about the current lti_context
+        try:
+            context["course_locked"] = LTIContext.objects.get(
+                id=self.request.forum_permission_handler.current_lti_context_id
+            ).is_marked_locked
+        except LTIContext.DoesNotExist:
+            context["course_locked"] = False
+
+        return context
+
 
 class ForumArchiveView(PermissionRequiredMixin, UpdateView):
     """Displays the form to archive a forum."""
@@ -218,6 +247,52 @@ class ForumArchiveView(PermissionRequiredMixin, UpdateView):
         kwargs = super().get_form_kwargs()
         kwargs.update({"data": {"archived": True}})
         return kwargs
+
+
+class ForumLockCourseView(PermissionRequiredMixin, UpdateView):
+    """View to lock forums of the course."""
+
+    model = Forum
+    fields = ["lti_contexts"]
+    template_name = "forum/forum_lock.html"
+
+    def get_success_url(self):
+        """Returns the success URL to redirect the user to."""
+        return reverse("forum:index")
+
+    # pylint: disable=unused-argument
+    def perform_permissions_check(self, user, obj, perms):
+        """
+        Performs the permissions check. If forums is not part of current LTIContext
+        access is refused.
+        """
+        if not obj.lti_contexts.filter(
+            id=self.request.forum_permission_handler.current_lti_context_id
+        ).exists():
+            return False
+        return self.request.forum_permission_handler.can_lock_course(obj, user)
+
+    def post(self, request, *args, **kwargs):
+        """
+        We lock all forums of this course. Default group shouldn't have writing
+        permissions anymore. The LTIContex will then be marked as blocked.
+        """
+        lti_context = self.get_object().lti_contexts.get(
+            id=self.request.forum_permission_handler.current_lti_context_id
+        )
+        default_group = lti_context.get_base_group()
+
+        # remove all permissions for each forum of this LTIContext
+        for forum in Forum.objects.filter(lti_contexts=lti_context):
+            # pylint: disable=not-an-iterable
+            for perm in DEFAULT_FORUM_BASE_WRITE_PERMISSIONS:
+                remove_perm(perm, default_group, forum)
+
+        # mark this course as locked
+        lti_context.is_marked_locked = True
+        lti_context.save()
+
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class ForumRenameView(PermissionRequiredMixin, UpdateView):

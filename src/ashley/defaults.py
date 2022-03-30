@@ -13,15 +13,21 @@ _FORUM_ROLE_INSTRUCTOR = "instructor"
 _FORUM_ROLE_MODERATOR = "moderator"
 _FORUM_ROLE_STUDENT = "student"
 
-_FORUM_BASE_PERMISSIONS = [
+_FORUM_BASE_READ_PERMISSIONS = [
     "can_see_forum",
     "can_read_forum",
+]
+
+_FORUM_BASE_WRITE_PERMISSIONS = [
     "can_start_new_topics",
     "can_reply_to_topics",
     "can_edit_own_posts",
     "can_post_without_approval",
     "can_vote_in_polls",
 ]
+
+
+_FORUM_BASE_PERMISSIONS = _FORUM_BASE_READ_PERMISSIONS + _FORUM_BASE_WRITE_PERMISSIONS
 
 _FORUM_MODERATOR_PERMISSIONS = _FORUM_BASE_PERMISSIONS + [
     "can_approve_posts",
@@ -37,10 +43,30 @@ _FORUM_MODERATOR_PERMISSIONS = _FORUM_BASE_PERMISSIONS + [
 ]
 
 _FORUM_ADMIN_PERMISSIONS = _FORUM_MODERATOR_PERMISSIONS + [
-    "can_rename_forum",
-    "can_manage_moderator",
     "can_archive_forum",
+    "can_lock_course",
+    "can_manage_moderator",
+    "can_rename_forum",
 ]
+
+DEFAULT_FORUM_BASE_READ_PERMISSIONS = lazy(
+    lambda: getattr(
+        settings,
+        "ASHLEY_DEFAULT_FORUM_READ_PERMISSIONS",
+        _FORUM_BASE_READ_PERMISSIONS,
+    ),
+    list,
+)()
+
+DEFAULT_FORUM_BASE_WRITE_PERMISSIONS = lazy(
+    lambda: getattr(
+        settings,
+        "ASHLEY_DEFAULT_FORUM_WRITE_PERMISSIONS",
+        _FORUM_BASE_WRITE_PERMISSIONS,
+    ),
+    list,
+)()
+
 
 DEFAULT_FORUM_BASE_PERMISSIONS = lazy(
     lambda: getattr(
