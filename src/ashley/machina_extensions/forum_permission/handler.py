@@ -12,6 +12,8 @@ from machina.core.db.models import get_model
 
 Forum = get_model("forum", "Forum")
 
+# pylint: disable = consider-using-f-string
+
 
 class PermissionHandler(BasePermissionHandler):
     """Add ashley specific permission checks to the machina permission handler."""

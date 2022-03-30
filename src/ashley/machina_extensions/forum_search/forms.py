@@ -33,6 +33,7 @@ class SearchForm(MachinaSearchForm):
         self.allowed_forums = PermissionHandler().get_readable_forums(
             Forum.objects.filter(archived=False, lti_contexts=lti_contexts), user
         )
+        # pylint: disable=consider-using-f-string
         if self.allowed_forums:
             self.fields["search_forums"].choices = [
                 (f.id, "{} {}".format("-" * f.margin_level, f.name))

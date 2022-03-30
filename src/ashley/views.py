@@ -132,7 +132,7 @@ class ForumLTIView(BaseLTIAuthView):
 
 
 class ChangeUsernameView(PermissionRequiredMixin, UpdateView):
-    """ Allow the current user to update his username. """
+    """Allow the current user to update his username."""
 
     model = User
     fields = ["public_username"]
@@ -148,15 +148,14 @@ class ChangeUsernameView(PermissionRequiredMixin, UpdateView):
         messages.success(
             self.request,
             _(
-                "Welcome %(username)s, your username is now registered."
-                % {"username": self.request.user.public_username}
+                f"Welcome {self.request.user.public_username}, your username is now registered."
             ),
         )
         return HttpResponseRedirect(reverse("forum:index"))
 
     # pylint: disable=no-self-use,unused-argument
     def perform_permissions_check(self, user, obj, perms):
-        """ The user can update his username only if it is not yet defined """
+        """The user can update his username only if it is not yet defined"""
         return user.is_authenticated and not getattr(obj, "public_username", "")
 
 

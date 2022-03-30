@@ -238,7 +238,7 @@ class ImageUploadApiTest(TestCase):
         self.assertEqual(content, {"detail": 'Method "DELETE" not allowed.'})
 
     def test_api_create_upload_image_wrong_user_id(self):
-        """Verify that if user id is wrong we get a 400 code """
+        """Verify that if user id is wrong we get a 400 code"""
         user = UserFactory()
         forum = ForumFactory()
         self.client.force_login(user, "ashley.auth.backend.LTIBackend")

@@ -29,6 +29,8 @@ get_forum_member_display_name = get_class(
 
 logger = logging.getLogger(__name__)
 
+# pylint: disable = C0209, W0232, c-extension-no-member
+
 
 class TestIsUserInstructorTag(TestCase):
     """

@@ -2,7 +2,7 @@
 Ashley URLs (that includes django machina urls)
 """
 
-from django.urls import include, path, re_path
+from django.urls import include, path
 from machina import urls as machina_urls
 
 from ashley.api import urls as api_urls
@@ -18,6 +18,6 @@ urlpatterns = [
         name="forum.username.change",
     ),
     path("moderators/", ManageModeratorsView.as_view(), name="moderators"),
-    re_path(r"api/{}/".format(API_PREFIX), include(api_urls)),
+    path(f"api/{format(API_PREFIX)}/", include(api_urls)),
     path("forum/", include(machina_urls)),
 ]

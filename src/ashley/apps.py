@@ -8,6 +8,6 @@ class AshleyConfig(AppConfig):
     name = "ashley"
 
     def ready(self):
-        """ Executes whatever is necessary when the application is ready. """
+        """Executes whatever is necessary when the application is ready."""
         # pylint: disable=import-outside-toplevel,unused-import
         from . import receivers  # noqa: F401
