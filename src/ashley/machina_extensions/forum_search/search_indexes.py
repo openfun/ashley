@@ -13,7 +13,7 @@ Post = get_model("forum_conversation", "Post")
 
 
 def get_indexable_forum_member_display_name(user):
-    """ Given a specific user, returns their related display name. """
+    """Given a specific user, returns their related display name."""
     return getattr(user, defaults.INDEXABLE_USER_DISPLAY_NAME_METHOD)()
 
 
@@ -49,7 +49,7 @@ class PostIndex(indexes.SearchIndex, indexes.Indexable):
 
     @staticmethod
     def prepare_poster_name(obj):
-        """ Returns the poster's name """
+        """Returns the poster's name"""
         return (
             get_indexable_forum_member_display_name(obj.poster)
             if obj.poster
@@ -58,22 +58,22 @@ class PostIndex(indexes.SearchIndex, indexes.Indexable):
 
     @staticmethod
     def prepare_forum_slug(obj):
-        """ Returns the forum's slug """
+        """Returns the forum's slug"""
         return obj.topic.forum.slug
 
     @staticmethod
     def prepare_forum_name(obj):
-        """ Returns the forum's name """
+        """Returns the forum's name"""
         return obj.topic.forum.name
 
     @staticmethod
     def prepare_topic_slug(obj):
-        """ Returns the topic's slug """
+        """Returns the topic's slug"""
         return obj.topic.slug
 
     @staticmethod
     def prepare_topic_subject(obj):
-        """ Returns the topic's subject """
+        """Returns the topic's subject"""
         return obj.topic.subject
 
     def index_queryset(self, using=None):

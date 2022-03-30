@@ -10,7 +10,7 @@ from machina.apps.forum_conversation.forms import TopicForm as MachinaTopicForm
 
 
 class PostForm(MachinaPostForm):
-    """ Overload Machina PostForm to send extra variables to the widget editor """
+    """Overload Machina PostForm to send extra variables to the widget editor"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

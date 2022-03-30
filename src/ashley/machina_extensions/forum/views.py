@@ -132,7 +132,8 @@ class OrderByColumnMixin:
         or adding new_params
         """
         param = {**self.params, **new_params}
-        return "?%s" % urlencode(sorted(param.items()))
+        query = urlencode(sorted(param.items()))
+        return f"?{query}"
 
     def get_ordering_column(self):
         """From query url, retrieve the concerned field ordered on if any."""
@@ -146,13 +147,13 @@ class OrderByColumnMixin:
 class IndexView(
     OrderByColumnMixin, BaseIndexView
 ):  # pylint: disable=too-many-ancestors
-    """ Displays the top-level forums. """
+    """Displays the top-level forums."""
 
     # header columns
     list_display = ["name", "direct_topics_count", "direct_posts_count", "last_post_on"]
 
     def get_queryset(self):
-        """ Returns the list of items for this view ordered by column. """
+        """Returns the list of items for this view ordered by column."""
         pfx, idx = self.get_ordering()
         f_query = F(self.list_display[idx])
         f_query_order_by = (

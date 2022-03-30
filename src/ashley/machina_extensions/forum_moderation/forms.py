@@ -14,7 +14,7 @@ PermissionHandler = get_class("forum_permission.handler", "PermissionHandler")
 
 
 class TopicMoveForm(MachinaTopicMoveForm):
-    """ Allows to move a topic. """
+    """Allows to move a topic."""
 
     def __init__(self, *args, **kwargs):
         """

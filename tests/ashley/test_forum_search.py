@@ -24,7 +24,7 @@ from ashley.factories import (
 )
 from ashley.machina_extensions.forum_search.forms import SearchForm
 
-# pylint: disable = too-many-public-methods
+# pylint: disable = too-many-public-methods, consider-using-f-string
 
 Forum = get_model("forum", "Forum")
 
