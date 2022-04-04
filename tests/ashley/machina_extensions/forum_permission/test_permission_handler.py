@@ -131,22 +131,28 @@ class PermissionHandlerTestCase(TestCase):
     def test_get_readable_forums_no_archives(self):
         """
         The get_readable_forums() function should filter the results and not return
-        archived forums
+        archived forums with or without LTIContext
         """
         user = UserFactory()
         lti_context_a = LTIContextFactory(lti_consumer=user.lti_consumer)
+        lti_context_b = LTIContextFactory(lti_consumer=user.lti_consumer)
 
         # Create 2 forums for context A, with forum_a1 as an archived one
         forum_a1 = ForumFactory(name="Forum A1", archived=True)
         forum_a1.lti_contexts.add(lti_context_a)
         forum_a2 = ForumFactory(name="Forum A2")
         forum_a2.lti_contexts.add(lti_context_a)
+        # Create 1 forum for context B
+        forum_b1 = ForumFactory(name="Forum B1")
+        forum_b1.lti_contexts.add(lti_context_b)
 
         # Grant read-only access for forums A1, A2 and B1 to our user
         assign_perm("can_see_forum", user, forum_a1, True)
         assign_perm("can_read_forum", user, forum_a1, True)
         assign_perm("can_see_forum", user, forum_a2, True)
         assign_perm("can_read_forum", user, forum_a2, True)
+        assign_perm("can_see_forum", user, forum_b1, True)
+        assign_perm("can_read_forum", user, forum_b1, True)
 
         # Instantiate the permission Handler
         permission_handler = PermissionHandler()
@@ -156,6 +162,15 @@ class PermissionHandlerTestCase(TestCase):
         # has access to
         forums_qs = Forum.objects.all()
         forums_list = list(Forum.objects.all())
+        readable_forums = permission_handler.get_readable_forums(forums_qs, user)
+        self.assertCountEqual(readable_forums, [forum_a2, forum_b1])
+
+        # Check the same with a list of forums instead of a QuerySet
+        readable_forums = permission_handler.get_readable_forums(forums_list, user)
+        self.assertCountEqual(readable_forums, [forum_a2, forum_b1])
+
+        # Inject a LTI context into the permission handler and ensure that
+        # the results are filtered according to it
         permission_handler.current_lti_context_id = lti_context_a.id
         readable_forums = permission_handler.get_readable_forums(forums_qs, user)
         self.assertCountEqual(readable_forums, [forum_a2])
