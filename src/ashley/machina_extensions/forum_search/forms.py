@@ -30,8 +30,16 @@ class SearchForm(MachinaSearchForm):
         self.fields["q"].widget.attrs["placeholder"] = _("Keywords or phrase")
         self.fields["search_poster_name"].widget.attrs["placeholder"] = _("Poster name")
 
-        self.allowed_forums = PermissionHandler().get_readable_forums(
-            Forum.objects.filter(archived=False, lti_contexts=lti_contexts), user
+        self.perm_handler = PermissionHandler()
+
+        # add context
+        if lti_contexts:
+            self.perm_handler.current_lti_context_id = lti_contexts.id
+
+        # forums gets filtered by lti_context and exclude archives directly
+        # in get_readable_forums
+        self.allowed_forums = self.perm_handler.get_readable_forums(
+            Forum.objects.all(), user
         )
         # pylint: disable=consider-using-f-string
         if self.allowed_forums:
