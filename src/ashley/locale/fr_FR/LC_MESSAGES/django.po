@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ashleyforum\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-21 13:57+0000\n"
-"PO-Revision-Date: 2021-10-21 14:03\n"
+"POT-Creation-Date: 2022-05-16 14:00+0000\n"
+"PO-Revision-Date: 2022-05-16 14:06\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -1072,11 +1072,12 @@ msgstr "Il n'y a aucune discussion non lue."
 msgid "Forum index"
 msgstr "Accueil du forum"
 
-#: auth/backend.py:131
+#: auth/backend.py:138
 msgid "Educational team"
 msgstr "Equipe pédagogique"
 
-#: auth/backend.py:133
+#: auth/backend.py:140 templates/partials/user_icon.html:10
+#: templates/partials/user_icon.html:11
 msgid "Administrator"
 msgstr "Administrateur"
 
@@ -1085,12 +1086,16 @@ msgid "Can archive a forum"
 msgstr "Peut archiver un forum"
 
 #: machina_extensions/forum_permission/defaults.py:27
+msgid "Can manage a user's moderator status"
+msgstr ""
+
+#: machina_extensions/forum_permission/defaults.py:32
 msgid "Can rename a forum"
 msgstr "Peut renommer un forum"
 
-#: machina_extensions/forum_permission/defaults.py:32
-msgid "Can manage a user's moderator status"
-msgstr "Permet de gérer le statut de modérateur d'un utilisateur"
+#: machina_extensions/forum_permission/defaults.py:37
+msgid "Can lock forums of the course"
+msgstr ""
 
 #: models.py:44
 msgid "LTI remote user identifier"
@@ -1122,20 +1127,19 @@ msgstr "Votre nom d'utilisateur sera associé à tous vos messages et ne pourra 
 msgid "Manage forum's moderators"
 msgstr "Gérer les modérateurs du forum"
 
-#: templates/board_base.html:38
+#: templates/board_base.html:37
+msgid "This course has locked forums, non admin users can only read the history."
+msgstr "Les forums de ces cours sont verrouillés. Hormis pour les administrateurs, seul l'historique est accessible."
+
+#: templates/board_base.html:48
 msgid "Welcome to the discussion forum! First of all, please set a display name that will be associated with your messages."
 msgstr "Bienvenue sur le forum ! Avant toute chose, veuillez définir un nom d'utilisateur qui sera associé à vos messages."
 
-#: templates/board_base.html:38
+#: templates/board_base.html:48
 msgid "Set my display name"
 msgstr "Définir mon nom d'utilisateur"
 
-#: templates/forum/forum_archive.html:4 templates/forum/forum_rename.html:4
-#: templates/forum/forum_rename.html:11
-msgid "Rename the forum"
-msgstr "Renommer le forum"
-
-#: templates/forum/forum_archive.html:11
+#: templates/forum/forum_archive.html:4 templates/forum/forum_archive.html:11
 msgid "Delete the forum"
 msgstr "Supprimer le forum"
 
@@ -1143,27 +1147,47 @@ msgstr "Supprimer le forum"
 msgid "Are you sure you want to delete this forum ?"
 msgstr "Êtes-vous sûr(e) de vouloir supprimer ce forum ?"
 
-#: templates/forum/forum_archive.html:25
+#: templates/forum/forum_archive.html:25 templates/forum/forum_lock.html:25
 msgid "Cancel"
 msgstr "Annuler"
 
-#: templates/forum/forum_detail.html:23
+#: templates/forum/forum_detail.html:24
 msgid "Rename forum"
 msgstr "Renommer le forum"
 
-#: templates/forum/forum_detail.html:24
+#: templates/forum/forum_detail.html:25
 msgid "Manage moderators"
 msgstr "Gérer les modérateurs"
 
-#: templates/forum/forum_detail.html:25
+#: templates/forum/forum_detail.html:26
 msgid "Delete forum"
 msgstr "Supprimer le forum"
+
+#: templates/forum/forum_detail.html:27
+msgid "Lock forums"
+msgstr "Vérouiller les forums"
+
+#: templates/forum/forum_lock.html:4 templates/forum/forum_lock.html:11
+msgid "Lock the forum"
+msgstr "Vérouiller le forum"
+
+#: templates/forum/forum_lock.html:15
+msgid "Are you sure you want to lock the entire course? All the forums in this course will be locked."
+msgstr "Êtes-vous sûr de vouloir verrouiller le cours en entier ? Tous les forums de ce cours seront verrouillés."
+
+#: templates/forum/forum_lock.html:24
+msgid "Lock"
+msgstr "Vérouiller"
+
+#: templates/forum/forum_rename.html:4 templates/forum/forum_rename.html:11
+msgid "Rename the forum"
+msgstr "Renommer le forum"
 
 #: templates/forum/forum_rename.html:23
 msgid "Rename"
 msgstr "Renommer"
 
-#: templates/forum_conversation/partials/topic_list_header_sort.html:4
+#: templates/forum_conversation/partials/list_header_sort.html:4
 msgid "Toggle sorting"
 msgstr "Inverser le tri"
 
@@ -1183,8 +1207,8 @@ msgstr "Enseignant(e)"
 msgid "The maximum file size that can be uploaded is {settings.MAX_UPLOAD_FILE_MB} MB"
 msgstr "La taille maximale du fichier pouvant être téléchargé est de {settings.MAX_UPLOAD_FILE_MB} Mo"
 
-#: views.py:139
-#, python-format
-msgid "Welcome %(username)s, your username is now registered."
-msgstr "Bienvenue %(username)s, votre nom d'utilisateur a bien été pris en compte."
+#: views.py:172
+#, python-brace-format
+msgid "Welcome {self.request.user.public_username}, your username is now registered."
+msgstr "Bienvenue {self.request.user.public_username}, votre nom d'utilisateur a bien été pris en compte."
 
