@@ -15,6 +15,8 @@ They will be documented in this file:
 
 ### Unreleased
 
+### Ashley 1.2.0
+
 A new permission has been added in this release : `can_lock_forum`.
 By default, this permission will only be added to new users with administrator or
 instructor roles. If you want to update the group permissions on users already

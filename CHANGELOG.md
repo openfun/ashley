@@ -8,18 +8,17 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-### Add
+## [1.2.0] - 2022-05-16
+
+### Added
 
 - Enables to lock an entire forum
+- Specific endpoints to add and remove group moderator
+- Search results directly target the page of the topic of the related post
 
 ### Changed
 
 - Stop calculating the list of roles for the endpoint that list users
-
-### Added
-
-- Specific endpoints to add and remove group moderator
-- Search results directly target the page of the topic of the related post
 
 ### Fixed
 
@@ -217,7 +216,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Update sandbox settings to be able to run Ashley in an `iframe` on multiple
   external websites
 
-[unreleased]: https://github.com/openfun/ashley/compare/v1.1.2...master
+[unreleased]: https://github.com/openfun/ashley/compare/v1.2.0...master
+[1.2.0]: https://github.com/openfun/ashley/compare/v1.1.2...v1.2.0
 [1.1.2]: https://github.com/openfun/ashley/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/openfun/ashley/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/openfun/ashley/compare/v1.0.0...v1.1.0
