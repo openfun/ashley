@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: ashleyforum\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-16 14:00+0000\n"
-"PO-Revision-Date: 2022-05-16 14:06\n"
+"PO-Revision-Date: 2022-06-07 12:49\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -1028,7 +1028,7 @@ msgid "Are you sure you want to delete this topic?"
 msgstr "Êtes-vous sûr de vouloir supprimer cette discussion ?"
 
 msgid "Are you sure you want to lock this topic?"
-msgstr "Êtes-vous sûr de vouloir supprimer cette discussion ?"
+msgstr "Êtes-vous sûr de vouloir verrouiller cette discussion ?"
 
 msgid "Are you sure you want to unlock this topic?"
 msgstr "Êtes-vous sûr de vouloir déverrouiller cette discussion ?"
@@ -1165,11 +1165,11 @@ msgstr "Supprimer le forum"
 
 #: templates/forum/forum_detail.html:27
 msgid "Lock forums"
-msgstr "Vérouiller les forums"
+msgstr "Verrouiller les forums"
 
 #: templates/forum/forum_lock.html:4 templates/forum/forum_lock.html:11
 msgid "Lock the forum"
-msgstr "Vérouiller le forum"
+msgstr "Verrouiller le forum"
 
 #: templates/forum/forum_lock.html:15
 msgid "Are you sure you want to lock the entire course? All the forums in this course will be locked."
@@ -1177,7 +1177,7 @@ msgstr "Êtes-vous sûr de vouloir verrouiller le cours en entier ? Tous les for
 
 #: templates/forum/forum_lock.html:24
 msgid "Lock"
-msgstr "Vérouiller"
+msgstr "Verrouiller"
 
 #: templates/forum/forum_rename.html:4 templates/forum/forum_rename.html:11
 msgid "Rename the forum"
