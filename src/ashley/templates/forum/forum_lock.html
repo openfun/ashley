@@ -13,9 +13,7 @@
       <div class="card-body">
           <div class="mb-3 warning-message">
               <p>{% trans "Are you sure you want to lock the entire course? All the forums in this course will be locked." %}</p>
-              <p class="ml-3 pb-3">
-                  <strong>{{ object.name }}</strong>
-              <p>
+              {% for forum in list_forum %}<p class="ml-3 pb-3"><strong>{{ forum.name }}</strong><p>{% endfor %}
           </div>
         <form method="post" action="." class="form" enctype="multipart/form-data" novalidate>{% csrf_token %}
           <div class="row">

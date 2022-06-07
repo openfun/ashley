@@ -769,3 +769,37 @@ class CourseLockCase(TestCase):
                 ).values_list("permission__codename", flat=True)
             ),
         )
+
+    def test_course_create_multiple_forums_listing_on(self):
+        """
+        Instructor wants to lock the course that has multiple forums.
+        The list of forums should be displayed before the confirmation's
+        button.
+        """
+        forum1 = self._connects("instructor")
+        forum2 = ForumFactory(name="Forum2")
+        forum3 = ForumFactory(name="Forum3")
+        # connects user and add forums to the lti_context
+        forum2 = self._connects("instructor", forum_uuid=forum2.lti_id)
+        forum3 = self._connects("instructor", forum_uuid=forum3.lti_id)
+
+        # go on the page to lock the course from the forum1
+        response = self.client.get(f"/forum/admin/lock-course/{forum1.id}/")
+        self.assertEqual(200, response.status_code)
+        # this listing is common for all the forums of the course
+        forums_list = (
+            f'<p class="ml-3 pb-3"><strong>{forum1.name}</strong><p>'
+            '<p class="ml-3 pb-3"><strong>Forum2</strong><p>'
+            '<p class="ml-3 pb-3"><strong>Forum3</strong><p>'
+        )
+        self.assertContains(response, forums_list)
+
+        # go on the page to lock the course from the forum2
+        response = self.client.get(f"/forum/admin/lock-course/{forum2.id}/")
+        self.assertEqual(200, response.status_code)
+        self.assertContains(response, forums_list)
+
+        # go on the page to lock the course from the forum3
+        response = self.client.get(f"/forum/admin/lock-course/{forum3.id}/")
+        self.assertEqual(200, response.status_code)
+        self.assertContains(response, forums_list)

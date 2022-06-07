@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Show the listing of forums part of the course that would be locked if CTA is
+  confirmed
+
 ## [1.2.0] - 2022-05-16
 
 ### Added
