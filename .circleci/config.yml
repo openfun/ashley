@@ -54,6 +54,23 @@ jobs:
           command: |
             git whatchanged --name-only --pretty="" origin..HEAD | grep CHANGELOG
 
+  # Check that all versions are up-to-date
+  check-versions:
+    docker:
+      - image: cimg/base:2022.04
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - run:
+          name: Check that all versions are the same
+          command: |
+            BACKEND_VERSION=$(cat setup.cfg | grep "version" | cut -d" " -f3)
+            echo "Ashley version: ${BACKEND_VERSION}"
+            # In the frontend
+            cat src/frontend/package.json | grep "\"version\": \"${BACKEND_VERSION}\",$"
+            # In the CHANGELOG.md file
+            cat CHANGELOG.md | grep "## \[${BACKEND_VERSION}\] -"
+
   # Check that the CHANGELOG max line length does not exceed 80 characters
   lint-changelog:
     docker:
@@ -481,6 +498,12 @@ workflows:
               ignore: master
             tags:
               only: /(?!^v).*/
+      # Check on each PR if the last ashley version is present everywhere it should be.
+      # If not the build will fail before publishing a new release to Pypi and Dockerhub.
+      - check-versions:
+          filters:
+            tags:
+              only: /.*/
       - lint-changelog:
           filters:
             branches:
@@ -538,6 +561,7 @@ workflows:
       # the master branch
       - hub:
           requires:
+            - check-versions
             - lint-front
             - test-front
             - build-docker
@@ -554,6 +578,7 @@ workflows:
       # succeed and it has been tagged with a tag starting with the letter v
       - pypi:
           requires:
+            - check-versions
             - package-back
           filters:
             branches:
