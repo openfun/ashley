@@ -256,7 +256,7 @@ class ForumLockCourseView(PermissionRequiredMixin, UpdateView):
     fields = ["lti_contexts"]
     template_name = "forum/forum_lock.html"
 
-    def get_list_forums(self):
+    def get_forums_list(self):
         """Returns the list of forums of this course"""
         return Forum.objects.filter(
             lti_contexts=self.get_object().lti_contexts.get(
@@ -265,9 +265,9 @@ class ForumLockCourseView(PermissionRequiredMixin, UpdateView):
         )
 
     def get_context_data(self, **kwargs):
-        """Sends list_forum to the view"""
+        """Sends forums_list to the view"""
         context = super().get_context_data()
-        context["list_forum"] = self.get_list_forums()
+        context["forums_list"] = self.get_forums_list()
         return context
 
     def get_success_url(self):
@@ -298,7 +298,7 @@ class ForumLockCourseView(PermissionRequiredMixin, UpdateView):
         default_group = lti_context.get_base_group()
 
         # remove all permissions for each forum of this LTIContext
-        for forum in self.get_list_forums():
+        for forum in self.get_forums_list():
             # pylint: disable=not-an-iterable
             for perm in DEFAULT_FORUM_BASE_WRITE_PERMISSIONS:
                 remove_perm(perm, default_group, forum)
