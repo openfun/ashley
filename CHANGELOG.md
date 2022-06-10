@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+
+### Changed
+
+- Reduce spaces between forums names on the lock page
+
 ## [1.2.2] - 2022-06-08
 
 ### Fixed

@@ -788,9 +788,9 @@ class CourseLockCase(TestCase):
         self.assertEqual(200, response.status_code)
         # this listing is common for all the forums of the course
         forums_list = (
-            f'<p class="ml-3 pb-3"><strong>{forum1.name}</strong><p>'
-            '<p class="ml-3 pb-3"><strong>Forum2</strong><p>'
-            '<p class="ml-3 pb-3"><strong>Forum3</strong><p>'
+            f'<p class="ml-3 mb-0"><strong>{forum1.name}</strong></p>'
+            '<p class="ml-3 mb-0"><strong>Forum2</strong></p>'
+            '<p class="ml-3 mb-0"><strong>Forum3</strong></p>'
         )
         self.assertContains(response, forums_list)
 
