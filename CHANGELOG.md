@@ -8,6 +8,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.2.3] - 2022-06-13
 
 ### Changed
 
@@ -234,7 +235,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Update sandbox settings to be able to run Ashley in an `iframe` on multiple
   external websites
 
-[unreleased]: https://github.com/openfun/ashley/compare/v1.2.2...master
+[unreleased]: https://github.com/openfun/ashley/compare/v1.2.3...master
+[1.2.3]: https://github.com/openfun/ashley/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/openfun/ashley/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/openfun/ashley/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/openfun/ashley/compare/v1.1.2...v1.2.0
