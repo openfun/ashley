@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.test import TestCase
 from lti_toolbox.factories import LTIConsumerFactory, LTIPassportFactory
-from machina.apps.forum_permission.shortcuts import assign_perm
+from machina.apps.forum_permission.shortcuts import assign_perm, remove_perm
 from machina.apps.forum_permission.viewmixins import (
     PermissionRequiredMixin as BasePermissionRequiredMixin,
 )
@@ -748,7 +748,22 @@ class CourseLockCase(TestCase):
         context.is_marked_locked = True
         context.save()
         self.assertEqual(context.is_marked_locked, True)
-
+        self.assertEqual(
+            [
+                "can_see_forum",
+                "can_read_forum",
+                "can_start_new_topics",
+                "can_reply_to_topics",
+                "can_edit_own_posts",
+                "can_post_without_approval",
+                "can_vote_in_polls",
+            ],
+            list(
+                GroupForumPermission.objects.filter(
+                    forum=forum, group=context.get_base_group(), has_perm=True
+                ).values_list("permission__codename", flat=True)
+            ),
+        )
         # connects the student
         self._connects("student", uuid="NewOne", lis_person_sourcedid="enzo")
 
@@ -761,11 +776,50 @@ class CourseLockCase(TestCase):
                 ).values_list("permission__codename", flat=True)
             ),
         )
+
+    def test_is_marked_locked_and_one_writing_perm(self):
+        """
+        Check when the tag is_marked_locked is set to True and that if
+        there is any writing permissions for the base group, that
+        synchronization is played when user is connecting
+        """
+        forum = self._connects("instructor")
+        context = LTIContext.objects.get(lti_id=self.context_id)
+        base_group = context.get_base_group()
+        # change field is_marked_locked to False
+        context.is_marked_locked = True
+        context.save()
+        # remove some writing permissions
+        remove_perm("can_start_new_topics", base_group, forum)
+        remove_perm("can_edit_own_posts", base_group, forum)
+        remove_perm("can_post_without_approval", base_group, forum)
+        remove_perm("can_vote_in_polls", base_group, forum)
+        self.assertEqual(context.is_marked_locked, True)
         self.assertEqual(
-            [],
+            [
+                "can_see_forum",
+                "can_read_forum",
+                "can_reply_to_topics",
+            ],
             list(
                 GroupForumPermission.objects.filter(
-                    forum=forum, group=context.get_role_group("student"), has_perm=True
+                    forum=forum, group=base_group, has_perm=True
+                ).values_list("permission__codename", flat=True)
+            ),
+        )
+
+        # connects the student
+        self._connects("student", uuid="NewOne", lis_person_sourcedid="enzo")
+
+        # writting permissions gets deleted
+        self.assertEqual(
+            [
+                "can_see_forum",
+                "can_read_forum",
+            ],
+            list(
+                GroupForumPermission.objects.filter(
+                    forum=forum, group=base_group, has_perm=True
                 ).values_list("permission__codename", flat=True)
             ),
         )

@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Allow unlocking all forums of a course
+
 ## [1.2.3] - 2022-06-13
 
 ### Changed

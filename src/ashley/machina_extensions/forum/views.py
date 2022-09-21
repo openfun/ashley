@@ -12,7 +12,7 @@ from django.utils.http import urlencode
 from django.views.generic import UpdateView
 from machina.apps.forum.views import ForumView as BaseForumView
 from machina.apps.forum.views import IndexView as BaseIndexView
-from machina.apps.forum_permission.shortcuts import remove_perm
+from machina.apps.forum_permission.shortcuts import assign_perm, remove_perm
 from machina.apps.forum_permission.viewmixins import (
     PermissionRequiredMixin as BasePermissionRequiredMixin,
 )
@@ -249,12 +249,11 @@ class ForumArchiveView(PermissionRequiredMixin, UpdateView):
         return kwargs
 
 
-class ForumLockCourseView(PermissionRequiredMixin, UpdateView):
-    """View to lock forums of the course."""
+class ForumLockUnlockCourseView(PermissionRequiredMixin, UpdateView):
+    """Parent class to lock or unlock forums of the course."""
 
     model = Forum
     fields = ["lti_contexts"]
-    template_name = "forum/forum_lock.html"
 
     def get_forums_list(self):
         """Returns the list of forums of this course"""
@@ -274,6 +273,12 @@ class ForumLockCourseView(PermissionRequiredMixin, UpdateView):
         """Returns the success URL to redirect the user to."""
         return reverse("forum:index")
 
+
+class ForumLockCourseView(ForumLockUnlockCourseView):
+    """View to lock forums of the course."""
+
+    template_name = "forum/forum_lock.html"
+
     # pylint: disable=unused-argument
     def perform_permissions_check(self, user, obj, perms):
         """
@@ -289,7 +294,7 @@ class ForumLockCourseView(PermissionRequiredMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         """
         We lock all forums of this course. Default group shouldn't have writing
-        permissions anymore. The LTIContex will then be marked as blocked.
+        permissions anymore. The LTIContext will then be marked as blocked.
         """
 
         lti_context = self.get_object().lti_contexts.get(
@@ -331,3 +336,45 @@ class ForumRenameView(PermissionRequiredMixin, UpdateView):
     def perform_permissions_check(self, user, obj, perms):
         """Performs the permissions check."""
         return self.request.forum_permission_handler.can_rename_forum(obj, user)
+
+
+class ForumUnlockCourseView(ForumLockUnlockCourseView):
+    """View to unlock forums of the course."""
+
+    template_name = "forum/forum_unlock.html"
+
+    # pylint: disable=unused-argument
+    def perform_permissions_check(self, user, obj, perms):
+        """
+        Performs the permissions check. If forums is not part of current LTIContext
+        access is refused.
+        """
+        if not obj.lti_contexts.filter(
+            id=self.request.forum_permission_handler.current_lti_context_id,
+            is_marked_locked=True,
+        ).exists():
+            return False
+        return self.request.forum_permission_handler.can_unlock_course(obj, user)
+
+    def post(self, request, *args, **kwargs):
+        """
+        We unlock all forums of this course. Default group should have writing
+        permissions. The LTIContext will then be marked as not blocked.
+        """
+
+        lti_context = self.get_object().lti_contexts.get(
+            id=self.request.forum_permission_handler.current_lti_context_id
+        )
+        default_group = lti_context.get_base_group()
+
+        # add all permissions for each forum of this LTIContext
+        for forum in self.get_forums_list():
+            # pylint: disable=not-an-iterable
+            for perm in DEFAULT_FORUM_BASE_WRITE_PERMISSIONS:
+                assign_perm(perm, default_group, forum, True)
+
+        # mark this course as unlocked
+        lti_context.is_marked_locked = False
+        lti_context.save()
+
+        return HttpResponseRedirect(self.get_success_url())
