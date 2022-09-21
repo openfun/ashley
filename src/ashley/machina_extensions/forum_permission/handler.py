@@ -45,6 +45,10 @@ class PermissionHandler(BasePermissionHandler):
         """
         return self._perform_basic_permission_check(forum, user, "can_manage_moderator")
 
+    def can_unlock_course(self, forum, user):
+        """Given a forum, checks whether the user can unlock it."""
+        return self._perform_basic_permission_check(forum, user, "can_unlock_course")
+
     def forum_list_filter(self, qs, user):
         """
         Filters the given queryset in order to return a list of forums that

@@ -16,6 +16,7 @@ class ForumURLPatternsFactory(BaseForumURLPatternsFactory):
     rename_view = get_class("forum.views", "ForumRenameView")
     archive_view = get_class("forum.views", "ForumArchiveView")
     lock_course_view = get_class("forum.views", "ForumLockCourseView")
+    unlock_course_view = get_class("forum.views", "ForumUnlockCourseView")
 
     def get_urlpatterns(self):
         """Returns the URL patterns managed by the considered factory / application."""
@@ -29,6 +30,11 @@ class ForumURLPatternsFactory(BaseForumURLPatternsFactory):
                 "admin/lock-course/<int:pk>/",
                 self.lock_course_view.as_view(),
                 name="lock_course",
+            ),
+            path(
+                "admin/unlock-course/<int:pk>/",
+                self.unlock_course_view.as_view(),
+                name="unlock_course",
             ),
         ]
 

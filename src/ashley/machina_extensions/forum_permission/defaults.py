@@ -37,4 +37,9 @@ class PermissionConfig(BasePermissionConfig):
             "label": _("Can lock forums of the course"),
             "scope": "forum",
         },
+        {
+            "codename": "can_unlock_course",
+            "label": _("Can unlock forums of the course"),
+            "scope": "forum",
+        },
     ]

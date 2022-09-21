@@ -69,16 +69,10 @@ class ForumLTIView(BaseLTIAuthView):
                 type=Forum.FORUM_POST,
                 lti_contexts__id=context.id,
             )
-            # If course is locked, security to remove forum permission on default group
-            # only needed if the course has been marked outside web navigation
-            if context.is_marked_locked and any(
-                item in DEFAULT_FORUM_BASE_READ_PERMISSIONS
-                for item in GroupForumPermission.objects.filter(
-                    forum=forum, group=context.get_base_group(), has_perm=True
-                ).values_list("permission__codename", flat=True)
-            ):
-                for perm in DEFAULT_FORUM_BASE_WRITE_PERMISSIONS:
-                    remove_perm(perm, context.get_base_group(), forum)
+            # Security to remove/add forum permission on default group
+            # only needed if the course has been locked/unlocked outside
+            # web navigation
+            self._check_marked_locked_unlocked_unsync(forum, context)
 
         except Forum.DoesNotExist:
 
@@ -117,6 +111,29 @@ class ForumLTIView(BaseLTIAuthView):
             response.set_cookie(settings.LANGUAGE_COOKIE_NAME, locale)
 
         return response
+
+    @classmethod
+    def _check_marked_locked_unlocked_unsync(cls, forum, context):
+        """
+        The context contains a field is_marked_locked, we control that if
+        this field is checked or unchecked, there is no problem of unsynchronicity
+        It's a security to remove/add forum permission on the default group.
+        This could only happen if the course was locked/unlocked outside
+        web navigation directly on the database
+        """
+        group_permissions = GroupForumPermission.objects.filter(
+            forum=forum, group=context.get_base_group(), has_perm=True
+        ).values_list("permission__codename", flat=True)
+
+        if context.is_marked_locked:
+            for perm in group_permissions:
+                # forum is marked locked but the base group still has a writing permission
+                if perm in DEFAULT_FORUM_BASE_WRITE_PERMISSIONS:
+                    remove_perm(perm, context.get_base_group(), forum)
+        else:  # make sure the base group has all the writing permissions
+            for perm in DEFAULT_FORUM_BASE_WRITE_PERMISSIONS:
+                if perm not in group_permissions:
+                    assign_perm(perm, context.get_base_group(), forum)
 
     def _init_forum(self, forum, context):
         """

@@ -47,6 +47,7 @@ _FORUM_ADMIN_PERMISSIONS = _FORUM_MODERATOR_PERMISSIONS + [
     "can_lock_course",
     "can_manage_moderator",
     "can_rename_forum",
+    "can_unlock_course",
 ]
 
 DEFAULT_FORUM_BASE_READ_PERMISSIONS = lazy(

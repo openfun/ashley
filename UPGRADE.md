@@ -15,6 +15,19 @@ They will be documented in this file:
 
 ### Unreleased
 
+A new permission has been added in this release : `can_unlock_course`.
+By default, this permission will only be added to new users with administrator or
+instructor roles. If you want to update the group permissions on users already
+existing in the database, to reflect what is defined in the setting
+`ASHLEY_DEFAULT_FORUM_ROLES_PERMISSIONS`, you can execute the following
+management command :
+
+```python manage.py sync_group_permissions --apply```
+
+Note: You can execute the above command without the `--apply` option to do it in
+dry mode and see what changes will be applied to your database.
+
+
 ### Ashley 1.2.0
 
 A new permission has been added in this release : `can_lock_forum`.
