@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Allow unlocking all forums of a course
+- Display lti_id field on the forum admin panel
 
 ## [1.2.3] - 2022-06-13
 
