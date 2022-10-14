@@ -15,6 +15,8 @@ They will be documented in this file:
 
 ### Unreleased
 
+### Ashley 1.2.4
+
 A new permission has been added in this release : `can_unlock_course`.
 By default, this permission will only be added to new users with administrator or
 instructor roles. If you want to update the group permissions on users already

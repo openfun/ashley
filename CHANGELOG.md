@@ -8,6 +8,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.2.5] - 2022-10-14
+
+### Fixed
+
+- Fix wording unlock forums feature
+
 ## [1.2.4] - 2022-10-07
 
 ### Added
@@ -242,7 +248,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Update sandbox settings to be able to run Ashley in an `iframe` on multiple
   external websites
 
-[unreleased]: https://github.com/openfun/ashley/compare/v1.2.4...master
+[unreleased]: https://github.com/openfun/ashley/compare/v1.2.5...master
+[1.2.5]: https://github.com/openfun/ashley/compare/v1.2.4...v1.2.5
 [1.2.4]: https://github.com/openfun/ashley/compare/v1.2.3...v1.2.4
 [1.2.3]: https://github.com/openfun/ashley/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/openfun/ashley/compare/v1.2.1...v1.2.2
