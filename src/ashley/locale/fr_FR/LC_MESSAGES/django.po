@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: ashleyforum\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-05 16:40+0000\n"
-"PO-Revision-Date: 2022-10-07 07:21\n"
+"PO-Revision-Date: 2022-10-14 08:12\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -1099,7 +1099,7 @@ msgstr "Peut verrouiller les forums du cours"
 
 #: machina_extensions/forum_permission/defaults.py:42
 msgid "Can unlock forums of the course"
-msgstr "Peut verrouiller les forums du cours"
+msgstr "Peut déverrouiller les forums du cours"
 
 #: models.py:44
 msgid "LTI remote user identifier"
@@ -1174,7 +1174,7 @@ msgstr "Verrouiller les forums"
 
 #: templates/forum/forum_detail.html:29
 msgid "Unlock forums"
-msgstr "Verrouiller les forums"
+msgstr "Déverrouiller les forums"
 
 #: templates/forum/forum_lock.html:4 templates/forum/forum_lock.html:11
 msgid "Lock the forum"
@@ -1198,7 +1198,7 @@ msgstr "Renommer"
 
 #: templates/forum/forum_unlock.html:4 templates/forum/forum_unlock.html:11
 msgid "Unlock the forum"
-msgstr "Verrouiller le forum"
+msgstr "Déverrouiller le forum"
 
 #: templates/forum/forum_unlock.html:15
 msgid "Are you sure you want to unlock the entire course? All the forums in this course will be unlocked."
