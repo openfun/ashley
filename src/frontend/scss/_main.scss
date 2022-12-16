@@ -20,6 +20,10 @@
 @import '@draft-js-plugins/mention/lib/plugin';
 @import '@draft-js-plugins/static-toolbar/lib/plugin';
 
+//latex code style
+@import 'draft-js-latex-plugin/lib/styles';
+@import 'katex/dist/katex';
+
 //highlight code style
 @import 'highlight.js/styles/github';
 

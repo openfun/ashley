@@ -1,5 +1,5 @@
 import { createEvent } from '@testing-library/dom';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, fireEvent, screen, within } from '@testing-library/react';
 import user from '@testing-library/user-event';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
@@ -25,6 +25,9 @@ describe('AshleyEditor', () => {
   };
   afterEach(() => {
     jest.resetAllMocks();
+    if (target) {
+      target.value = '';
+    }
   });
 
   // add input target, it's value is linked with editor content and needed for all the tests
@@ -179,6 +182,53 @@ describe('AshleyEditor', () => {
         },
       ]),
     );
+  });
+
+  it('recognizes a block of type TEXBLOCK using atomic blocks', () => {
+    render(
+      <IntlProvider locale="en">
+        <AshleyEditor target="target" {...props} />
+      </IntlProvider>,
+    );
+    expect(screen.queryByRole('figure')).not.toBeInTheDocument();
+
+    // TEXBLOCK are recognized
+    target.value = BlockMapFactory([
+      {
+        type: 'atomic',
+        text: 'displaystylesum_{i=1}^{k+1}i',
+        data: {
+          tex: '',
+          type: 'TEXBLOCK',
+        },
+      },
+    ]);
+
+    render(
+      <IntlProvider locale="en">
+        <AshleyEditor target="target" {...props} />
+      </IntlProvider>,
+    );
+    const figure = screen.getByRole('figure');
+    const latex = within(figure).getByRole('textbox');
+    expect(latex).toBeInTheDocument();
+  });
+
+  it('generates a block of type inlinetex when `$` key is pressed', () => {
+    const { container } = render(
+      <IntlProvider locale="en">
+        <AshleyEditor target="target" {...props} />
+      </IntlProvider>,
+    );
+
+    expect(screen.queryAllByRole('textbox').length).toEqual(1);
+    // select the draft-js editor
+    const editorNode = container.querySelector('.public-DraftEditor-content')!;
+
+    fireEvent.keyDown(editorNode, { key: '$', code: '221', charCode: 36 });
+    expect(screen.queryAllByRole('textbox').length).toEqual(2);
+    const latex = screen.queryAllByRole('textbox')[1];
+    expect(latex).toHaveClass('TeXInput');
   });
 
   it('renders the editor with a list of users to mention', () => {

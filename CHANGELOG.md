@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Enabling latex mathematical equations in forums
+
 ## [1.2.5] - 2022-10-14
 
 ### Fixed

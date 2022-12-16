@@ -31,7 +31,6 @@ import {
   BlockquoteButton,
   CodeBlockButton,
 } from '@draft-js-plugins/buttons';
-import createCodeEditorPlugin from '../../draftjs-plugins/code-editor';
 import { ImageAdd } from './ImageAdd';
 import createAlignmentPlugin from '@draft-js-plugins/alignment';
 import createFocusPlugin from '@draft-js-plugins/focus';
@@ -39,6 +38,7 @@ import createResizeablePlugin from '@draft-js-plugins/resizeable';
 import createBlockDndPlugin from '@draft-js-plugins/drag-n-drop';
 import { useIntl } from 'react-intl';
 import { messagesEditor } from './messages';
+import { getLaTeXPlugin } from 'draft-js-latex-plugin';
 
 interface MyEditorProps {
   autofocus?: boolean;
@@ -67,7 +67,6 @@ export const AshleyEditor = (props: MyEditorProps) => {
       emojiPlugin,
       linkPlugin,
       toolbarPlugin,
-      codeEditorPlugin,
       blockDndPlugin,
       alignmentPlugin,
       focusPlugin,
@@ -85,7 +84,6 @@ export const AshleyEditor = (props: MyEditorProps) => {
       },
     }),
     toolbarPlugin: createToolbarPlugin(),
-    codeEditorPlugin: createCodeEditorPlugin(),
     blockDndPlugin: createBlockDndPlugin(),
     alignmentPlugin: createAlignmentPlugin(),
     focusPlugin: createFocusPlugin(),
@@ -107,7 +105,9 @@ export const AshleyEditor = (props: MyEditorProps) => {
   const [{ imagePlugin }] = useState({
     imagePlugin: createImagePlugin({ decorator }),
   });
-
+  const [{ LaTeXPlugin }] = useState({
+    LaTeXPlugin: getLaTeXPlugin({}),
+  });
   const { AlignmentTool } = alignmentPlugin;
 
   useEffect(() => {
@@ -169,12 +169,12 @@ export const AshleyEditor = (props: MyEditorProps) => {
     toolbarPlugin,
     emojiPlugin,
     linkPlugin,
-    codeEditorPlugin,
     blockDndPlugin,
     focusPlugin,
     alignmentPlugin,
     resizeablePlugin,
     imagePlugin,
+    LaTeXPlugin,
   ];
 
   if (props.mentions) {
@@ -183,6 +183,7 @@ export const AshleyEditor = (props: MyEditorProps) => {
     });
     const [open, setOpen] = useState(true);
     const [suggestions, setSuggestions] = useState(props.mentions);
+
     const onSearchChange = useCallback(({ value }: { value: string }) => {
       setSuggestions(defaultSuggestionsFilter(value, props.mentions!));
     }, []);

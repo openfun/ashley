@@ -4,5 +4,7 @@ module.exports = {
   setupFilesAfterEnv: ['./testSetup.ts', 'regenerator-runtime/runtime'],
   testMatch: [__dirname + '/js/**/*.spec.+(ts|tsx|js)'],
   testURL: 'https://localhost',
-  transformIgnorePatterns: ['node_modules/(?!(lodash-es)/)'],
+  transformIgnorePatterns: [
+    '/node_modules/(?!(lodash-es|draft-js-latex-plugin)/)',
+  ],
 };
