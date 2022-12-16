@@ -34,6 +34,10 @@ module.exports = () => {
 
     module: {
       rules: [
+        {
+          test: /\.(woff|woff2|ttf|eot|png|jpg|svg|gif)$/i,
+          use: ['file-loader'],
+        },
         { test: /\.css$/, use: ['style-loader', 'css-loader'] },
         {
           test: new RegExp(`(${babelCompileDeps.join('|')}.*)`),

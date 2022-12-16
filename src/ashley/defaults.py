@@ -6,7 +6,14 @@ from draftjs_exporter.defaults import BLOCK_MAP as DEFAULT_BLOCK_MAP
 from draftjs_exporter.defaults import STYLE_MAP as DEFAULT_STYLE_MAP
 from draftjs_exporter.dom import DOM
 
-from ashley.editor.decorators import emoji, image, link, mention
+from ashley.editor.decorators import (
+    emoji,
+    image,
+    inlinetex,
+    link,
+    mention,
+    render_children,
+)
 
 _FORUM_ROLE_ADMINISTRATOR = "administrator"
 _FORUM_ROLE_INSTRUCTOR = "instructor"
@@ -95,9 +102,15 @@ DEFAULT_DRAFTJS_EXPORTER_CONFIG = {
         "emoji": emoji,
         "mention": mention,
         "IMAGE": image,
+        "INLINETEX": inlinetex,
     },
     "composite_decorators": [],
-    "block_map": DEFAULT_BLOCK_MAP,
+    "block_map": dict(
+        DEFAULT_BLOCK_MAP,
+        **{
+            "atomic": render_children,
+        },
+    ),
     "style_map": DEFAULT_STYLE_MAP,
     "engine": DOM.STRING,
 }

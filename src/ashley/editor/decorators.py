@@ -93,3 +93,28 @@ def image(props):
         )
 
     return None
+
+
+def inlinetex(props):
+    """
+    Decorator for the `INLINETEX` entity in Draft.js ContentState.
+    """
+    return DOM.create_element(
+        "span", {"class": "ashley-latex-inline"}, props.get("tex", None)
+    )
+
+
+def render_children(props):
+    """
+    Decorator for the blocks in Draft.js ContentState. TEXBLOCK is a custom
+    block that is used through atomic blocks.
+    """
+    if props.get("block").get("data").get("type") == "TEXBLOCK":
+        return DOM.create_element(
+            "span",
+            {"class": "ashley-latex-display"},
+            props.get("block").get("data").get("tex", None),
+        )
+
+    # default behaviour
+    return props
