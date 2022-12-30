@@ -14,7 +14,7 @@
     "lint-all": "yarn lint-fix && yarn prettier-write",
     "sass": "node-sass --include-path node_modules scss/_main.scss ../ashley/static/ashley/css/main.css",
     "sass-production": "node-sass --include-path node_modules scss/_main.scss --output-style compressed ../ashley/static/ashley/css/main.css",
-    "webfonts": "mkdir -p ../ashley/static/ashley/font/ && cp -f ./node_modules/@fortawesome/fontawesome-free/webfonts/* ../ashley/static/ashley/font/",
+    "webfonts": "mkdir -p ../ashley/static/ashley/font/ ../ashley/static/ashley/css/fonts/ && cp -f ./node_modules/@fortawesome/fontawesome-free/webfonts/* ../ashley/static/ashley/font/ && cp -f ./node_modules/katex/dist/fonts/* ../ashley/static/ashley/css/fonts/",
     "test": "jest",
     "watch-sass": "nodemon -e scss -x 'yarn sass'"
   },

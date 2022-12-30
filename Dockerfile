@@ -53,6 +53,9 @@ COPY --from=front-builder \
 COPY --from=front-builder \
     /builder/src/ashley/static/ashley/font/* \
     /builder/src/ashley/static/ashley/font/
+COPY --from=front-builder \
+    /builder/src/ashley/static/ashley/css/fonts/* \
+    /builder/src/ashley/static/ashley/css/fonts/
 
 RUN mkdir /install && \
     pip install --prefix=/install .[sandbox]
