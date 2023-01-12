@@ -10,6 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add buttons in the toolbar of Ashley to add inline and block
+  latex
 - Enabling latex mathematical equations in forums
 
 ## [1.2.5] - 2022-10-14
