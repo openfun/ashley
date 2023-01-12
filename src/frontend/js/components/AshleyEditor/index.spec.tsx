@@ -55,6 +55,12 @@ describe('AshleyEditor', () => {
       name: /☺/i,
     });
 
+    // check if latex inline has been added to the toolbar plugin editor
+    screen.getByTestId('addLatexinline');
+
+    // check if latex block has been added to the toolbar plugin editor
+    screen.getByTestId('addLatexblock');
+
     // check if quotation has been added to the toolbar plugin editor
     const quotationButton = container.querySelector(
       'path[d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"]',
@@ -229,6 +235,40 @@ describe('AshleyEditor', () => {
     expect(screen.queryAllByRole('textbox').length).toEqual(2);
     const latex = screen.queryAllByRole('textbox')[1];
     expect(latex).toHaveClass('TeXInput');
+  });
+
+  it('generates a textbox when the inline latex button is fired', () => {
+    const { container } = render(
+      <IntlProvider locale="en">
+        <AshleyEditor target="target" {...props} />
+      </IntlProvider>,
+    );
+
+    expect(screen.queryAllByRole('textbox').length).toEqual(1);
+
+    const button = screen.getByTestId('addLatexinline');
+    fireEvent.click(button);
+    expect(screen.queryAllByRole('textbox').length).toEqual(2);
+    const latex = screen.queryAllByRole('textbox')[1];
+    expect(latex).toHaveClass('TeXInput');
+    expect(latex.parentElement).toHaveClass('INLINETEX');
+  });
+
+  it('generates a textbox when the block latex button is fired', () => {
+    const { container } = render(
+      <IntlProvider locale="en">
+        <AshleyEditor target="target" {...props} />
+      </IntlProvider>,
+    );
+
+    expect(screen.queryAllByRole('textbox').length).toEqual(1);
+
+    const button = screen.getByTestId('addLatexblock');
+    fireEvent.click(button);
+    expect(screen.queryAllByRole('textbox').length).toEqual(2);
+    const latex = screen.queryAllByRole('textbox')[1];
+    expect(latex).toHaveClass('TeXInput');
+    expect(latex.parentElement).toHaveClass('TEXBLOCK');
   });
 
   it('renders the editor with a list of users to mention', () => {

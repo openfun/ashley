@@ -32,6 +32,7 @@ import {
   CodeBlockButton,
 } from '@draft-js-plugins/buttons';
 import { ImageAdd } from './ImageAdd';
+import { LatexButton } from './LatexButton';
 import createAlignmentPlugin from '@draft-js-plugins/alignment';
 import createFocusPlugin from '@draft-js-plugins/focus';
 import createResizeablePlugin from '@draft-js-plugins/resizeable';
@@ -39,6 +40,7 @@ import createBlockDndPlugin from '@draft-js-plugins/drag-n-drop';
 import { useIntl } from 'react-intl';
 import { messagesEditor } from './messages';
 import { getLaTeXPlugin } from 'draft-js-latex-plugin';
+import { TypeLatexStyle, DraftHandleValue } from '../../types/Enums';
 
 interface MyEditorProps {
   autofocus?: boolean;
@@ -61,6 +63,7 @@ export const AshleyEditor = (props: MyEditorProps) => {
   });
   const editorRef = useRef(null as PluginEditor | null);
   const intl = useIntl();
+
   // Instantiate plugins in a state to avoid instantiation on every render
   const [
     {
@@ -136,9 +139,9 @@ export const AshleyEditor = (props: MyEditorProps) => {
       editorChange(
         EditorState.push(stateEditor, newContent, 'insert-characters'),
       );
-      return 'handled';
+      return DraftHandleValue.HANDLED;
     }
-    return 'not-handled';
+    return DraftHandleValue.NOT_HANDLED;
   };
 
   const editorChange = (stateEditor: EditorState) => {
@@ -159,9 +162,9 @@ export const AshleyEditor = (props: MyEditorProps) => {
     const newState = RichUtils.handleKeyCommand(stateEditor, command);
     if (newState) {
       editorChange(newState);
-      return 'handled';
+      return DraftHandleValue.HANDLED;
     }
-    return 'not-handled';
+    return DraftHandleValue.NOT_HANDLED;
   };
 
   const PluginRenderers = [<emojiPlugin.EmojiSuggestions key="emoji" />];
@@ -238,6 +241,18 @@ export const AshleyEditor = (props: MyEditorProps) => {
               <UnorderedListButton {...externalProps} />
               <OrderedListButton {...externalProps} />
               <emojiPlugin.EmojiSelect {...externalProps} />
+              <Separator {...externalProps} />
+              <LatexButton
+                editorState={editorState}
+                {...externalProps}
+                type={TypeLatexStyle.INLINE}
+              />
+              <LatexButton
+                editorState={editorState}
+                {...externalProps}
+                type={TypeLatexStyle.BLOCK}
+              />
+              <Separator {...externalProps} />
             </div>
           )}
         </toolbarPlugin.Toolbar>

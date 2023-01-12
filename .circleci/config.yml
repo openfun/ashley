@@ -335,8 +335,8 @@ jobs:
           path: ~/fun
       - restore_cache:
           keys:
-            - v2-front-dependencies-{{ checksum "yarn.lock" }}
-            - v2-front-dependencies-
+            - v3-front-dependencies-{{ checksum "yarn.lock" }}
+            - v3-front-dependencies
       # If the yarn.lock file is not up-to-date with the package.json file,
       # using the --frozen-lockfile should fail.
       - run:
@@ -358,7 +358,7 @@ jobs:
       - save_cache:
           paths:
             - ./node_modules
-          key: v2-front-dependencies-{{ checksum "yarn.lock" }}
+          key: v3-front-dependencies-{{ checksum "yarn.lock" }}
 
   build-front-production:
     docker:
@@ -369,8 +369,8 @@ jobs:
           path: ~/fun
       - restore_cache:
           keys:
-            - v2-front-dependencies-{{ checksum "yarn.lock" }}
-            - v2-front-dependencies-
+            - v3-front-dependencies-{{ checksum "yarn.lock" }}
+            - v3-front-dependencies-
       - run:
           name: Build front-end application in production mode
           command: yarn build-production
@@ -404,7 +404,7 @@ jobs:
           path: ~/fun
       - restore_cache:
           keys:
-            - v2-front-dependencies-{{ checksum "yarn.lock" }}
+            - v3-front-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Lint code with tslint
           command: yarn lint
@@ -421,7 +421,7 @@ jobs:
           path: ~/fun
       - restore_cache:
           keys:
-            - v2-front-dependencies-{{ checksum "yarn.lock" }}
+            - v3-front-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Run tests
           # Circle CI needs the tests to be run sequentially, otherwise it hangs. See Jest docs below:

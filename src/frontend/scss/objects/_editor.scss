@@ -246,3 +246,12 @@ addImage Editor
     transform: scale(1);
   }
 }
+.latex-inline,
+.latex-inline:hover {
+  background-image: url(../img/latex-inline.svg);
+}
+
+.latex-block,
+.latex-block:hover {
+  background-image: url(../img/latex-block.svg);
+}

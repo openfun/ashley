@@ -15,6 +15,14 @@
     "description": "Error message on uploading image, max size reached",
     "message": "Une erreur est survenue lors du téléchargement de l'image, la taille du fichier est supérieure à {maxSize}Mo."
   },
+  "components.AshleyEditor.LatexButton.toolTipAddLatexBlock": {
+    "description": "Message over the button to add a Latex block formula",
+    "message": "Ajouter une formule mathématique Latex dans un nouveau bloc"
+  },
+  "components.AshleyEditor.LatexButton.toolTipAddLatexInline": {
+    "description": "Message over the button to add a Latex inline formula",
+    "message": "Insérer une formule mathématique Latex à l'emplacement du curseur"
+  },
   "components.AshleyEditor.linkPlaceholderEditor": {
     "description": "Placeholder when adding a link in the editor",
     "message": "Saisissez ou collez votre URL ici et appuyez sur Entrée"

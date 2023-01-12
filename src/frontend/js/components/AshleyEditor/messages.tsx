@@ -33,4 +33,14 @@ export const messagesEditor = defineMessages({
     description: 'Placeholder for new posts when editor is empty',
     id: 'components.AshleyEditor.placeholderEditor',
   },
+  toolTipAddLatexInline: {
+    defaultMessage: 'Add a Latex inline mathematical formula',
+    description: 'Message over the button to add a Latex inline formula',
+    id: 'components.AshleyEditor.LatexButton.toolTipAddLatexInline',
+  },
+  toolTipAddLatexBlock: {
+    defaultMessage: 'Add a Latex mathematical formula in a new block',
+    description: 'Message over the button to add a Latex block formula',
+    id: 'components.AshleyEditor.LatexButton.toolTipAddLatexBlock',
+  },
 });

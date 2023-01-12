@@ -6,7 +6,6 @@ import { appFrontendContext } from './../../../data/frontEndData';
 import { FileUploadError } from './../../../types/Enums';
 import { uploadFile } from './../../../utils/uploadFile';
 import { messagesEditor } from '../messages';
-import { UploadedFile } from '../../../types/UploadedFile';
 import { Spinner } from '../../Spinner';
 
 interface ImageAddProps {
