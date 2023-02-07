@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.3.0] - 2023-02-07
+
 ### Added
 
 - Add buttons in the toolbar of Ashley to add inline and block
@@ -254,7 +256,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Update sandbox settings to be able to run Ashley in an `iframe` on multiple
   external websites
 
-[unreleased]: https://github.com/openfun/ashley/compare/v1.2.5...master
+[unreleased]: https://github.com/openfun/ashley/compare/v1.3.0...master
+[1.3.0]: https://github.com/openfun/ashley/compare/v1.2.5...v1.3.0
 [1.2.5]: https://github.com/openfun/ashley/compare/v1.2.4...v1.2.5
 [1.2.4]: https://github.com/openfun/ashley/compare/v1.2.3...v1.2.4
 [1.2.3]: https://github.com/openfun/ashley/compare/v1.2.2...v1.2.3
