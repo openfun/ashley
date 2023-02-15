@@ -1,6 +1,7 @@
 """This module contains custom decorators for draftjs_exporter."""
 import logging
 
+from draftjs_exporter.defaults import render_children
 from draftjs_exporter.dom import DOM
 
 logger = logging.getLogger(__name__)
@@ -104,17 +105,16 @@ def inlinetex(props):
     )
 
 
-def render_children(props):
+def ashley_render_children(props):
     """
     Decorator for the blocks in Draft.js ContentState. TEXBLOCK is a custom
     block that is used through atomic blocks.
     """
-    if props.get("block").get("data").get("type") == "TEXBLOCK":
+    if props.get("block", {}).get("data", {}).get("type") == "TEXBLOCK":
         return DOM.create_element(
             "span",
             {"class": "ashley-latex-display"},
             props.get("block").get("data").get("tex", None),
         )
-
     # default behaviour
-    return props
+    return render_children(props)

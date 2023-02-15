@@ -7,12 +7,12 @@ from draftjs_exporter.defaults import STYLE_MAP as DEFAULT_STYLE_MAP
 from draftjs_exporter.dom import DOM
 
 from ashley.editor.decorators import (
+    ashley_render_children,
     emoji,
     image,
     inlinetex,
     link,
     mention,
-    render_children,
 )
 
 _FORUM_ROLE_ADMINISTRATOR = "administrator"
@@ -108,7 +108,7 @@ DEFAULT_DRAFTJS_EXPORTER_CONFIG = {
     "block_map": dict(
         DEFAULT_BLOCK_MAP,
         **{
-            "atomic": render_children,
+            "atomic": ashley_render_children,
         },
     ),
     "style_map": DEFAULT_STYLE_MAP,
