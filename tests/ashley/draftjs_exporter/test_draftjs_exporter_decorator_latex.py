@@ -1,7 +1,9 @@
+from unittest import mock
+
 from django.test import TestCase
 from draftjs_exporter.dom import DOM
 
-from ashley.editor.decorators import inlinetex, render_children
+from ashley.editor.decorators import ashley_render_children, inlinetex
 
 
 class TestInlinetexDecorator(TestCase):
@@ -40,7 +42,7 @@ class TestInlinetexDecorator(TestCase):
 
     def test_custom_decorator_displaytex_ok(self):
         """
-        check custom decorator for `render_children` of tex returns expected html
+        check custom decorator for `ashley_render_children` of tex returns expected html
         """
 
         tex = "\left.\frac{x^3}{3}\right|_0^1"  # noqa: W605
@@ -48,7 +50,7 @@ class TestInlinetexDecorator(TestCase):
         self.assertEqual(
             DOM.render(
                 DOM.create_element(
-                    render_children,
+                    ashley_render_children,
                     {
                         "block": {
                             "key": "a215p",
@@ -70,7 +72,7 @@ class TestInlinetexDecorator(TestCase):
         self.assertEqual(
             DOM.render(
                 DOM.create_element(
-                    render_children,
+                    ashley_render_children,
                     {
                         "block": {
                             "key": "a215p",
@@ -86,13 +88,13 @@ class TestInlinetexDecorator(TestCase):
 
     def test_custom_decorator_displaytex_no_maths(self):
         """
-        check custom decorator `render_children` returns expected html even when
+        check custom decorator `ashley_render_children` returns expected html even when
         the content is not a formula but a regular string
         """
         self.assertEqual(
             DOM.render(
                 DOM.create_element(
-                    render_children,
+                    ashley_render_children,
                     {
                         "block": {
                             "key": "a215p",
@@ -108,13 +110,13 @@ class TestInlinetexDecorator(TestCase):
 
     def test_custom_decorator_displaytex_no_malformed(self):
         """
-        check custom decorator `render_children` returns expected html even when
+        check custom decorator `ashley_render_children` returns expected html even when
         the `tex` attribute is missing
         """
         self.assertEqual(
             DOM.render(
                 DOM.create_element(
-                    render_children,
+                    ashley_render_children,
                     {
                         "block": {
                             "key": "a215p",
@@ -126,4 +128,31 @@ class TestInlinetexDecorator(TestCase):
                 )
             ),
             '<span class="ashley-latex-display"></span>',
+        )
+
+    @mock.patch("ashley.editor.decorators.render_children")
+    def test_custom_decorator_atomic_other_mock_render_children(
+        self, mock_render_children
+    ):
+        """
+        check custom decorator `ashley_render_children` returns expected html by rendering
+        render_children of the draftjs_exporter in case of atomic block used for other type than
+        type TEXBLOCK
+        """
+        props = {
+            "block": {
+                "key": "ahfcc",
+                "text": " ",
+                "type": "atomic",
+                "depth": 0,
+                "inlineStyleRanges": [],
+                "entityRanges": [{"offset": 0, "length": 1, "key": 0}],
+                "data": {},
+            },
+        }
+        mock_render_children.return_value = "mocked children"
+
+        self.assertEqual(
+            ashley_render_children(props),
+            "mocked children",
         )

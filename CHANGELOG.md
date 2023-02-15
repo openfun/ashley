@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix converting in HTML atomic blocks for images
+
 ## [1.3.0] - 2023-02-07
 
 ### Added
