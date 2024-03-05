@@ -57,7 +57,7 @@ jobs:
   # Check that all versions are up-to-date
   check-versions:
     docker:
-      - image: cimg/base:2022.04
+      - image: cimg/base:current
     working_directory: ~/fun
     steps:
       - checkout
@@ -97,7 +97,7 @@ jobs:
       - <<: *generate-version-file
       # Activate docker-in-docker
       - setup_remote_docker:
-          version: 19.03.13
+          version: default
       # Each image is tagged with the current git commit sha1 to avoid collisions in parallel builds.
       - run:
           name: Build production image
@@ -267,7 +267,7 @@ jobs:
       - <<: *generate-version-file
       # Activate docker-in-docker
       - setup_remote_docker:
-          version: 19.03.13
+          version: default
       - run:
           name: Build production image
           command: docker build -t ashley:${CIRCLE_SHA1} --target production .
