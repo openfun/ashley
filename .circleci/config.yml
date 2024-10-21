@@ -45,7 +45,7 @@ jobs:
   # Check that the CHANGELOG has been updated in the current branch
   check-changelog:
     docker:
-      - image: circleci/buildpack-deps:stretch-scm
+      - image: cimg/base:current
     working_directory: ~/fun
     steps:
       - checkout
@@ -88,7 +88,7 @@ jobs:
   # Build the Docker image ready for production
   build-docker:
     docker:
-      - image: circleci/buildpack-deps:stretch
+      - image: cimg/base:current
     working_directory: ~/fun
     steps:
       # Checkout repository sources
@@ -97,7 +97,7 @@ jobs:
       - <<: *generate-version-file
       # Activate docker-in-docker
       - setup_remote_docker:
-          version: 19.03.13
+          version: default
       # Each image is tagged with the current git commit sha1 to avoid collisions in parallel builds.
       - run:
           name: Build production image
@@ -172,7 +172,7 @@ jobs:
           ELASTICSEARCH_PORT: 9200
           DJANGO_AWS_S3_REGION_NAME: eu-west-1
       # services
-      - image: circleci/postgres:12-ram
+      - image: cimg/postgres:13.16
         environment:
           POSTGRES_DB: test_ashley
           POSTGRES_USER: fun
@@ -328,7 +328,7 @@ jobs:
   # ---- Front-end jobs ----
   build-front:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:16.15
     working_directory: ~/fun/src/frontend
     steps:
       - checkout:
@@ -397,7 +397,7 @@ jobs:
             - src/ashley/static/ashley/font/*
   lint-front:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:18.18
     working_directory: ~/fun/src/frontend
     steps:
       - checkout:
@@ -414,7 +414,7 @@ jobs:
 
   test-front:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:18.18
     working_directory: ~/fun/src/frontend
     steps:
       - checkout:
@@ -430,7 +430,7 @@ jobs:
 
   test-front-package:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:18.18
     working_directory: ~/wrk
     steps:
       - checkout:
