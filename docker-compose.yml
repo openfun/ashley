@@ -1,8 +1,6 @@
-version: '3.4'
-
 services:
   postgresql:
-    image: postgres:12
+    image: postgres:13.16
     env_file:
       - env.d/development/postgresql
     ports:
