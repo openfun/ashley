@@ -30,16 +30,16 @@ function _set_user() {
     echo "🙋(user) ID: ${USER_ID}"
 }
 
-# docker_compose: wrap docker-compose command
+# docker_compose: wrap docker compose command
 #
 # usage: docker_compose [options] [ARGS...]
 #
-# options: docker-compose command options
-# ARGS   : docker-compose command arguments
+# options: docker compose command options
+# ARGS   : docker compose command arguments
 function _docker_compose() {
 
     echo "🐳(compose) project: '${COMPOSE_PROJECT}' file: '${COMPOSE_FILE}'"
-    docker-compose \
+    docker compose \
         -p "${COMPOSE_PROJECT}" \
         -f "${COMPOSE_FILE}" \
         --project-directory "${REPO_DIR}" \

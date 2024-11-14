@@ -15,13 +15,13 @@
 #
 
 # -- Base image --
-FROM python:3.8-slim as base
+FROM python:3.8-slim AS base
 
 # Upgrade pip to its latest release to speed up dependencies installation
 RUN pip install --upgrade pip
 
 # ---- Front-end builder image ----
-FROM node:14 as front-builder
+FROM node:14 AS front-builder
 
 # Copy frontend app sources
 COPY ./src/frontend /builder/src/frontend
@@ -35,7 +35,7 @@ RUN yarn install --frozen-lockfile && \
     yarn webfonts
 
 # ---- Back-end builder image ----
-FROM base as back-builder
+FROM base AS back-builder
 
 WORKDIR /builder
 
@@ -61,7 +61,7 @@ RUN mkdir /install && \
     pip install --prefix=/install .[sandbox]
 
 # ---- Core application image ----
-FROM base as core
+FROM base AS core
 
 # Install gettext
 RUN apt-get update && \
@@ -96,7 +96,7 @@ USER ${DOCKER_USER}
 ENTRYPOINT [ "/usr/local/bin/entrypoint" ]
 
 # ---- Development image ----
-FROM core as development
+FROM core AS development
 
 ENV PYTHONUNBUFFERED=1
 
@@ -127,7 +127,7 @@ CMD cd sandbox && \
     python manage.py runserver 0.0.0.0:8000
 
 # ---- Production image ----
-FROM core as production
+FROM core AS production
 
 ENV PYTHONUNBUFFERED=1
 
