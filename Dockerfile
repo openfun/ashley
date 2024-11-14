@@ -21,7 +21,7 @@ FROM python:3.8-slim AS base
 RUN pip install --upgrade pip
 
 # ---- Front-end builder image ----
-FROM node:14 AS front-builder
+FROM node:16 AS front-builder
 
 # Copy frontend app sources
 COPY ./src/frontend /builder/src/frontend

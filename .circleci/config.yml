@@ -96,8 +96,7 @@ jobs:
       # Generate a version.json file describing app release
       - <<: *generate-version-file
       # Activate docker-in-docker
-      - setup_remote_docker:
-          version: 19.03.13
+      - setup_remote_docker
       # Each image is tagged with the current git commit sha1 to avoid collisions in parallel builds.
       - run:
           name: Build production image
@@ -266,8 +265,7 @@ jobs:
       # Generate a version.json file describing app release
       - <<: *generate-version-file
       # Activate docker-in-docker
-      - setup_remote_docker:
-          version: 19.03.13
+      - setup_remote_docker
       - run:
           name: Build production image
           command: docker build -t ashley:${CIRCLE_SHA1} --target production .
@@ -328,15 +326,15 @@ jobs:
   # ---- Front-end jobs ----
   build-front:
     docker:
-      - image: circleci/node:14
+      - image: circleci/node:16
     working_directory: ~/fun/src/frontend
     steps:
       - checkout:
           path: ~/fun
       - restore_cache:
           keys:
-            - v3-front-dependencies-{{ checksum "yarn.lock" }}
-            - v3-front-dependencies
+            - v4-front-dependencies-{{ checksum "yarn.lock" }}
+            - v4-front-dependencies
       # If the yarn.lock file is not up-to-date with the package.json file,
       # using the --frozen-lockfile should fail.
       - run:
@@ -358,19 +356,19 @@ jobs:
       - save_cache:
           paths:
             - ./node_modules
-          key: v3-front-dependencies-{{ checksum "yarn.lock" }}
+          key: v4-front-dependencies-{{ checksum "yarn.lock" }}
 
   build-front-production:
     docker:
-      - image: circleci/node:14
+      - image: circleci/node:16
     working_directory: ~/fun/src/frontend
     steps:
       - checkout:
           path: ~/fun
       - restore_cache:
           keys:
-            - v3-front-dependencies-{{ checksum "yarn.lock" }}
-            - v3-front-dependencies-
+            - v4-front-dependencies-{{ checksum "yarn.lock" }}
+            - v4-front-dependencies-
       - run:
           name: Build front-end application in production mode
           command: yarn build-production
@@ -397,14 +395,14 @@ jobs:
             - src/ashley/static/ashley/font/*
   lint-front:
     docker:
-      - image: circleci/node:14
+      - image: circleci/node:16
     working_directory: ~/fun/src/frontend
     steps:
       - checkout:
           path: ~/fun
       - restore_cache:
           keys:
-            - v3-front-dependencies-{{ checksum "yarn.lock" }}
+            - v4-front-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Lint code with tslint
           command: yarn lint
@@ -414,14 +412,14 @@ jobs:
 
   test-front:
     docker:
-      - image: circleci/node:14
+      - image: circleci/node:16
     working_directory: ~/fun/src/frontend
     steps:
       - checkout:
           path: ~/fun
       - restore_cache:
           keys:
-            - v3-front-dependencies-{{ checksum "yarn.lock" }}
+            - v4-front-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Run tests
           # Circle CI needs the tests to be run sequentially, otherwise it hangs. See Jest docs below:
@@ -430,7 +428,7 @@ jobs:
 
   test-front-package:
     docker:
-      - image: circleci/node:14
+      - image: circleci/node:16
     working_directory: ~/wrk
     steps:
       - checkout:
