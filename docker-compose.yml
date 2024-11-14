@@ -46,7 +46,7 @@ services:
     working_dir: /app
 
   node:
-    image: node:14
+    image: node:16
     working_dir: /app/src/frontend
     user: "${DOCKER_USER:-1000}"
     volumes:
