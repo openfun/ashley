@@ -1,8 +1,6 @@
-version: '3.4'
-
 services:
   postgresql:
-    image: postgres:12
+    image: postgres:16.4
     env_file:
       - env.d/development/postgresql
     ports:
@@ -48,7 +46,7 @@ services:
     working_dir: /app
 
   node:
-    image: node:lts
+    image: node:14
     working_dir: /app/src/frontend
     user: "${DOCKER_USER:-1000}"
     volumes:

@@ -172,9 +172,9 @@ jobs:
           ELASTICSEARCH_PORT: 9200
           DJANGO_AWS_S3_REGION_NAME: eu-west-1
       # services
-      - image: circleci/postgres:12-ram
+      - image: cimg/postgres:16.4
         environment:
-          POSTGRES_DB: test_ashley
+          POSTGRES_DB: ashley
           POSTGRES_USER: fun
           POSTGRES_PASSWORD: pass
       - image: elasticsearch:5
