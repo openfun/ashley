@@ -288,9 +288,9 @@ help:
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 .PHONY: help
 
-env.d/development/aws:## genererate personal setting file for aws
+env.d/development/aws:## genererate personal setting file for S3 storage
 	cp env.d/development/aws.dist env.d/development/aws
-	
+
 sync-group-permission : ## synchronize groups with expected permissions
 	@$(COMPOSE_RUN_APP) python sandbox/manage.py sync_group_permissions --apply
 .PHONY: sync-group-permission

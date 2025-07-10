@@ -1,8 +1,14 @@
-# AWS admin credentials
-AWS_ACCESS_KEY_ID=yourAwsAccesKeyId
-AWS_SECRET_ACCESS_KEY=YourAwsSecretAccessKey
-AWS_DEFAULT_REGION=eu-west-1
+# SCW admin credentials for creating the s3 state bucket
+SCW_ACCESS_KEY=yourScwAccessKeyId
+SCW_SECRET_KEY=YourSCWSecretAccessKey
 
-# In this map, you should set the domain name of your ashley application,
-# per environment (key = terraform workspace, value = domain name)
-TF_VAR_app_domain={ production = "ashley.education" }
+# SCW admin credentials for accessing s3 state backend (needs to be prefixed with AWS)
+AWS_ACCESS_KEY_ID=yourScwAccessKeyId
+AWS_SECRET_ACCESS_KEY=YourSCWSecretAccessKey
+
+# Terraform variables
+TF_VAR_scw_project_id=yourScwProjectId
+TF_VAR_scw_organization_id=yourScwOrganizationId
+TF_VAR_scw_user_id=yourScwUserId
+TF_VAR_scw_zone=fr-par-1
+TF_VAR_scw_region=fr-par
