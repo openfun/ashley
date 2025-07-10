@@ -53,7 +53,7 @@ services:
       - .:/app
 
   terraform:
-    image: hashicorp/terraform:0.15.3
+    image: hashicorp/terraform:1.12.2
     env_file: env.d/terraform
     user: ${DOCKER_USER:-1000}
     working_dir: /app
@@ -61,7 +61,7 @@ services:
       - ./terraform:/app
 
   terraform-state:
-    image: hashicorp/terraform:0.15.3
+    image: hashicorp/terraform:1.12.2
     env_file: env.d/terraform
     user: ${DOCKER_USER:-1000}
     working_dir: /app
