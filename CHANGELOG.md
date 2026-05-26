@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Isolate Ashley session/CSRF cookies to prevent collision with LMS cookies
+- Scope cookie domains per environment (Production/PreProduction)
+
 ## [1.3.1] - 2023-02-17
 
 ### Fixed

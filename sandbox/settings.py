@@ -382,6 +382,24 @@ class Production(Base):
     # Session storage engine
     SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 
+    # Use dedicated cookie names to avoid collisions with LMS cookies.
+    SESSION_COOKIE_NAME = "ashley_sessionid"
+    CSRF_COOKIE_NAME = "ashley_csrftoken"
+
+    # Keep cookies scoped to Ashley production host.
+    SESSION_COOKIE_DOMAIN = "forum.fun-mooc.fr"
+    CSRF_COOKIE_DOMAIN = "forum.fun-mooc.fr"
+    # Trust production origins for CSRF checks (LMS + Ashley).
+    CSRF_TRUSTED_ORIGINS = [
+        "forum.fun-mooc.fr",
+        "lms.fun-mooc.fr",
+    ]
+
+
+    # Ashley is embedded in iframes from LMS domains.
+    SESSION_COOKIE_SAMESITE = "None"
+    CSRF_COOKIE_SAMESITE = "None"
+
     # Security
     ALLOWED_HOSTS = values.ListValue(None)
     CSRF_COOKIE_SECURE = True
@@ -417,6 +435,9 @@ class Feature(Production):
     nota bene: it should inherit from the Production environment.
     """
 
+    # Keep explicit parity with production CSRF trusted origins.
+    CSRF_TRUSTED_ORIGINS = Production.CSRF_TRUSTED_ORIGINS
+
 
 class Staging(Production):
     """
@@ -424,6 +445,15 @@ class Staging(Production):
 
     nota bene: it should inherit from the Production environment.
     """
+
+    # Keep cookies scoped to Ashley staging host.
+    SESSION_COOKIE_DOMAIN = "staging.ashley.apps.openfun.fr"
+    CSRF_COOKIE_DOMAIN = "staging.ashley.apps.openfun.fr"
+    # Accept both staging hostnames during migration/redirect period.
+    CSRF_TRUSTED_ORIGINS = [
+        "staging.ashley.apps.openfun.fr",
+        "staging.ashley.apps.preprod.openfun.fr",
+    ]
 
 
 class PreProduction(Production):
